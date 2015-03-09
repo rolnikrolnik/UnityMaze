@@ -1,2 +1,0 @@
-# UntyMaze
-Jebać Kubusia
