@@ -1,6 +1,5 @@
 using UnityEngine;
-namespace Palac
-{
+
 [ExecuteInEditMode]
 [RequireComponent (typeof(Camera))]
 [AddComponentMenu("Image Effects/Screen Space Ambient Occlusion")]
@@ -192,5 +191,4 @@ public class SSAOEffect : MonoBehaviour
 		Debug.Log (table);
 	}
 	*/
-}
 }
