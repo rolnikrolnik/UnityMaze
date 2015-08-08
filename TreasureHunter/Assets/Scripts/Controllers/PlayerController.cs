@@ -18,7 +18,6 @@ namespace Treasure_Hunter.Controllers
         public Animator Animator;
 
         //Other Gameobjects Components
-        public CameraController PlayerCamera;
         public Transform CameraPosition;
 
         #endregion
@@ -33,9 +32,9 @@ namespace Treasure_Hunter.Controllers
         public IEnumerator InitPlayer(float animationTime)
         {
             SceneManager.Instance.Camera.Transform.parent = CameraPosition;
+            //set camera position
             Vector3 cameraPosition = SceneManager.Instance.Camera.Transform.localPosition;
             Vector3 cameraRotation = SceneManager.Instance.Camera.Transform.localRotation.eulerAngles;
-            SceneManager.Instance.Camera.Deactivate();
             for (float time = 0; time < animationTime; time += Time.deltaTime)
             {
                 float factor = time / animationTime;
@@ -45,8 +44,7 @@ namespace Treasure_Hunter.Controllers
             }
             SceneManager.Instance.Camera.Transform.localPosition = Vector3.zero;
             SceneManager.Instance.Camera.Transform.localRotation = Quaternion.Euler(Vector3.zero);
-            PlayerCamera.GameObject.SetActive(true);
-            SceneManager.Instance.Camera.GameObject.SetActive(false);
+            //Activate player components
             ThirdPersonUserControl.enabled = true;
             ThirdPersonCharacter.enabled = true;
             Collider.enabled = true;

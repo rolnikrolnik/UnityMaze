@@ -22,8 +22,8 @@ namespace Treasure_Hunter.Managers
         public GameObject GameObject;
 
         //Other Gameobjects Components
-        public CameraController Camera;
         public Transform PagesContainer;
+        public CameraController Camera;
         public BaseManager BaseManager;
         public LoadingPageController LoadingPage;
 

@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-namespace Treasure_Hunter.Enumerations
+﻿namespace Treasure_Hunter.Enumerations
 {
     public enum LevelEnums
     {
