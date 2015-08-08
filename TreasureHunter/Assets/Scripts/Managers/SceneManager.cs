@@ -60,9 +60,15 @@ namespace Treasure_Hunter.Managers
             yield return 0;
             BaseManager.Player.GameObject.SetActive(true);
             LoadingPage.Hide();
+            BaseManager.MoveMazeChoicePopupToCanvas();
             yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
             BaseManager.Player.Init();
             yield return 0;
+        }
+
+        public void LoadMaze(MazeType mazeType)
+        {
+
         }
     }
 }

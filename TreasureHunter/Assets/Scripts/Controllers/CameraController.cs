@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Treasure_Hunter.Enumerations;
+using Treasure_Hunter.Managers;
 
 namespace Treasure_Hunter.Controllers
 {
@@ -63,6 +64,11 @@ namespace Treasure_Hunter.Controllers
             OVRCamera.SetActive(true);
             UICanvas.worldCamera = UILeftEyeCamera;
             UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            if (SceneManager.Instance.BaseManager != null && SceneManager.Instance.BaseManager.MazeChoicePopup!=null)
+            {
+                SceneManager.Instance.BaseManager.MazeChoicePopup.OVRBackground.gameObject.SetActive(true);
+                SceneManager.Instance.BaseManager.MazeChoicePopup.StandaloneBackground.gameObject.SetActive(false);
+            }
             StartCoroutine(SetRenderModeToWorldAfterShortDelay());
         }
 
@@ -73,6 +79,11 @@ namespace Treasure_Hunter.Controllers
             OVRCamera.SetActive(false);
             UICanvas.worldCamera = UIStandaloneCamera;
             UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            if (SceneManager.Instance.BaseManager != null && SceneManager.Instance.BaseManager.MazeChoicePopup != null)
+            {
+                SceneManager.Instance.BaseManager.MazeChoicePopup.OVRBackground.gameObject.SetActive(false);
+                SceneManager.Instance.BaseManager.MazeChoicePopup.StandaloneBackground.gameObject.SetActive(true);
+            }
         }
 
         private IEnumerator SetRenderModeToWorldAfterShortDelay()
