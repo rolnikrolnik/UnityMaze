@@ -13,7 +13,7 @@ GameObject:
   - 114: {fileID: 11407116}
   - 114: {fileID: 11466582}
   m_Layer: 0
-  m_Name: CameraLeft
+  m_Name: UICameraLeft
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ GameObject:
   - 114: {fileID: 11437158}
   - 114: {fileID: 11449974}
   m_Layer: 0
-  m_Name: CameraRight
+  m_Name: UICameraRight
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 475176}
-  - 114: {fileID: 11494338}
+  - 114: {fileID: 11437170}
   - 114: {fileID: 11412022}
   m_Layer: 0
   m_Name: OVRCamera
@@ -170,9 +170,10 @@ GameObject:
   - 20: {fileID: 2039472}
   - 124: {fileID: 12490270}
   - 114: {fileID: 11467304}
+  - 114: {fileID: 11481166}
   - 45: {fileID: 4541158}
   m_Layer: 0
-  m_Name: CameraRightWithoutUI
+  m_Name: CameraRight
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -189,9 +190,10 @@ GameObject:
   - 20: {fileID: 2071386}
   - 124: {fileID: 12402190}
   - 114: {fileID: 11406264}
+  - 114: {fileID: 11408788}
   - 45: {fileID: 4524454}
   m_Layer: 0
-  m_Name: CameraLeftWithoutUI
+  m_Name: CameraLeft
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -584,10 +586,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a310e7aab8433a4eac0bd823d0d1ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camera: {fileID: 2066290}
+  OwnOVRCameraController: {fileID: 11437170}
   NeckPosition: {x: 0, y: .600000024, z: 0}
   EyePosition: {x: 0, y: .150000006, z: .0900000036}
-  Camera: {fileID: 2066290}
-  OVRCameraController: {fileID: 11494338}
+--- !u!114 &11408788
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 189526}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a310e7aab8433a4eac0bd823d0d1ddd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Camera: {fileID: 2071386}
+  OwnOVRCameraController: {fileID: 11437170}
+  NeckPosition: {x: 0, y: .600000024, z: 0}
+  EyePosition: {x: 0, y: .150000006, z: .0900000036}
 --- !u!114 &11412022
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -612,10 +629,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a310e7aab8433a4eac0bd823d0d1ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Camera: {fileID: 2075970}
+  OwnOVRCameraController: {fileID: 11437170}
   NeckPosition: {x: 0, y: .600000024, z: 0}
   EyePosition: {x: 0, y: .150000006, z: .0900000036}
-  Camera: {fileID: 2075970}
-  OVRCameraController: {fileID: 11494338}
+--- !u!114 &11437170
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9817216364e9a6140bade8b7688b7c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UICameraLeft: {fileID: 2066290}
+  UICameraRight: {fileID: 2075970}
+  CameraLeft: {fileID: 2071386}
+  CameraRight: {fileID: 2039472}
+  ipd: .639999986
+  verticalFOV: 97
+  backgroundColor: {r: .192000002, g: .301999986, b: .474999994, a: 1}
+  nearClipPlane: .150000006
+  farClipPlane: 1000
+  CameraRootPosition: {x: 0, y: 0, z: 0}
+  NeckPosition: {x: 0, y: 0, z: 0}
+  EyeCenterPosition: {x: 0, y: .150000006, z: .0900000036}
+  FollowOrientation: {fileID: 0}
+  UsePlayerEyeHeight: 0
+  TrackerRotatesY: 0
+  PortraitMode: 0
+  EnableOrientation: 1
+  PredictionOn: 1
+  CallInPreRender: 0
+  WireMode: 0
+  LensCorrection: 1
+  Chromatic: 0
 --- !u!114 &11441322
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -753,35 +803,21 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &11494338
+--- !u!114 &11481166
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 131804}
-  m_Enabled: 1
+  m_GameObject: {fileID: 181308}
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df9f338034892c44ebb62d97894772f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a310e7aab8433a4eac0bd823d0d1ddd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ipd: .639999986
-  verticalFOV: 97
-  CameraRootPosition: {x: 0, y: 0, z: 0}
-  NeckPosition: {x: 0, y: 0, z: 0}
-  EyeCenterPosition: {x: 0, y: .150000006, z: .0900000036}
-  UsePlayerEyeHeight: 0
-  FollowOrientation: {fileID: 0}
-  TrackerRotatesY: 0
-  PortraitMode: 0
-  EnableOrientation: 1
-  PredictionOn: 1
-  CallInPreRender: 0
-  WireMode: 0
-  LensCorrection: 1
-  Chromatic: 0
-  backgroundColor: {r: .192000002, g: .301999986, b: .474999994, a: 1}
-  nearClipPlane: .150000006
-  farClipPlane: 1000
+  Camera: {fileID: 2039472}
+  OwnOVRCameraController: {fileID: 11437170}
+  NeckPosition: {x: 0, y: .600000024, z: 0}
+  EyePosition: {x: 0, y: .150000006, z: .0900000036}
 --- !u!114 &11496052
 MonoBehaviour:
   m_ObjectHideFlags: 1

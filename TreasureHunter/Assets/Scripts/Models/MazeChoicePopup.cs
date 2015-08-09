@@ -52,8 +52,8 @@ namespace Treasure_Hunter.Controllers
         {
             OVRTitle.text = title;
             StandaloneTitle.text = title;
-            OVRTitle.text = message;
-            StandaloneTitle.text = message;
+            OVRMessage.text = message;
+            StandaloneMessage.text = message;
             OVRMazeLogo.sprite = logo;
             StandaloneMazeLogo.sprite = logo;
         }
