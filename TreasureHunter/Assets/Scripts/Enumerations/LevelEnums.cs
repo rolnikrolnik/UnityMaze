@@ -3,6 +3,7 @@
     public enum LevelEnums
     {
         LoadingLevel = 0,
-        BaseLevel = 1
+        BaseLevel = 1,
+        MazeLevel = 2
     }
 }

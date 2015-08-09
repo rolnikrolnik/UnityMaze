@@ -12,7 +12,6 @@ namespace Treasure_Hunter.Controllers
         #region CLASS SETTINGS
 
         private static Vector3 POSITION_CORRECTION = new Vector3(73.2f, 0, -113.22f);
-        private const float ANIMATION_TIME = 0.5f;
 
         #endregion
 
@@ -24,6 +23,7 @@ namespace Treasure_Hunter.Controllers
 
         private MazeType mazeType;
         private Coroutine currentCoroutine;
+        private bool isEnabled = true;
 
         #region MONO BEHAVIOUR
 
@@ -102,9 +102,10 @@ namespace Treasure_Hunter.Controllers
         private IEnumerator AlphaAnimation(bool isShowing)
         {
             float startAlpha = MazeChoicePopup.OVRBackground.color.a;
-            for (float time = isShowing ?startAlpha:0; time < ANIMATION_TIME; time += Time.deltaTime)
+            float animationTime = SceneManager.MAZE_CHOICE_POPUP_ANIMATION_TIME;
+            for (float time = isShowing ? startAlpha : 0; time < animationTime; time += Time.deltaTime)
             {
-                float alpha = isShowing ? time / ANIMATION_TIME : (1 - time / ANIMATION_TIME) * startAlpha;
+                float alpha = isShowing ? time / animationTime : (1 - time / animationTime) * startAlpha;
                 MazeChoicePopup.SetAlphaChannel(alpha);
                 yield return 0;
             }
@@ -118,7 +119,16 @@ namespace Treasure_Hunter.Controllers
 
         public void OnPlayClick()
         {
-            SceneManager.Instance.LoadMaze(mazeType);
+            if (isEnabled)
+            {
+                isEnabled = false;
+                if (currentCoroutine != null)
+                {
+                    StopCoroutine(currentCoroutine);
+                }
+                currentCoroutine = StartCoroutine(AlphaAnimation(false));
+                SceneManager.Instance.LoadMaze(mazeType);
+            }
         }
 
         #endregion

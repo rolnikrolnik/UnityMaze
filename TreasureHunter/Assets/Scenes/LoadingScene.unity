@@ -129,8 +129,9 @@ MonoBehaviour:
   GameObject: {fileID: 302236431}
   PagesContainer: {fileID: 1711634774}
   Camera: {fileID: 982470963}
-  BaseManager: {fileID: 0}
   LoadingPage: {fileID: 1178263976}
+  BaseManager: {fileID: 0}
+  MazeManager: {fileID: 0}
 --- !u!1 &455367849
 GameObject:
   m_ObjectHideFlags: 0

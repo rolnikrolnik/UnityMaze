@@ -1,21 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Treasure_Hunter.Controllers;
+using Treasure_Hunter.Abstract;
 
 namespace Treasure_Hunter.Managers
 {
-    public class BaseManager : MonoBehaviour
+    public class BaseManager : LevelManager
     {
         #region SCENE REFERENCES
 
-        public GameObject Palace;
-        public GameObject Terrain;
-        public PlayerController Player;
         public MazeChoicePopup MazeChoicePopup;
 
         #endregion
 
-        public void MoveMazeChoicePopupToCanvas()
+        public override void MoveUIToCanvas()
         {
             MazeChoicePopup.transform.parent = SceneManager.Instance.PagesContainer;
             MazeChoicePopup.transform.localRotation = Quaternion.identity;

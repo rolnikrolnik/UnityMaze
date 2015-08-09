@@ -11,6 +11,7 @@ namespace Treasure_Hunter.Managers
 
         #region TIME_CONSTANTS
 
+        public const float MAZE_CHOICE_POPUP_ANIMATION_TIME = 0.5f;
         public const float LOADING_PAGE_ANIMATION = 1;
         public const float CAMERA_ANIMTION = 2;
 
@@ -24,8 +25,10 @@ namespace Treasure_Hunter.Managers
         //Other Gameobjects Components
         public Transform PagesContainer;
         public CameraController Camera;
-        public BaseManager BaseManager;
         public LoadingPageController LoadingPage;
+
+        public BaseManager BaseManager;
+        public MazeManager MazeManager;
 
         #endregion
 
@@ -54,21 +57,42 @@ namespace Treasure_Hunter.Managers
                 yield return 0;
                 BaseManager = FindObjectOfType<BaseManager>();
             }
-            BaseManager.Palace.SetActive(true);
-            yield return 0;
-            BaseManager.Terrain.SetActive(true);
-            yield return 0;
-            BaseManager.Player.GameObject.SetActive(true);
+            yield return StartCoroutine(BaseManager.Activate());
             LoadingPage.Hide();
-            BaseManager.MoveMazeChoicePopupToCanvas();
+            BaseManager.MoveUIToCanvas();
             yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
-            BaseManager.Player.Init();
-            yield return 0;
+            yield return StartCoroutine(BaseManager.Init());
         }
 
         public void LoadMaze(MazeType mazeType)
         {
+            StartCoroutine(LoadMazeCoroutine(mazeType));
+        }
 
+        private IEnumerator LoadMazeCoroutine(MazeType mazeType)
+        {
+            yield return new WaitForSeconds(MAZE_CHOICE_POPUP_ANIMATION_TIME);
+            LoadingPage.Show();
+            yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
+            Camera.transform.parent = null;
+            Application.LoadLevelAdditive((int)LevelEnums.MazeLevel);
+            while (BaseManager == null)
+            {
+                yield return 0;
+                BaseManager = FindObjectOfType<BaseManager>();
+            }
+            Destroy(BaseManager.LevelRootObject.gameObject);
+            while (MazeManager == null)
+            {
+                yield return 0;
+                MazeManager = FindObjectOfType<MazeManager>();
+            }
+            yield return StartCoroutine(MazeManager.GenerateMaze(mazeType));
+            LoadingPage.Hide();
+            MazeManager.MoveUIToCanvas();
+            yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
+            MazeManager.Init();
+            yield return 0;
         }
     }
 }

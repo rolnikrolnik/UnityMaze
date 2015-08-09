@@ -2,10 +2,11 @@
 using System.Collections;
 using UnityStandardAssets.Characters.ThirdPerson;
 using Treasure_Hunter.Managers;
+using Treasure_Hunter.Interfaces;
 
 namespace Treasure_Hunter.Controllers
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviour, IInitiation
     {
         #region SCENE REFERENCES
 
