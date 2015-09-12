@@ -276,10 +276,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PrehistoricMazeSprite: {fileID: 21300000, guid: 03a80d7928529d143990b61036a2ca04,
     type: 3}
-  NecropolisMazeSprite: {fileID: 21300000, guid: 03a80d7928529d143990b61036a2ca04,
+  NecropolisMazeSprite: {fileID: 21300000, guid: e710b6a3e0da57f4490f7f7617af19ec,
     type: 3}
-  SwampMazeSprite: {fileID: 21300000, guid: 03a80d7928529d143990b61036a2ca04, type: 3}
-  WormsWorldMazeSprite: {fileID: 21300000, guid: 03a80d7928529d143990b61036a2ca04,
+  SwampMazeSprite: {fileID: 21300000, guid: 05a9af9772e9ac84ab2feb7b796fcf24, type: 3}
+  WormsWorldMazeSprite: {fileID: 21300000, guid: b72ec51fccd126b4c9f06d4f494133ac,
     type: 3}
   OVRButtonBackground: {fileID: 11456424}
   OVRBackground: {fileID: 11429514}

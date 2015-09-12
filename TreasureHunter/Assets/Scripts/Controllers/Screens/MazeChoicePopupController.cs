@@ -79,19 +79,19 @@ namespace Treasure_Hunter.Controllers
         {
             if(deltaPosition.x>0&&deltaPosition.z>0)
             {
-                return MazeType.SwampMaze;
+                return MazeType.PrehistoricMaze;
             }
             else if (deltaPosition.x <= 0 && deltaPosition.z > 0)
             {
-                return MazeType.WormsWorldMaze;
+                return MazeType.NecropolisMaze;
             }
             else if (deltaPosition.x > 0 && deltaPosition.z <= 0)
             {
-                return MazeType.PrehistoricMaze;
+                return MazeType.WormsWorldMaze;
             }
             else
             {
-                return MazeType.NecropolisMaze;
+                return MazeType.SwampMaze;
             }
         }
 
