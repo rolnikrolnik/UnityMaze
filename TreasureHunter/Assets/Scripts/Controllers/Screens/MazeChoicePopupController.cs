@@ -103,13 +103,25 @@ namespace Treasure_Hunter.Controllers
         {
             float startAlpha = MazeChoicePopup.OVRBackground.color.a;
             float animationTime = SceneManager.MAZE_CHOICE_POPUP_ANIMATION_TIME;
-            for (float time = isShowing ? startAlpha : 0; time < animationTime; time += Time.deltaTime)
+            if(isShowing)
             {
-                float alpha = isShowing ? time / animationTime : (1 - time / animationTime) * startAlpha;
-                MazeChoicePopup.SetAlphaChannel(alpha);
-                yield return 0;
+                for (float time = startAlpha * animationTime; time < animationTime; time += Time.deltaTime)
+                {
+                    MazeChoicePopup.SetAlphaChannel(time / animationTime);
+                    yield return 0;
+                }
+                MazeChoicePopup.SetAlphaChannel(1);
             }
-            MazeChoicePopup.SetAlphaChannel(isShowing ? 1 : 0);
+            else
+            {
+
+                for (float time =  (1 - startAlpha) * animationTime; time < animationTime; time += Time.deltaTime)
+                {
+                    MazeChoicePopup.SetAlphaChannel(1 - time / animationTime);
+                    yield return 0;
+                }
+                MazeChoicePopup.SetAlphaChannel(0);
+            }
             MazeChoicePopup.gameObject.SetActive(isShowing);
         }
 

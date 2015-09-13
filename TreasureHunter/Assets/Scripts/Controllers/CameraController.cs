@@ -69,6 +69,11 @@ namespace Treasure_Hunter.Controllers
                 SceneManager.Instance.BaseManager.MazeChoicePopup.OVRBackground.gameObject.SetActive(true);
                 SceneManager.Instance.BaseManager.MazeChoicePopup.StandaloneBackground.gameObject.SetActive(false);
             }
+            if (SceneManager.Instance.BaseManager != null && SceneManager.Instance.MazeManager.ActionChoicePopup != null)
+            {
+                SceneManager.Instance.MazeManager.ActionChoicePopup.OVRBackground.gameObject.SetActive(true);
+                SceneManager.Instance.MazeManager.ActionChoicePopup.StandaloneBackground.gameObject.SetActive(false);
+            }
             StartCoroutine(SetRenderModeToWorldAfterShortDelay());
         }
 
@@ -83,6 +88,11 @@ namespace Treasure_Hunter.Controllers
             {
                 SceneManager.Instance.BaseManager.MazeChoicePopup.OVRBackground.gameObject.SetActive(false);
                 SceneManager.Instance.BaseManager.MazeChoicePopup.StandaloneBackground.gameObject.SetActive(true);
+            }
+            if (SceneManager.Instance.BaseManager != null && SceneManager.Instance.MazeManager.ActionChoicePopup != null)
+            {
+                SceneManager.Instance.MazeManager.ActionChoicePopup.OVRBackground.gameObject.SetActive(false);
+                SceneManager.Instance.MazeManager.ActionChoicePopup.StandaloneBackground.gameObject.SetActive(true);
             }
         }
 
