@@ -8,7 +8,7 @@ namespace Treasure_Hunter.Models
     public class PlayerAction
     {
         public ActionType Type { get; private set; }
-        public int Charges { get; private set; }
+        public int Charges { get; set; }
         public bool hasLimitedCharges { get; private set; }
 
         public PlayerAction(ActionType _type, int _charges = 0, bool _hasLimitedCharges = false)

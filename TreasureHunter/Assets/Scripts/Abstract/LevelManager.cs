@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using Treasure_Hunter.Interfaces;
 using System;
+using Treasure_Hunter.Managers;
 
 namespace Treasure_Hunter.Abstract
 {
@@ -37,6 +38,17 @@ namespace Treasure_Hunter.Abstract
         public virtual void MoveUIToCanvas()
         {
 
+        }
+
+        protected void MovePopupToCanvas(Transform popup)
+        {
+            popup.parent = SceneManager.Instance.PagesContainer;
+            popup.localRotation = Quaternion.identity;
+            popup.localScale = Vector3.one;
+            popup.localPosition = Vector3.zero;
+            RectTransform rectTransform = popup.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = Vector2.zero;
+            rectTransform.sizeDelta = Vector2.zero;
         }
     }
 }
