@@ -1,0 +1,5 @@
+Achievement Title,Goal Enumaration Number (0 - killing monsters; 1 - wining mazes; 2 - losing mazes; 3 - using actions),Threshold I (Bronze),Threshold II (Silver),Threshold III (Gold),Achievement parameter (different for diffrent goals: Goal 0: monsterTypeEnum number; Goal 1 and 2: mazeTypeEnum number; Goal 3: actionTypeEnum number)
+Monsters Killer,0,10,50,100,0
+Maze Slayer,1,2,5,10,0
+Trainee,2,1,5,10,0
+Jumper,3,10,50,100,3

@@ -11,3 +11,5 @@ EditorBuildSettings:
     path: Assets/Scenes/BaseScene.unity
   - enabled: 1
     path: Assets/Scenes/MazeScene.unity
+  - enabled: 1
+    path: Assets/Scenes/TestScreens/AchievementsTest.unity
