@@ -129,6 +129,9 @@ MonoBehaviour:
   LevelRootObject: {fileID: 1559645710}
   ObjectsWhichNeedActivation: []
   ObjectsWhichNeedInitiation: []
+  height: 20
+  width: 20
+  prim: 0
 --- !u!1 &903216930
 GameObject:
   m_ObjectHideFlags: 0

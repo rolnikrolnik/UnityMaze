@@ -4,28 +4,31 @@ namespace MapGenerator
 {
     class CellularAutomata
     {
-        private readonly bool[][] _map;
+        private  bool[][] _map;
         private readonly Random _rng;
-        private readonly int _height;
-        private readonly int _width;
-        private readonly int _randomFillPercentage;
+        private  int _height;
+        private  int _width;
+        private  int _randomFillPercentage;
 
-        public CellularAutomata(int heightTmp = 50, int widthTmp = 50, int randomFillPercentage = 40)
+        public CellularAutomata()
+        {
+
+            this._rng = new Random();
+
+        }
+
+        public void GenerateCave(int heightTmp = 50, int widthTmp = 50, int randomFillPercentage = 40, int turns = 4)
         {
             this._height = heightTmp;
             this._width = widthTmp;
             this._randomFillPercentage = randomFillPercentage;
-            this._rng = new Random();
 
             _map = new bool[this._height][];
             for (var i = 0; i < this._height; i++)
             {
                 _map[i] = new bool[this._width];
             }
-        }
 
-        public void GenerateCave(int turns = 4)
-        {
             this.RandomMapFill();
             for (var i = 0; i < turns; i++)
             {
