@@ -44,8 +44,8 @@ namespace Treasure_Hunter.Controllers
         private void CheckCameraState()
         {
             bool debug = false;// Input.GetKeyDown(KeyCode.Mouse0);
-            if (debug)
-            {
+//            if (debug)
+//            {
                 if (currentDisplayMode == DisplayMode.OVRCamera && OVRDevice.SensorCount <= 0)
                 {
                     SetStandaloneCameraAsMain();
@@ -54,7 +54,7 @@ namespace Treasure_Hunter.Controllers
                 {
                     SetOVRCameraAsMain();
                 }
-            }
+//            }
         }
 
         private void SetOVRCameraAsMain()
