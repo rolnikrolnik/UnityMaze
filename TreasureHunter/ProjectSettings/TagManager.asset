@@ -7,6 +7,8 @@ TagManager:
   - terrain
   - Monster
   - Healthbar
+  - MazeWall
+  - Cube
   layers:
   - Default
   - TransparentFX

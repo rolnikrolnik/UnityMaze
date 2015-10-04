@@ -20,7 +20,6 @@ namespace Treasure_Hunter.TestScripts
 
         void Update()
         {
-            //Sprawdzic nachodzenie na siebie punktow, dodawanie oraz usuwanie itemow
             if(Input.GetKeyDown(KeyCode.Mouse0))
             {
                 switch(testcaseNumber)
@@ -39,12 +38,12 @@ namespace Treasure_Hunter.TestScripts
                         ActionChoicePopup.SelectAction();
                         break;
                     case 4:
-                        ActionChoicePopup.AddAction(new PlayerAction(ActionType.Jump));
-                        ActionChoicePopup.AddAction(new PlayerAction(ActionType.Rope));
+                        ActionChoicePopup.AddAction(new PlayerAction(ActionType.JUMP));
+                        ActionChoicePopup.AddAction(new PlayerAction(ActionType.ROPE));
                         ActionChoicePopup.Show();
                         break;
                     case 5:
-                        ActionChoicePopup.RemoveAction(ActionType.Rope);
+                        ActionChoicePopup.RemoveAction(ActionType.ROPE);
                         ActionChoicePopup.Hide();
                         break;
                 }

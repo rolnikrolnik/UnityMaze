@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace GrowingTree
+namespace MapGenerator
 {
     enum MazeDirections
     {
@@ -140,15 +140,15 @@ namespace GrowingTree
         {
             var mazePrintHeight = 2*_height + 1;
             var mazePrintWidth = 2*_width + 1;
-            char[][] mazeToPrint = new char[mazePrintHeight][];
-            for (int i = 0; i < mazePrintHeight; i++)
+            var mazeToPrint = new char[mazePrintHeight][];
+            for (var i = 0; i < mazePrintHeight; i++)
             {
                 mazeToPrint[i] = new char[mazePrintWidth];
             }
 
-            for (int i = 0; i < mazePrintHeight; i++)
+            for (var i = 0; i < mazePrintHeight; i++)
             {
-                for (int j = 0; j < mazePrintWidth; j++)
+                for (var j = 0; j < mazePrintWidth; j++)
                 {
                     if (j%2 == 0 && i%2 == 0)
                         mazeToPrint[i][j] = '#';

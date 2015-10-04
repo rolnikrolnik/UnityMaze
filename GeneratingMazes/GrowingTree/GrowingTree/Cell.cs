@@ -1,4 +1,4 @@
-﻿namespace GrowingTree
+﻿namespace MapGenerator
 {
         
     public class Cell
