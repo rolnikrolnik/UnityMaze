@@ -62,7 +62,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 				translation *= 2.0f;
 			}
 
-			transform.Translate (0, 0, translation);
+			//transform.Translate (0, 0, translation);
 			transform.Rotate (0, rotation, 0);
 
 			var h_mouse = rotationSpeed * Input.GetAxis ("Mouse X");
@@ -70,7 +70,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			transform.Rotate (/*v_mouse*/0, h_mouse * 0.25f, 0);
 
             // pass all parameters to the character control script
-			m_Character.Move(m_Move, crouch, m_Jump);
+			m_Character.Move(translation*transform.forward, crouch, m_Jump);
             m_Jump = false;
         }
     }
