@@ -15,6 +15,7 @@ namespace Treasure_Hunter.Managers
         public const float LOADING_PAGE_ANIMATION = 1;
         public const float CAMERA_ANIMTION = 2;
 
+
         #endregion
 
         #region SCENE REFERENCES
@@ -42,6 +43,7 @@ namespace Treasure_Hunter.Managers
 
         private void Start()
         {
+            PlayerPrefsManager.Instance.Init();
             StartCoroutine(LoadBase());
         }
 
@@ -49,8 +51,7 @@ namespace Treasure_Hunter.Managers
 
         private IEnumerator LoadBase()
         {
-            yield return 0;
-            PlayerPrefsManager.Instance.Init();
+            Camera.InitCameraInTheBase();
             yield return 0;
             Application.LoadLevelAdditive((int)LevelEnums.BaseLevel);
             while (BaseManager == null)
@@ -75,13 +76,15 @@ namespace Treasure_Hunter.Managers
             yield return new WaitForSeconds(POPUP_ANIMATION_TIME);
             LoadingPage.Show();
             yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
-            Camera.transform.parent = null;
+            Camera.InitCameraInTheMaze();
             Application.LoadLevelAdditive((int)LevelEnums.MazeLevel);
             while (BaseManager == null)
             {
                 yield return 0;
                 BaseManager = FindObjectOfType<BaseManager>();
             }
+            Destroy(BaseManager.MazeChoicePopup.gameObject);
+            Destroy(BaseManager.AchievementsPopup.gameObject);
             Destroy(BaseManager.LevelRootObject.gameObject);
             while (MazeManager == null)
             {
@@ -92,8 +95,7 @@ namespace Treasure_Hunter.Managers
             LoadingPage.Hide();
             MazeManager.MoveUIToCanvas();
             yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
-            MazeManager.Init();
-            yield return 0;
+            yield return StartCoroutine(MazeManager.Init());
         }
     }
 }

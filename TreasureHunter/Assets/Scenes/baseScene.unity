@@ -2488,11 +2488,11 @@ Prefab:
     - target: {fileID: 11470540, guid: e1a9a113bcf094948ba531d824ded7be, type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 531190606}
     - target: {fileID: 11458096, guid: e1a9a113bcf094948ba531d824ded7be, type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 531190606}
     - target: {fileID: 11470540, guid: e1a9a113bcf094948ba531d824ded7be, type: 2}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnPlayClick
@@ -6751,8 +6751,8 @@ Transform:
   m_LocalPosition: {x: 194.75, y: 37.1640625, z: 325.78125}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_Father: {fileID: 1391147769}
+  m_RootOrder: 4
 --- !u!1 &1391147768
 GameObject:
   m_ObjectHideFlags: 0
@@ -6782,6 +6782,7 @@ Transform:
   - {fileID: 956727392}
   - {fileID: 2024345608}
   - {fileID: 1927194796}
+  - {fileID: 1332543065}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!1 &1404442000

@@ -7,6 +7,15 @@ namespace Treasure_Hunter.Controllers
 {
     public class CameraController : MonoBehaviour
     {
+        #region CLASS SETTINGS
+
+        private static Vector3 MAZE_START_CAMERA_POSITION = new Vector3(-13, 104, -5);
+        private static Vector3 MAZE_START_CAMERA_ROTATION = new Vector3(30, 70, 0);
+        private static Vector3 BASE_START_CAMERA_POSITION = new Vector3(71.19169f, 60, 204.5f);
+        private static Vector3 BASE_START_CAMERA_ROTATION = new Vector3(30, 60, 0);
+
+        #endregion
+
         #region SCENE REFERENCES
 
         //Self Components
@@ -40,6 +49,20 @@ namespace Treasure_Hunter.Controllers
         }
 
         #endregion
+
+        public void InitCameraInTheBase()
+        {
+            transform.parent = null;
+            transform.localPosition = BASE_START_CAMERA_POSITION;
+            transform.localRotation = Quaternion.Euler(BASE_START_CAMERA_ROTATION);
+        }
+
+        public void InitCameraInTheMaze()
+        {
+            transform.parent = null;
+            transform.localPosition = MAZE_START_CAMERA_POSITION;
+            transform.localRotation = Quaternion.Euler(MAZE_START_CAMERA_ROTATION);
+        }
 
         private void CheckCameraState()
         {

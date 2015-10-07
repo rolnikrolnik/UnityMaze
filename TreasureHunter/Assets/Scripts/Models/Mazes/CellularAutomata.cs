@@ -7,7 +7,6 @@ namespace Treasure_Hunter.Mazes
 {
 	public class CellularAutomata : MonoBehaviour, IMaze
 	{
-
 		private bool[][] _map;
 		private readonly System.Random _rng;
 		private int _height;
@@ -45,22 +44,7 @@ namespace Treasure_Hunter.Mazes
 				for (int j = 0; j < this._width; j++) {
 				}
 			}
-
-            this.DebugPrint();
 		}
-
-        private void DebugPrint()
-        {
-            using (var sw = File.AppendText(@"C:\studia\inz\debug.txt"))
-                for (int i = 0; i < _map.Length; i++)
-                {
-                    for (int j = 0; j < _map[i].Length; j++)
-                    {
-                        sw.Write(_map[i][j] ? "#" : " ");
-                    }
-                    sw.Write("\n");
-                }
-        }
 
         public bool IsPointAWall(int x, int y)
 		{
