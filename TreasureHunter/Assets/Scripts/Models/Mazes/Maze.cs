@@ -75,12 +75,46 @@ namespace Treasure_Hunter.Mazes
 
 		public bool IsPointAWall(int x, int y)
 		{
-			return this.mazeArray [x] [y];
+		    if (x < this.GetLength()
+		        && x >= 0
+		        && y < this.GetWidth()
+		        && y >= 0)
+		    {
+		        return this.mazeArray[x][y];
+		    }
+		    else
+		    {
+                throw new Exception("Out of bounds exception!");
+		    }
 		}
 
-		#region Private methods
+	    public Vector3 GetPlayerCoords(Vector3 mazeWallScale, Vector3 mazeScale)
+	    {
+	        while (true)
+	        {
+                var randomPostion = _rng.Next(this.GetWidth());
+                var playerVector = new Vector3(_rng.Next(this.GetWidth()), 1, 1);
+	            if (this.IsPointAWall(0, randomPostion))
+	            {
+	                return Vector3.Scale(playerVector + mazeWallScale * 0.5f, mazeScale);
+	            }
+            }
 
-		private Point SelectNeighbour(Point startingCell, out MazeDirections selectedDirection)
+        }
+
+	    public int GetLength()
+        {
+            return mazeArray.Length;
+        }
+
+        public int GetWidth()
+        {
+            return mazeArray != null ? mazeArray[0].Length : 0;
+        }
+
+	    #region Private methods
+
+        private Point SelectNeighbour(Point startingCell, out MazeDirections selectedDirection)
 		{
 			Point neighborCell = null;
 			var startingX = startingCell.X;

@@ -91,7 +91,7 @@ namespace Treasure_Hunter.Managers
                 yield return 0;
                 MazeManager = FindObjectOfType<MazeManager>();
             }
-            yield return StartCoroutine(MazeManager.GenerateMaze(mazeType));
+            //yield return StartCoroutine(MazeManager.GenerateMaze(mazeType));
             LoadingPage.Hide();
             MazeManager.MoveUIToCanvas();
             yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);

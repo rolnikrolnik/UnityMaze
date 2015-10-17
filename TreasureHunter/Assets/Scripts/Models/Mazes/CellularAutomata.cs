@@ -5,6 +5,7 @@ using System.Collections;
 
 namespace Treasure_Hunter.Mazes
 {
+    
 	public class CellularAutomata : MonoBehaviour, IMaze
 	{
 		private bool[][] _map;
@@ -40,10 +41,6 @@ namespace Treasure_Hunter.Mazes
 			{
 				this.SmoothMap();
 			}
-			for (int i = 0; i < this._height; i++) {
-				for (int j = 0; j < this._width; j++) {
-				}
-			}
 		}
 
         public bool IsPointAWall(int x, int y)
@@ -51,9 +48,31 @@ namespace Treasure_Hunter.Mazes
 			return this._map [x] [y];
 		}
 
-		#region Private methods
+	    public Vector3 GetPlayerCoords(Vector3 mazeWallScale, Vector3 mazeScale)
+	    {
+	        throw new NotImplementedException();
+	    }
 
-		private void RandomMapFill()
+	    public int GetLength()
+        {
+            return _map.Length;
+        }
+
+        public int GetWidth()
+        {
+            if (_map != null)
+            {
+                return _map[0].Length;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        #region Private methods
+
+        private void RandomMapFill()
 		{
 			for (var i = 0; i < this._height; i++)
 			{
