@@ -86,7 +86,7 @@ NavMeshSettings:
     minRegionArea: 2
     cellSize: .166666672
     manualCellSize: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 46678ae203909114e8fb8a74dc3e17f7, type: 2}
 --- !u!1 &374700285
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,6 +115,7 @@ Transform:
   - {fileID: 1786136222}
   - {fileID: 786801684}
   - {fileID: 1620980438}
+  - {fileID: 2120038470}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!1 &434447002
@@ -285,7 +286,7 @@ Transform:
   m_GameObject: {fileID: 1620980437}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20, y: 1, z: 20}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 374700286}
   m_RootOrder: 2
@@ -304,14 +305,20 @@ MonoBehaviour:
   ObjectsWhichNeedActivation: []
   ObjectsWhichNeedInitiation: []
   ActionChoicePopup: {fileID: 0}
-  width: 40
-  length: 40
+  Player: {fileID: 1786136229}
+  width: 20
+  length: 20
   prim: 0
-  heightOfMaze: 0
   mazeType: 1
-  mazeWallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
-  floorMaterial: {fileID: 2100000, guid: d99161c024294442eb37f9f853a8b4f3, type: 2}
-  wallMaterial: {fileID: 0}
+  WallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
+  FloorPrefab: {fileID: 141030, guid: b4311c58f143713409e2e17e7495f329, type: 2}
+  ExitPrefab: {fileID: 143512, guid: 136c8226cf2780b42baa0a24e9d10de2, type: 2}
+  StationaryTrapPrefab: {fileID: 102680, guid: 933e7eb59163b414882282554643ae8e, type: 2}
+  AcrossTrapPrefab: {fileID: 188886, guid: 4a8274d7c5b0e3d4ca5f4ca409a48375, type: 2}
+  DownTrapPrefab: {fileID: 178758, guid: 641bfba5914ef944faa1cbe7a3a0745d, type: 2}
+  MonsterPrefab: {fileID: 116974, guid: fe57e0a0d5098d244a0feb3d986c6ad3, type: 2}
+  startPosition: {x: 0, y: 0, z: 0}
+  exitVector: {x: 0, y: 0, z: 0}
 --- !u!1001 &1786136221
 Prefab:
   m_ObjectHideFlags: 0
@@ -471,3 +478,73 @@ MonoBehaviour:
   Collider: {fileID: 1786136226}
   Animator: {fileID: 1786136228}
   CameraPosition: {fileID: 0}
+--- !u!1 &2120038469
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 2120038470}
+  - 218: {fileID: 2120038472}
+  - 154: {fileID: 2120038471}
+  m_Layer: 0
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967263
+  m_IsActive: 1
+--- !u!4 &2120038470
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2120038469}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 374700286}
+  m_RootOrder: 3
+--- !u!154 &2120038471
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2120038469}
+  m_Material: {fileID: 0}
+  m_Enabled: 1
+  m_TerrainData: {fileID: 15600000, guid: d1996dd4c15d2ed4d9b652a629f04732, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!218 &2120038472
+Terrain:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2120038469}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_TerrainData: {fileID: 15600000, guid: d1996dd4c15d2ed4d9b652a629f04732, type: 2}
+  m_TreeDistance: 2000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMaximumLOD: 0
+  m_CastShadows: 1
+  m_DrawHeightmap: 1
+  m_DrawTreesAndFoliage: 1
+  m_ReflectionProbeUsage: 1
+  m_MaterialType: 0
+  m_LegacySpecular:
+    serializedVersion: 2
+    rgba: 4286545791
+  m_LegacyShininess: .078125
+  m_MaterialTemplate: {fileID: 0}
+  m_BakeLightProbesForTrees: 1
+  m_ScaleInLightmap: .0511999987
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}

@@ -11,16 +11,22 @@ namespace Treasure_Hunter.Mazes
 		
 		private List<List<Cell>> _cells;
 		private List<Point> _activeCells;
-		private readonly System.Random _rng;
+		private readonly System.Random random;
 		private int _height;
 		private int _width;
 		private bool[][] mazeArray;
 
 		public bool IsPrim { get; set; }
+        public int Length { get { return mazeArray.Length;  } }
+        public int Width { get { return mazeArray[0].Length; }}
+        public Dictionary<Vector3, MazeComponentType> MazeComponents { get; private set; }  
+        public Vector3 MazeWallScale { get; set; }
 		
-		public Maze()
+		public Maze(Vector3 mazeWallScale)
 		{
-			_rng = new System.Random();
+			random = new System.Random();
+            this.MazeComponents = new Dictionary<Vector3, MazeComponentType>();
+		    this.MazeWallScale = mazeWallScale;
 		}
 		
 		public void GenerateMaze(int heightTmp = 20, int widthTmp = 20)
@@ -71,13 +77,15 @@ namespace Treasure_Hunter.Mazes
 			}
 
 			this.CreateMazeArray();
+
+		    this.FillVectorCollections();
 		}
 
-		public bool IsPointAWall(int x, int y)
+        public bool IsPointAWall(int x, int y)
 		{
-		    if (x < this.GetLength()
+		    if (x < this.Length
 		        && x >= 0
-		        && y < this.GetWidth()
+		        && y < this.Width
 		        && y >= 0)
 		    {
 		        return this.mazeArray[x][y];
@@ -88,31 +96,153 @@ namespace Treasure_Hunter.Mazes
 		    }
 		}
 
-	    public Vector3 GetPlayerCoords(Vector3 mazeWallScale, Vector3 mazeScale)
+	    public Vector3 GetPlayerCoords()
 	    {
 	        while (true)
 	        {
-                var randomPostion = _rng.Next(this.GetWidth());
-                var playerVector = new Vector3(_rng.Next(this.GetWidth()), 1, 1);
-	            if (this.IsPointAWall(0, randomPostion))
+                var randomPostionX = random.Next(this.Width);
+                var playerVector = new Vector3(randomPostionX, 1, 1);
+	            if (!this.IsPointAWall(1, randomPostionX))
 	            {
-	                return Vector3.Scale(playerVector + mazeWallScale * 0.5f, mazeScale);
+	                return playerVector + this.MazeWallScale*0.5f;
 	            }
+            }
+        }
+
+        #region Private methods
+
+        #region Vector3 prepare methods
+
+        // TODO : refactor and put in another class
+
+        private void FillVectorCollections()
+        {
+            this.AddExitComponent();
+
+            for (var x = 0; x < this.Length; x++)
+            {
+                for (var y = 0; y < this.Width; y++)
+                {
+                    var componentVector = new Vector3(x, 1, y) + MazeWallScale / 2;
+
+                    if (this.IsPointAWall(x, y))
+                    {
+                        this.AddWallComponents(componentVector);
+                    }
+                    else
+                    {
+                        this.AddOtherComponents(componentVector);
+                    }
+                }
+            }
+        }
+
+	    private void AddExitComponent()
+        {
+            while (true)
+            {
+                var lastRowOfMaze = this.Length - 1;
+                var randomPostionX = random.Next(this.Width - 2) + 1;
+                if (!IsPointAWall(randomPostionX, lastRowOfMaze - 1))
+                {
+                    this.MazeComponents.Add(
+                        new Vector3(randomPostionX, 1, lastRowOfMaze) + MazeWallScale / 2, 
+                        MazeComponentType.EXIT);
+                    return;
+                }
+            }
+        }
+
+	    private void AddWallComponents(Vector3 componentVector)
+	    {
+            try
+            {
+                this.MazeComponents.Add(componentVector, MazeComponentType.WALL);
+            }
+            catch (Exception ex)
+            {
+                Debug.Log("Tried to add wall which is exit");
+                Debug.Log(ex);
+            }
+        }
+
+	    private void AddOtherComponents(Vector3 componentVector)
+	    {
+	        if (this.IsTrapPossible(componentVector))
+	        {
+                var obstacleProbability = 2; // TODO : pass obstacle probability to Maze class
+                var isTrap = random.Next(10) < obstacleProbability;
+
+                if (isTrap)
+                {
+                    this.AddObstaclesComponents(componentVector);
+                }
+                else
+                {
+                    this.MazeComponents.Add(componentVector, MazeComponentType.FLOOR);
+                }
+            }
+	        else
+	        {
+                this.MazeComponents.Add(componentVector, MazeComponentType.FLOOR);
             }
 
         }
 
-	    public int GetLength()
+        private bool IsTrapPossible(Vector3 componentVector)
         {
-            return mazeArray.Length;
+            var leftCell = new Vector3(componentVector.x - 1, componentVector.y, componentVector.z);
+            var rightCell = new Vector3(componentVector.x + 1, componentVector.y, componentVector.z);
+            var upperCell = new Vector3(componentVector.x, componentVector.y, componentVector.z + 1);
+            var lowerCell = new Vector3(componentVector.x, componentVector.y, componentVector.z - 1);
+
+            var neighboursList = new List<Vector3> { leftCell, rightCell, upperCell, lowerCell };
+
+            foreach (var neighbour in neighboursList)
+            {
+                if (!this.MazeComponents.ContainsKey(neighbour))
+                {
+                    continue;
+                }
+
+                if (this.MazeComponents[neighbour] == MazeComponentType.STATIONARY_TRAP
+                    || this.MazeComponents[neighbour] == MazeComponentType.ACROSS_TRAP
+                    || this.MazeComponents[neighbour] == MazeComponentType.DOWN_TRAP
+                    || this.MazeComponents[neighbour] == MazeComponentType.MONSTER)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
-        public int GetWidth()
-        {
-            return mazeArray != null ? mazeArray[0].Length : 0;
-        }
+        private void AddObstaclesComponents(Vector3 componentVector)
+	    {
+            // TODO : write check for across/down traps
+	        var trapProbability = random.Next(10);
+            if (trapProbability < 5)
+            {
+                var trapTypeProbability = random.Next(10);
+                if (trapTypeProbability < 3)
+                {
+                    this.MazeComponents.Add(componentVector, MazeComponentType.STATIONARY_TRAP);
+                }
+                else if (trapTypeProbability < 7)
+                {
+                    this.MazeComponents.Add(componentVector, MazeComponentType.ACROSS_TRAP);
+                }
+                else
+                {
+                    this.MazeComponents.Add(componentVector, MazeComponentType.DOWN_TRAP);
+                }
+            }
+	        else
+	        {
+                this.MazeComponents.Add(componentVector, MazeComponentType.MONSTER);
+            }
+	    }
 
-	    #region Private methods
+        #endregion
 
         private Point SelectNeighbour(Point startingCell, out MazeDirections selectedDirection)
 		{
@@ -228,23 +358,21 @@ namespace Treasure_Hunter.Mazes
 			}
 		}
 
-
-		
 		private Point SelectCellFromList(bool isPrim)
 		{
 			// random selection of cell - almost like Prim's algorithm  ||  latest cell from list - recursive backtracker
-			return isPrim ? _activeCells[_rng.Next(_activeCells.Count)] : _activeCells[_activeCells.Count - 1];
+			return isPrim ? _activeCells[random.Next(_activeCells.Count)] : _activeCells[_activeCells.Count - 1];
 		}
 		
 		private Point GetRandomCell()
 		{
-			return new Point(_rng.Next(_width), _rng.Next(_height));
+			return new Point(random.Next(_width), random.Next(_height));
 		}
 		
 		private MazeDirections GetRandomDirection()
 		{
 			var values = Enum.GetValues(typeof(MazeDirections));
-			return (MazeDirections)values.GetValue(_rng.Next(values.Length));
+			return (MazeDirections)values.GetValue(random.Next(values.Length));
 		}
 		
 		private static MazeDirections GetOppositeDirection(MazeDirections mazeDirection)

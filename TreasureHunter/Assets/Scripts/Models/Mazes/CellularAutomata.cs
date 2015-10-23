@@ -2,6 +2,8 @@
 using System;
 using System.IO;
 using System.Collections;
+using System.Collections.Generic;
+using Treasure_Hunter.Enumerations;
 
 namespace Treasure_Hunter.Mazes
 {
@@ -25,7 +27,13 @@ namespace Treasure_Hunter.Mazes
 
 		public int Turns { get; set; }
 
-		public void GenerateMaze(int heightTmp = 50, int widthTmp = 50)
+	    public int Length { get { return _map.Length; } }
+
+	    public int Width { get { return _map[0].Length; } }
+
+        public Dictionary<Vector3, MazeComponentType> MazeComponents { get; private set; }
+
+	    public void GenerateMaze(int heightTmp = 50, int widthTmp = 50)
 		{
 			this._height = heightTmp;
 			this._width = widthTmp;
@@ -48,27 +56,16 @@ namespace Treasure_Hunter.Mazes
 			return this._map [x] [y];
 		}
 
-	    public Vector3 GetPlayerCoords(Vector3 mazeWallScale, Vector3 mazeScale)
+	    public Vector3 GetPlayerCoords()
 	    {
 	        throw new NotImplementedException();
 	    }
 
-	    public int GetLength()
-        {
-            return _map.Length;
-        }
 
-        public int GetWidth()
-        {
-            if (_map != null)
-            {
-                return _map[0].Length;
-            }
-            else
-            {
-                return 0;
-            }
-        }
+	    public Dictionary<MazeComponentType, Vector3> GetMazeComponents()
+	    {
+	        throw new NotImplementedException();
+	    }
 
         #region Private methods
 
@@ -125,6 +122,6 @@ namespace Treasure_Hunter.Mazes
 			}
 		}
 
-		#endregion
-	}
+        #endregion
+    }
 }
