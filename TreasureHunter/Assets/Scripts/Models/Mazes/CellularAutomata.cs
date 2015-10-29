@@ -56,17 +56,6 @@ namespace Treasure_Hunter.Mazes
 			return this._map [x] [y];
 		}
 
-	    public Vector3 GetPlayerCoords()
-	    {
-	        throw new NotImplementedException();
-	    }
-
-
-	    public Dictionary<MazeComponentType, Vector3> GetMazeComponents()
-	    {
-	        throw new NotImplementedException();
-	    }
-
         #region Private methods
 
         private void RandomMapFill()

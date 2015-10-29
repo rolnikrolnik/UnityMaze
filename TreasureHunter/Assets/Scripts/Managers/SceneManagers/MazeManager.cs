@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Linq;
 using Treasure_Hunter.Enumerations;
 using Treasure_Hunter.Abstract;
 using Treasure_Hunter.Controllers;
@@ -26,14 +24,14 @@ namespace Treasure_Hunter.Managers
 
         #endregion
 
-        #region Public fields
+        #region Fields
 
-        public int width;
-        public int length;
-        public bool prim;
-        public System.Random random;
-        public MazeType mazeType;
+        private Vector3 mazeWallScale;
 
+        public int Width;
+        public int Length;
+        public bool Prim;
+        public MazeType MazeType;
         public GameObject WallPrefab;
         public GameObject FloorPrefab;
         public GameObject ExitPrefab;
@@ -41,11 +39,6 @@ namespace Treasure_Hunter.Managers
         public GameObject AcrossTrapPrefab;
         public GameObject DownTrapPrefab;
         public GameObject MonsterPrefab;
-
-        public Vector3 startPosition;
-        public Vector3 exitVector;
-
-        private Vector3 MazeWallScale;
 
         #endregion
 
@@ -58,8 +51,7 @@ namespace Treasure_Hunter.Managers
 
         public void Start()
         {
-            MazeWallScale = this.WallPrefab.transform.localScale;
-            random = new System.Random();
+            mazeWallScale = this.WallPrefab.transform.localScale;
         }
 
         public override void MoveUIToCanvas()
@@ -84,32 +76,52 @@ namespace Treasure_Hunter.Managers
                         Destroy(wall);
                     }
 
-                    this.GenerateMaze(this.mazeType);
+                    this.GenerateMaze(this.MazeType);
                 }
             }
         }
 
-        public void GenerateMaze(MazeType _mazeType)
+        public void GenerateMaze(MazeType mazeType)
+        {
+            //zmienić skybox'y
+            this.RestoreDefaultPositions();
+            this.InstantiateMazeObject(mazeType);
+            this.GenerateMazeComponents();
+            this.ChangeMazeScale();
+            //yield return StartCoroutine(Activate());
+        }
+
+        private void RestoreDefaultPositions()
         {
             this.transform.localScale = Vector3.one;
+            var terrain = GameObject.Find(TerrainName);
+            terrain.transform.position = Vector3.one;
+        }
 
-            //zmienić skybox'y
-            mazeType = _mazeType;
+        private void InstantiateMazeObject(MazeType mazeType)
+        {
+            this.MazeType = mazeType;
             switch (mazeType)
             {
                 case MazeType.PREHISTORIC_MAZE:
                 case MazeType.NECROPOLIS_MAZE:
                 case MazeType.WORMSWORLD_MAZE:
                     this.Maze = new Maze();
-                    this.Maze.GenerateMaze(length, width);
+                    this.Maze.GenerateMaze(Length, Width);
                     break;
                 case MazeType.SWAMP_MAZE:
                     this.Maze = new CellularAutomata();
+                    this.Maze.GenerateMaze(Length, Width);
                     break;
+                case MazeType.NONE:
+                    throw new Exception("Maze Type not specified!");
             }
 
-            this.MazeConverter = new MazeConverter(this.Maze, this.MazeWallScale);
+            this.MazeConverter = new MazeConverter(this.Maze, this.mazeWallScale);
+        }
 
+        private void GenerateMazeComponents()
+        {
             foreach (var mazeComponent in this.MazeConverter.MazeComponents)
             {
                 var componentType = mazeComponent.Value;
@@ -118,9 +130,6 @@ namespace Treasure_Hunter.Managers
                 {
                     case MazeComponentType.WALL:
                         this.InstantiateMazeComponent(componentVector, WallPrefab);
-                        break;
-                    case MazeComponentType.FLOOR:
-                        //this.InstantiateMazeComponent(componentVector, FloorPrefab);
                         break;
                     case MazeComponentType.STATIONARY_TRAP:
                         this.InstantiateMazeComponent(componentVector, StationaryTrapPrefab);
@@ -141,9 +150,6 @@ namespace Treasure_Hunter.Managers
                         break;
                 }
             }
-
-            this.ChangeMazeScale();
-            //yield return StartCoroutine(Activate());
         }
 
         private void InstantiateMazeComponent(Vector3 vector, GameObject prefab)
@@ -171,7 +177,5 @@ namespace Treasure_Hunter.Managers
                 terrain.transform.position.y + MAZE_SCALE.y,
                 terrain.transform.position.z);
         }
-
-
     }
 }
