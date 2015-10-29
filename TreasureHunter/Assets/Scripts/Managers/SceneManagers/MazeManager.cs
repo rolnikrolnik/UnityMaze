@@ -42,19 +42,17 @@ namespace Treasure_Hunter.Managers
         public GameObject DownTrapPrefab;
         public GameObject MonsterPrefab;
 
-
         public Vector3 startPosition;
         public Vector3 exitVector;
 
         private Vector3 MazeWallScale;
 
-
-
         #endregion
 
         #region Properties
 
-        private IMaze MazeCreator { get; set; }
+        private IMaze Maze { get; set; }
+        private MazeConverter MazeConverter { get; set; }
 
         #endregion
 
@@ -75,8 +73,26 @@ namespace Treasure_Hunter.Managers
             rectTransform.sizeDelta = Vector2.zero;
         }
 
+        public void Update()
+        {
+            if (Application.loadedLevel != (int)LevelEnums.MazeLevel)
+            {
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    foreach (var wall in GameObject.FindGameObjectsWithTag("MazeComponent"))
+                    {
+                        Destroy(wall);
+                    }
+
+                    this.GenerateMaze(this.mazeType);
+                }
+            }
+        }
+
         public void GenerateMaze(MazeType _mazeType)
         {
+            this.transform.localScale = Vector3.one;
+
             //zmienić skybox'y
             mazeType = _mazeType;
             switch (mazeType)
@@ -84,17 +100,17 @@ namespace Treasure_Hunter.Managers
                 case MazeType.PREHISTORIC_MAZE:
                 case MazeType.NECROPOLIS_MAZE:
                 case MazeType.WORMSWORLD_MAZE:
-                    this.MazeCreator = new Maze(MazeWallScale);
-                    ((Maze) this.MazeCreator).IsPrim = prim;
+                    this.Maze = new Maze();
+                    this.Maze.GenerateMaze(length, width);
                     break;
                 case MazeType.SWAMP_MAZE:
-                    this.MazeCreator = new CellularAutomata();
+                    this.Maze = new CellularAutomata();
                     break;
             }
 
-            this.MazeCreator.GenerateMaze(length, width);
+            this.MazeConverter = new MazeConverter(this.Maze, this.MazeWallScale);
 
-            foreach (var mazeComponent in this.MazeCreator.MazeComponents)
+            foreach (var mazeComponent in this.MazeConverter.MazeComponents)
             {
                 var componentType = mazeComponent.Value;
                 var componentVector = mazeComponent.Key;
@@ -148,7 +164,7 @@ namespace Treasure_Hunter.Managers
         private void ChangeMazeScale()
         {
             this.transform.localScale = MAZE_SCALE;
-            Player.transform.localPosition = Vector3.Scale(this.MazeCreator.GetPlayerCoords(), MAZE_SCALE);
+            Player.transform.localPosition = Vector3.Scale(this.MazeConverter.PlayerCoords, MAZE_SCALE);
             var terrain = GameObject.Find(TerrainName);
             terrain.transform.position = new Vector3(
                 terrain.transform.position.x,
@@ -156,23 +172,6 @@ namespace Treasure_Hunter.Managers
                 terrain.transform.position.z);
         }
 
-        public void Update()
-        {
-            if (Application.loadedLevel != (int)LevelEnums.MazeLevel)
-            {
-                if (Input.GetKeyUp(KeyCode.Space))
-                {
-                    this.transform.localScale = Vector3.one;
-
-                    foreach (var wall in GameObject.FindGameObjectsWithTag("MazeComponent"))
-                    {
-                        Destroy(wall);
-                    }
-
-                    this.GenerateMaze(this.mazeType);
-                }
-            }
-        }
 
     }
 }
