@@ -1,10 +1,9 @@
-﻿using System.Collections;
+﻿using System;
 using Treasure_Hunter.Enumerations;
 using Treasure_Hunter.Abstract;
 using Treasure_Hunter.Controllers;
 using Treasure_Hunter.Mazes;
 using UnityEngine;
-using System.Collections.Generic;
 
 
 namespace Treasure_Hunter.Managers
@@ -13,7 +12,8 @@ namespace Treasure_Hunter.Managers
     {
         #region CLASS SETTINGS
 
-        private static Vector3 MAZE_SCALE = new Vector3(20, 8, 20);
+        private static Vector3 MAZE_SCALE = new Vector3(10, 4, 10);
+        private static string TerrainName = "Terrain";
 
         #endregion
 
@@ -24,21 +24,35 @@ namespace Treasure_Hunter.Managers
 
         #endregion
 
-        #region Public fields
+        #region Fields
 
-        public int width;
-        public int length;
-        public bool prim;
-        public float heightOfMaze;
-        public MazeType mazeType;
-        public GameObject mazeWallPrefab;
-        public Material floorMaterial;
-        public Material wallMaterial;
-        public Vector3 startPosition;
+        private Vector3 mazeWallScale;
+
+        public int Width;
+        public int Length;
+        public bool Prim;
+        public MazeType MazeType;
+        public GameObject WallPrefab;
+        public GameObject FloorPrefab;
+        public GameObject ExitPrefab;
+        public GameObject StationaryTrapPrefab;
+        public GameObject AcrossTrapPrefab;
+        public GameObject DownTrapPrefab;
+        public GameObject MonsterPrefab;
 
         #endregion
 
-        private IMaze MazeCreator { get; set; }
+        #region Properties
+
+        private IMaze Maze { get; set; }
+        private MazeConverter MazeConverter { get; set; }
+
+        #endregion
+
+        public void Start()
+        {
+            mazeWallScale = this.WallPrefab.transform.localScale;
+        }
 
         public override void MoveUIToCanvas()
         {
@@ -51,112 +65,117 @@ namespace Treasure_Hunter.Managers
             rectTransform.anchoredPosition = Vector2.zero;
             rectTransform.sizeDelta = Vector2.zero;
         }
-        
-        public IEnumerator GenerateMaze(MazeType _mazeType)
+
+        public void Update()
+        {
+            if (Application.loadedLevel != (int)LevelEnums.MazeLevel)
+            {
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    foreach (var wall in GameObject.FindGameObjectsWithTag("MazeComponent"))
+                    {
+                        Destroy(wall);
+                    }
+
+                    this.GenerateMaze(this.MazeType);
+                }
+            }
+        }
+
+        public void GenerateMaze(MazeType mazeType)
         {
             //zmienić skybox'y
-            mazeType = _mazeType;
+            this.RestoreDefaultPositions();
+            this.InstantiateMazeObject(mazeType);
+            this.GenerateMazeComponents();
+            this.ChangeMazeScale();
+            //yield return StartCoroutine(Activate());
+        }
+
+        private void RestoreDefaultPositions()
+        {
+            this.transform.localScale = Vector3.one;
+            var terrain = GameObject.Find(TerrainName);
+            terrain.transform.position = Vector3.one;
+        }
+
+        private void InstantiateMazeObject(MazeType mazeType)
+        {
+            this.MazeType = mazeType;
             switch (mazeType)
             {
                 case MazeType.PREHISTORIC_MAZE:
                 case MazeType.NECROPOLIS_MAZE:
                 case MazeType.WORMSWORLD_MAZE:
-                    this.MazeCreator = new Maze();
-                    (this.MazeCreator as Maze).IsPrim = prim;
+                    this.Maze = new Maze();
                     break;
-
                 case MazeType.SWAMP_MAZE:
-                    this.MazeCreator = new CellularAutomata();
+                    this.Maze = new CellularAutomata();
                     break;
+                case MazeType.NONE:
+                    throw new Exception("Maze Type not specified!");
             }
 
-            var mazeWallScale = this.mazeWallPrefab.transform.localScale;
-            this.MazeCreator.GenerateMaze(length, width);
-            for (int x = 0; x < length; x++)
-            {
-                for (int y = 0; y < width; y++)
-                {
-                    if (this.MazeCreator.IsPointAWall(x, y))
-                    {
-                        var mazeWall = Instantiate(mazeWallPrefab,
-                                                   new Vector3(x + mazeWallScale.x / 2, mazeWallScale.y / 2, y + mazeWallScale.z / 2),
-                                                   Quaternion.identity) as GameObject;
-                        mazeWall.transform.parent = this.transform;
-                        mazeWall.transform.localScale = mazeWallScale;
-                    }
-                    else
-                    {
-                        var mazeFloor = Instantiate(mazeWallPrefab,
-                                                    new Vector3(x + mazeWallScale.x / 2, mazeWallScale.y / 2, y + mazeWallScale.z / 2),
-                                                   Quaternion.identity) as GameObject;
-                        mazeFloor.transform.parent = this.transform;
-                        mazeFloor.transform.localScale = new Vector3(mazeWallScale.x, mazeWallScale.y * 0.2f, mazeWallScale.z);
-                        var mazeFlooorMeshRenderer = mazeFloor.GetComponent<MeshRenderer>();
-                        mazeFlooorMeshRenderer.material = this.floorMaterial;
-                    }
-                }
-            }
-            transform.localScale = MAZE_SCALE;
-            yield return StartCoroutine(Activate());
-            Player.transform.localPosition = startPosition;
+            this.Maze.GenerateMaze(this.Length, this.Width);
+            this.MazeConverter = new MazeConverter(this.Maze, this.mazeWallScale);
         }
 
-        public void Update()
+        private void GenerateMazeComponents()
         {
-            if (Application.isEditor)
+            foreach (var mazeComponent in this.MazeConverter.MazeComponents)
             {
-                if (Input.GetKeyUp(KeyCode.Space))
+                var componentType = mazeComponent.Value;
+                var componentVector = mazeComponent.Key;
+                switch (componentType)
                 {
-                    var mazeWallScale = this.mazeWallPrefab.transform.localScale;
-                    foreach (var wall in GameObject.FindGameObjectsWithTag("MazeWall"))
-                    {
-                        Destroy(wall);
-                    }
-
-                    switch (mazeType)
-                    {
-                        case MazeType.PREHISTORIC_MAZE:
-                        case MazeType.NECROPOLIS_MAZE:
-                        case MazeType.WORMSWORLD_MAZE:
-                            this.MazeCreator = new Maze();
-                            (this.MazeCreator as Maze).IsPrim = prim;
-                            break;
-
-                        case MazeType.SWAMP_MAZE:
-                            this.MazeCreator = new CellularAutomata();
-                            break;
-                    }
-
-                    this.MazeCreator.GenerateMaze(length, width);
-
-                    transform.localScale = Vector3.one;
-                    for (int x = 0; x < length; x++)
-                    {
-                        for (int y = 0; y < width; y++)
-                        {
-                            if (this.MazeCreator.IsPointAWall(x, y))
-                            {
-                                var mazeWall = Instantiate(mazeWallPrefab,
-                                                           new Vector3(x + mazeWallScale.x / 2, mazeWallScale.y / 2, y + mazeWallScale.z / 2),
-                                                           Quaternion.identity) as GameObject;
-                                mazeWall.transform.parent = this.transform;
-                                mazeWall.transform.localScale = mazeWallScale;
-                            }
-                            else
-                            {
-                                var mazeFloor = Instantiate(mazeWallPrefab,
-                                                            new Vector3(x + mazeWallScale.x / 2, mazeWallScale.y / 2, y + mazeWallScale.z / 2),
-                                                           Quaternion.identity) as GameObject;
-                                mazeFloor.transform.parent = this.transform;
-                                mazeFloor.transform.localScale = new Vector3(mazeWallScale.x, mazeWallScale.y * 0.2f, mazeWallScale.z);
-                                var mazeFlooorMeshRenderer = mazeFloor.GetComponent<MeshRenderer>();
-                                mazeFlooorMeshRenderer.material = this.floorMaterial;
-                            }
-                        }
-                    }
-                    transform.localScale = new Vector3(4, 2, 4);
+                    case MazeComponentType.WALL:
+                        this.InstantiateMazeComponent(componentVector, WallPrefab);
+                        break;
+                    case MazeComponentType.STATIONARY_TRAP:
+                        this.InstantiateMazeComponent(componentVector, StationaryTrapPrefab);
+                        break;
+                    case MazeComponentType.MONSTER:
+                        this.InstantiateMazeComponent(componentVector, MonsterPrefab);
+                        break;
+                    case MazeComponentType.ACROSS_TRAP:
+                        this.InstantiateMazeComponent(componentVector, AcrossTrapPrefab);
+                        break;
+                    case MazeComponentType.DOWN_TRAP:
+                        this.InstantiateMazeComponent(componentVector, DownTrapPrefab);
+                        break;
+                    case MazeComponentType.EXIT:
+                        this.InstantiateMazeComponent(componentVector, ExitPrefab);
+                        break;
+                    default:
+                        break;
                 }
             }
+        }
+
+        private void InstantiateMazeComponent(Vector3 vector, GameObject prefab)
+        {
+            try
+            {
+                var mazeObject = Instantiate(prefab,
+                    vector,
+                    Quaternion.identity) as GameObject;
+                mazeObject.transform.parent = this.transform;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
+
+        private void ChangeMazeScale()
+        {
+            this.transform.localScale = MAZE_SCALE;
+            Player.transform.localPosition = Vector3.Scale(this.MazeConverter.PlayerCoords, MAZE_SCALE);
+            var terrain = GameObject.Find(TerrainName);
+            terrain.transform.position = new Vector3(
+                terrain.transform.position.x,
+                terrain.transform.position.y + MAZE_SCALE.y,
+                terrain.transform.position.z);
         }
     }
 }

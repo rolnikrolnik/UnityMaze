@@ -2,9 +2,12 @@
 using System;
 using System.IO;
 using System.Collections;
+using System.Collections.Generic;
+using Treasure_Hunter.Enumerations;
 
 namespace Treasure_Hunter.Mazes
 {
+    
 	public class CellularAutomata : MonoBehaviour, IMaze
 	{
 		private bool[][] _map;
@@ -24,7 +27,13 @@ namespace Treasure_Hunter.Mazes
 
 		public int Turns { get; set; }
 
-		public void GenerateMaze(int heightTmp = 50, int widthTmp = 50)
+	    public int Length { get { return _map.Length; } }
+
+	    public int Width { get { return _map[0].Length; } }
+
+        public Dictionary<Vector3, MazeComponentType> MazeComponents { get; private set; }
+
+	    public void GenerateMaze(int heightTmp = 50, int widthTmp = 50)
 		{
 			this._height = heightTmp;
 			this._width = widthTmp;
@@ -40,20 +49,81 @@ namespace Treasure_Hunter.Mazes
 			{
 				this.SmoothMap();
 			}
-			for (int i = 0; i < this._height; i++) {
-				for (int j = 0; j < this._width; j++) {
-				}
-			}
 		}
 
-        public bool IsPointAWall(int x, int y)
+	    public Point GetExitCoords()
+	    {
+	        var foundEmptyRow = false;
+	        var firstEmptyRow = this.Length - 1;
+	        for (; firstEmptyRow > 0; firstEmptyRow--)
+	        {
+	            if (foundEmptyRow)
+	            {
+	                break;
+	            }
+
+                for (int i = 0; i < this.Width; i++)
+	            {
+	                if (!IsPointAWall(firstEmptyRow, i))
+	                {
+	                    foundEmptyRow = true;
+	                    break;
+	                }
+	            }
+	        }
+
+            while (true)
+            {
+                var randomPostionX = _rng.Next(this.Width - 2) + 1;
+                if (!this.IsPointAWall(randomPostionX, firstEmptyRow - 1))
+                {
+                    Debug.Log(string.Format("EXIT = x = {0}, y ={1}", randomPostionX, firstEmptyRow));
+                    return new Point(randomPostionX, firstEmptyRow);
+                }
+            }
+        }
+
+	    public Point GetPlayerCoords()
+	    {
+            var foundEmptyRow = false;
+            var firstEmptyRow = 0;
+            for (; firstEmptyRow < this.Length; firstEmptyRow++)
+            {
+                if (foundEmptyRow)
+                {
+                    break;
+                }
+
+                for (int i = 0; i < this.Width; i++)
+                {
+                    if (!IsPointAWall(firstEmptyRow, i))
+                    {
+                        foundEmptyRow = true;
+                        break;
+                    }
+                }
+            }
+
+            while (true)
+            {
+                var randomPostionX = _rng.Next(this.Width);
+                if (!this.IsPointAWall(firstEmptyRow, randomPostionX))
+                {
+                    Debug.Log(string.Format("PLAYER = x = {0}, y ={1}", randomPostionX, firstEmptyRow));
+                    return new Point(randomPostionX, firstEmptyRow);
+                }
+            }
+        }
+
+	    public bool IsPointAWall(int x, int y)
 		{
+            //Debug.Log(string.Format("x = {0}, y ={1}", x, y));
 			return this._map [x] [y];
 		}
 
-		#region Private methods
+        #region Private methods
 
-		private void RandomMapFill()
+        private void RandomMapFill()
 		{
 			for (var i = 0; i < this._height; i++)
 			{
@@ -106,6 +176,6 @@ namespace Treasure_Hunter.Mazes
 			}
 		}
 
-		#endregion
-	}
+        #endregion
+    }
 }
