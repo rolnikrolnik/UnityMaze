@@ -107,16 +107,15 @@ namespace Treasure_Hunter.Managers
                 case MazeType.NECROPOLIS_MAZE:
                 case MazeType.WORMSWORLD_MAZE:
                     this.Maze = new Maze();
-                    this.Maze.GenerateMaze(Length, Width);
                     break;
                 case MazeType.SWAMP_MAZE:
                     this.Maze = new CellularAutomata();
-                    this.Maze.GenerateMaze(Length, Width);
                     break;
                 case MazeType.NONE:
                     throw new Exception("Maze Type not specified!");
             }
 
+            this.Maze.GenerateMaze(this.Length, this.Width);
             this.MazeConverter = new MazeConverter(this.Maze, this.mazeWallScale);
         }
 

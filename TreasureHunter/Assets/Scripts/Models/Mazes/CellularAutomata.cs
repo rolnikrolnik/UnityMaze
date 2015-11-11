@@ -51,8 +51,73 @@ namespace Treasure_Hunter.Mazes
 			}
 		}
 
-        public bool IsPointAWall(int x, int y)
+	    public Point GetExitCoords()
+	    {
+	        var foundEmptyRow = false;
+	        var firstEmptyRow = this.Length - 1;
+	        for (; firstEmptyRow > 0; firstEmptyRow--)
+	        {
+	            if (foundEmptyRow)
+	            {
+	                break;
+	            }
+
+                for (int i = 0; i < this.Width; i++)
+	            {
+	                if (!IsPointAWall(firstEmptyRow, i))
+	                {
+	                    foundEmptyRow = true;
+	                    break;
+	                }
+	            }
+	        }
+
+            while (true)
+            {
+                var randomPostionX = _rng.Next(this.Width - 2) + 1;
+                if (!this.IsPointAWall(randomPostionX, firstEmptyRow - 1))
+                {
+                    Debug.Log(string.Format("EXIT = x = {0}, y ={1}", randomPostionX, firstEmptyRow));
+                    return new Point(randomPostionX, firstEmptyRow);
+                }
+            }
+        }
+
+	    public Point GetPlayerCoords()
+	    {
+            var foundEmptyRow = false;
+            var firstEmptyRow = 0;
+            for (; firstEmptyRow < this.Length; firstEmptyRow++)
+            {
+                if (foundEmptyRow)
+                {
+                    break;
+                }
+
+                for (int i = 0; i < this.Width; i++)
+                {
+                    if (!IsPointAWall(firstEmptyRow, i))
+                    {
+                        foundEmptyRow = true;
+                        break;
+                    }
+                }
+            }
+
+            while (true)
+            {
+                var randomPostionX = _rng.Next(this.Width);
+                if (!this.IsPointAWall(firstEmptyRow, randomPostionX))
+                {
+                    Debug.Log(string.Format("PLAYER = x = {0}, y ={1}", randomPostionX, firstEmptyRow));
+                    return new Point(randomPostionX, firstEmptyRow);
+                }
+            }
+        }
+
+	    public bool IsPointAWall(int x, int y)
 		{
+            //Debug.Log(string.Format("x = {0}, y ={1}", x, y));
 			return this._map [x] [y];
 		}
 

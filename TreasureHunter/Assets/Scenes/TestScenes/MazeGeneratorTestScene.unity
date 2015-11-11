@@ -306,10 +306,10 @@ MonoBehaviour:
   ObjectsWhichNeedInitiation: []
   ActionChoicePopup: {fileID: 0}
   Player: {fileID: 1786136229}
-  width: 20
-  length: 20
-  prim: 0
-  mazeType: 1
+  Width: 20
+  Length: 20
+  Prim: 0
+  MazeType: 4
   WallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
   FloorPrefab: {fileID: 141030, guid: b4311c58f143713409e2e17e7495f329, type: 2}
   ExitPrefab: {fileID: 143512, guid: 136c8226cf2780b42baa0a24e9d10de2, type: 2}
@@ -317,8 +317,6 @@ MonoBehaviour:
   AcrossTrapPrefab: {fileID: 188886, guid: 4a8274d7c5b0e3d4ca5f4ca409a48375, type: 2}
   DownTrapPrefab: {fileID: 178758, guid: 641bfba5914ef944faa1cbe7a3a0745d, type: 2}
   MonsterPrefab: {fileID: 116974, guid: fe57e0a0d5098d244a0feb3d986c6ad3, type: 2}
-  startPosition: {x: 0, y: 0, z: 0}
-  exitVector: {x: 0, y: 0, z: 0}
 --- !u!1001 &1786136221
 Prefab:
   m_ObjectHideFlags: 0

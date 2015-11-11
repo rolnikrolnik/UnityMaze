@@ -76,7 +76,32 @@ namespace Treasure_Hunter.Mazes
 			this.CreateMazeArray();
 		}
 
-        public bool IsPointAWall(int x, int y)
+	    public Point GetExitCoords()
+	    {
+            while (true)
+            {
+                var lastRowOfMaze = this.Length - 1;
+                var randomPostionX = random.Next(this.Width - 2) + 1;
+                if (!this.IsPointAWall(randomPostionX, lastRowOfMaze - 1))
+                {
+                    return new Point(randomPostionX, lastRowOfMaze);
+                }
+            }
+        }
+
+	    public Point GetPlayerCoords()
+	    {
+            while (true)
+            {
+                var randomPostionX = random.Next(this.Width);
+                if (!this.IsPointAWall(1, randomPostionX))
+                {
+                    return new Point(randomPostionX, 1);
+                }
+            }
+        }
+
+	    public bool IsPointAWall(int x, int y)
 		{
 		    if (x < this.Length
 		        && x >= 0

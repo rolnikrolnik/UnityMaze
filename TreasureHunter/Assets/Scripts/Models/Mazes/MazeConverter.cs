@@ -80,32 +80,18 @@ namespace Treasure_Hunter.Mazes
 
         private void SetPlayerPosition()
         {
-            while (true)
-            {
-                var randomPostionX = random.Next(this.maze.Width);
-                var playerVector = new Vector3(randomPostionX, 1, 1);
-                if (!this.maze.IsPointAWall(1, randomPostionX))
-                {
-                    this.PlayerCoords = playerVector + mazeWallScale*0.5f;
-                    return;
-                }
-            }
+            var playerCoords = this.maze.GetPlayerCoords();
+            var playerVector = new Vector3(playerCoords.X, 1, playerCoords.Y);
+            this.PlayerCoords = playerVector + mazeWallScale / 2;
         }
 
         private void AddExitComponent()
         {
-            while (true)
-            {
-                var lastRowOfMaze = this.maze.Length - 1;
-                var randomPostionX = random.Next(this.maze.Width - 2) + 1;
-                if (!this.maze.IsPointAWall(randomPostionX, lastRowOfMaze - 1))
-                {
-                    this.MazeComponents.Add(
-                        new Vector3(randomPostionX, 1, lastRowOfMaze) + mazeWallScale/2,
-                        MazeComponentType.EXIT);
-                    return;
-                }
-            }
+            var exitCoords = this.maze.GetExitCoords();
+            var exitVector = new Vector3(exitCoords.X, 1, exitCoords.Y);
+            this.MazeComponents.Add(
+                exitVector + mazeWallScale / 2, 
+                MazeComponentType.EXIT);
         }
 
         private void AddWallComponent(Vector3 componentVector)
