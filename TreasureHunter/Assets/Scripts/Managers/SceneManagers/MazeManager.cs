@@ -89,7 +89,6 @@ namespace Treasure_Hunter.Managers
             this.InstantiateMazeObject(mazeType);
             this.GenerateMazeComponents();
             this.ChangeMazeScale();
-            //yield return StartCoroutine(Activate());
         }
 
         private void RestoreDefaultPositions()

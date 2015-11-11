@@ -87,61 +87,6 @@ NavMeshSettings:
     cellSize: .166666672
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &264620360
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 264620361}
-  - 114: {fileID: 264620362}
-  m_Layer: 0
-  m_Name: MazeManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &264620361
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 264620360}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1559645711}
-  m_RootOrder: 2
---- !u!114 &264620362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 264620360}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b111df1fdd6e0fb4983dcac7278e2c42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LevelRootObject: {fileID: 1559645710}
-  ObjectsWhichNeedActivation:
-  - {fileID: 1572267092}
-  ObjectsWhichNeedInitiation:
-  - {fileID: 1572267093}
-  ActionChoicePopup: {fileID: 272294887}
-  Player: {fileID: 1572267093}
-  width: 20
-  length: 20
-  prim: 0
-  heightOfMaze: 0
-  mazeType: 0
-  mazeWallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
-  floorMaterial: {fileID: 2100000, guid: d99161c024294442eb37f9f853a8b4f3, type: 2}
-  wallMaterial: {fileID: 0}
-  startPosition: {x: 30, y: 24, z: 30}
 --- !u!1001 &272294886
 Prefab:
   m_ObjectHideFlags: 0
@@ -272,12 +217,12 @@ Light:
   serializedVersion: 6
   m_Type: 1
   m_Color: {r: 1, g: .956862748, b: .839215696, a: 1}
-  m_Intensity: 1
+  m_Intensity: .75
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_Strength: 1
     m_Bias: .0500000007
@@ -333,7 +278,8 @@ Transform:
   m_Children:
   - {fileID: 903216932}
   - {fileID: 1572267090}
-  - {fileID: 264620361}
+  - {fileID: 1764031150}
+  - {fileID: 1613851466}
   - {fileID: 1671760596}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -417,6 +363,63 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1572267089}
   m_Script: {fileID: 11500000, guid: f76567d58189492498c3e9aed88a5419, type: 3}
+--- !u!1 &1613851465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1613851466}
+  - 114: {fileID: 1613851467}
+  m_Layer: 0
+  m_Name: MazeManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1613851466
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1613851465}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1559645711}
+  m_RootOrder: 3
+--- !u!114 &1613851467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1613851465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b111df1fdd6e0fb4983dcac7278e2c42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelRootObject: {fileID: 1559645710}
+  ObjectsWhichNeedActivation:
+  - {fileID: 1572267092}
+  ObjectsWhichNeedInitiation:
+  - {fileID: 1572267093}
+  ActionChoicePopup: {fileID: 272294887}
+  Player: {fileID: 1572267093}
+  Width: 20
+  Length: 20
+  Prim: 0
+  MazeType: 4
+  WallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
+  FloorPrefab: {fileID: 141030, guid: b4311c58f143713409e2e17e7495f329, type: 2}
+  ExitPrefab: {fileID: 143512, guid: 136c8226cf2780b42baa0a24e9d10de2, type: 2}
+  StationaryTrapPrefab: {fileID: 102680, guid: 933e7eb59163b414882282554643ae8e, type: 2}
+  AcrossTrapPrefab: {fileID: 188886, guid: 4a8274d7c5b0e3d4ca5f4ca409a48375, type: 2}
+  DownTrapPrefab: {fileID: 178758, guid: 641bfba5914ef944faa1cbe7a3a0745d, type: 2}
+  MonsterPrefab: {fileID: 116974, guid: fe57e0a0d5098d244a0feb3d986c6ad3, type: 2}
 --- !u!1 &1671760594
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,4 +461,74 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1559645711}
-  m_RootOrder: 3
+  m_RootOrder: 4
+--- !u!1 &1764031149
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1764031150}
+  - 218: {fileID: 1764031152}
+  - 154: {fileID: 1764031151}
+  m_Layer: 0
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967263
+  m_IsActive: 1
+--- !u!4 &1764031150
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1764031149}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1559645711}
+  m_RootOrder: 2
+--- !u!154 &1764031151
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1764031149}
+  m_Material: {fileID: 0}
+  m_Enabled: 1
+  m_TerrainData: {fileID: 15600000, guid: d1996dd4c15d2ed4d9b652a629f04732, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!218 &1764031152
+Terrain:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1764031149}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_TerrainData: {fileID: 15600000, guid: d1996dd4c15d2ed4d9b652a629f04732, type: 2}
+  m_TreeDistance: 2000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMaximumLOD: 0
+  m_CastShadows: 1
+  m_DrawHeightmap: 1
+  m_DrawTreesAndFoliage: 1
+  m_ReflectionProbeUsage: 1
+  m_MaterialType: 0
+  m_LegacySpecular:
+    serializedVersion: 2
+    rgba: 4286545791
+  m_LegacyShininess: .078125
+  m_MaterialTemplate: {fileID: 0}
+  m_BakeLightProbesForTrees: 1
+  m_ScaleInLightmap: .0511999987
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
