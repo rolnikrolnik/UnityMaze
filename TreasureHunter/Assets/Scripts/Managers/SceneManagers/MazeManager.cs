@@ -44,8 +44,9 @@ namespace Treasure_Hunter.Managers
         {
             ActionChoicePopup.transform.parent = SceneManager.Instance.PagesContainer;
             ActionChoicePopup.transform.localRotation = Quaternion.identity;
-            ActionChoicePopup.transform.localScale = Vector3.one;
+            ActionChoicePopup.SetInactiveSize();
             ActionChoicePopup.transform.localPosition = Vector3.zero;
+            ActionChoicePopup.Init();
             RectTransform rectTransform = ActionChoicePopup.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = Vector2.zero;
             rectTransform.sizeDelta = Vector2.zero;
@@ -102,7 +103,7 @@ namespace Treasure_Hunter.Managers
 
         public void Update()
         {
-            if (Application.loadedLevel != (int)LevelEnums.MazeLevel)
+            if (Application.isEditor)
             {
                 if (Input.GetKeyUp(KeyCode.Space))
                 {

@@ -13,7 +13,6 @@ namespace Treasure_Hunter.Controllers
         #region SCENE REFERENCES
 
         public ActionChoicePopup ChoicePopup;
-        public Image ActionBackground;
         public Image ActionImage;
 
         #endregion
@@ -54,7 +53,6 @@ namespace Treasure_Hunter.Controllers
         public void SetAlphaChannel(float alpha)
         {
             ActionImage.SetAlphaChannel(alpha);
-            ActionBackground.SetAlphaChannel(alpha);
         }
     }
 }

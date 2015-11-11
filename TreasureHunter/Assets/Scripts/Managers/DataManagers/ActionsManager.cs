@@ -11,8 +11,9 @@ namespace Treasure_Hunter.Managers
     {
         #region PROJECT REFERENCES
 
-        public Sprite Placeholder;
+        public Sprite AttackImage;
         public Sprite RopeImage;
+        public Sprite JumpImage;
 
         #endregion
 
@@ -20,30 +21,29 @@ namespace Treasure_Hunter.Managers
 
         public void RemoveAction(ActionType _type)
         {
-            throw new System.NotImplementedException();
+            PlayerPrefsManager.Instance.Actions.DecreaseChargesOfAction(_type);
         }
 
         public void AddAction(PlayerAction _action)
         {
-            throw new System.NotImplementedException();
+            PlayerPrefsManager.Instance.Actions.AddAction(_action);
         }
 
         public void AddChargesToAction(PlayerAction _action)
         {
-            throw new System.NotImplementedException();
+            PlayerPrefsManager.Instance.Actions.AddChargesToAction(_action);
         }
 
         public void DecreaseChargesOfAction(ActionType actionType)
         {
-            throw new System.NotImplementedException();
+            PlayerPrefsManager.Instance.Actions.DecreaseChargesOfAction(actionType);
         }
 
         #endregion
 
         public List<PlayerAction> GetAvailableActions()
         {
-            throw new System.NotImplementedException();
-            //PlayerPrefsManager.Instance.GetAvailableActions
+            return PlayerPrefsManager.Instance.Actions.GetAvailableActions();
         }
 
         public Sprite GetActionIcon(ActionType type)
@@ -51,13 +51,13 @@ namespace Treasure_Hunter.Managers
             switch(type)
             {
                 case ActionType.ATTACK:
-                    return Placeholder;
+                    return AttackImage;
                 case ActionType.ROPE:
                     return RopeImage;
                 case ActionType.JUMP:
-                    return Placeholder;
+                    return JumpImage;
                 default:
-                    return Placeholder;
+                    return null;
             }
         }
     }
