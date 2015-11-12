@@ -131,8 +131,14 @@ MonoBehaviour:
   PagesContainer: {fileID: 1711634774}
   Camera: {fileID: 982470963}
   LoadingPage: {fileID: 1178263976}
+  Skyboxes:
+  - {fileID: 1509719733}
+  - {fileID: 1529047787}
+  - {fileID: 628778791}
   BaseManager: {fileID: 0}
   MazeManager: {fileID: 0}
+  BaseSkybox: {fileID: 2100000, guid: d07d2172e76d3fa429e80a14d2ae3616, type: 2}
+  MazeSkybox: {fileID: 2100000, guid: 6e71f22b53c9cb54d85140289fc23694, type: 2}
 --- !u!1 &455367849
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,6 +212,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!45 &628778791 stripped
+Skybox:
+  m_PrefabParentObject: {fileID: 4554680, guid: a540632289a09c34192db42761be6400,
+    type: 2}
+  m_PrefabInternal: {fileID: 1098474975}
 --- !u!114 &982470963 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 11443356, guid: a540632289a09c34192db42761be6400,
@@ -275,6 +286,10 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 800
       objectReference: {fileID: 0}
+    - target: {fileID: 4541158, guid: a540632289a09c34192db42761be6400, type: 2}
+      propertyPath: m_CustomSkybox
+      value: 
+      objectReference: {fileID: 2100000, guid: d07d2172e76d3fa429e80a14d2ae3616, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a540632289a09c34192db42761be6400, type: 2}
   m_IsPrefabParent: 0
@@ -284,6 +299,16 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 1098474975}
   m_Script: {fileID: 11500000, guid: 4a9576d162ee405449384ec7bf325af7, type: 3}
+--- !u!45 &1509719733 stripped
+Skybox:
+  m_PrefabParentObject: {fileID: 4524454, guid: a540632289a09c34192db42761be6400,
+    type: 2}
+  m_PrefabInternal: {fileID: 1098474975}
+--- !u!45 &1529047787 stripped
+Skybox:
+  m_PrefabParentObject: {fileID: 4541158, guid: a540632289a09c34192db42761be6400,
+    type: 2}
+  m_PrefabInternal: {fileID: 1098474975}
 --- !u!1 &1615059338
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,12 +27,20 @@ namespace Treasure_Hunter.Managers
         public Transform PagesContainer;
         public CameraController Camera;
         public LoadingPage LoadingPage;
+        public Skybox[] Skyboxes;
 
         public BaseManager BaseManager;
         public MazeManager MazeManager;
 
         #endregion
 
+        #region PROJECT REFERENCES
+
+        public Material BaseSkybox;
+        public Material MazeSkybox;
+
+        #endregion
+        
         #region MONO BEHAVIOUR
 
         private void Awake()
@@ -58,6 +66,10 @@ namespace Treasure_Hunter.Managers
             {
                 yield return 0;
                 BaseManager = FindObjectOfType<BaseManager>();
+            }
+            for (int i = 0; i < Skyboxes.Length; i++)
+            {
+                Skyboxes[i].material = BaseSkybox;
             }
             yield return StartCoroutine(BaseManager.Activate());
             LoadingPage.Hide();
@@ -90,6 +102,10 @@ namespace Treasure_Hunter.Managers
             {
                 yield return 0;
                 MazeManager = FindObjectOfType<MazeManager>();
+            }
+            for (int i = 0; i < Skyboxes.Length; i++)
+            {
+                Skyboxes[i].material = MazeSkybox;
             }
             MazeManager.GenerateMaze(mazeType);
             yield return StartCoroutine(MazeManager.Activate());
