@@ -16,12 +16,13 @@ namespace Treasure_Hunter.Mazes
 
         #endregion
 
-        public MazeConverter(IMaze maze, Vector3 mazeWallScale)
+        public MazeConverter(IMaze maze, Vector3 mazeWallScale, int trapProbability)
         {
             this.maze = maze;
             this.random = new Random();
             this.mazeWallScale = mazeWallScale;
             this.PlayerCoords = new Vector3();
+            this.TrapProbability = trapProbability;
 
             this.ConvertMaze();
         }
@@ -30,6 +31,7 @@ namespace Treasure_Hunter.Mazes
 
         public Dictionary<Vector3, MazeComponentType> MazeComponents { get; private set; }
         public Vector3 PlayerCoords { get; private set; }
+        public int TrapProbability { get; set; }
 
         #endregion
 
@@ -37,19 +39,11 @@ namespace Treasure_Hunter.Mazes
 
         private void ConvertMaze()
         {
-            try
-            {
-                this.MazeComponents = new Dictionary<Vector3, MazeComponentType>();
-                this.SetPlayerPosition();
-                this.AddExitComponent();
-                this.AddWalls();
-                this.AddTraps();
-            }
-            catch (Exception e)
-            {
-                var a = e;
-                Debug.Log(e.Message);
-            }
+            this.MazeComponents = new Dictionary<Vector3, MazeComponentType>();
+            this.SetPlayerPosition();
+            this.AddExitComponent();
+            this.AddWalls();
+            this.AddTraps();
         }
 
         private void AddTraps()
@@ -63,7 +57,7 @@ namespace Treasure_Hunter.Mazes
                     if (!this.maze.IsPointAWall(x, y)
                         && this.IsTrapPossible(componentVector))
                     {
-                        this.AddTrapComponent(componentVector);
+                            this.AddTrapComponent(componentVector);
                     }
                 }
             }
@@ -110,14 +104,13 @@ namespace Treasure_Hunter.Mazes
             catch (Exception ex)
             {
                 Debug.Log("Tried to add wall which is exit");
-                Debug.Log(ex);
             }
         }
 
         private bool IsTrapPossible(Vector3 componentVector)
         {
-            var trapProbability = 2; // TODO : pass obstacle probability to Maze class
-            var isTrap = random.Next(10) < trapProbability;
+            var trapProbability = this.TrapProbability; // TODO : pass obstacle probability to Maze class
+            var isTrap = random.Next(100) < trapProbability;
             if (!isTrap)
             {
                 return false;
@@ -149,30 +142,38 @@ namespace Treasure_Hunter.Mazes
             return true;
         }
 
+
         private void AddTrapComponent(Vector3 componentVector)
         {
-            var trapProbability = random.Next(10);
-            if (trapProbability < 5)
+            try
             {
-                var trapTypeProbability = random.Next(10);
-                if (trapTypeProbability < 3
-                    && this.IsDownTrapPossible(componentVector))
+                var trapProbability = random.Next(10);
+                if (trapProbability < 5)
                 {
-                    this.MazeComponents.Add(componentVector, MazeComponentType.DOWN_TRAP);
-                }
-                else if (trapTypeProbability < 7
-                         && this.IsAcrossTrapPossible(componentVector))
-                {
-                    this.MazeComponents.Add(componentVector, MazeComponentType.ACROSS_TRAP);
+                    var trapTypeProbability = random.Next(10);
+                    if (trapTypeProbability < 3
+                        && this.IsDownTrapPossible(componentVector))
+                    {
+                        this.MazeComponents.Add(componentVector, MazeComponentType.DOWN_TRAP);
+                    }
+                    else if (trapTypeProbability < 7
+                             && this.IsAcrossTrapPossible(componentVector))
+                    {
+                        this.MazeComponents.Add(componentVector, MazeComponentType.ACROSS_TRAP);
+                    }
+                    else
+                    {
+                        this.MazeComponents.Add(componentVector, MazeComponentType.STATIONARY_TRAP);
+                    }
                 }
                 else
                 {
-                    this.MazeComponents.Add(componentVector, MazeComponentType.STATIONARY_TRAP);
+                    this.MazeComponents.Add(componentVector, MazeComponentType.MONSTER);
                 }
             }
-            else
+            catch (Exception e)
             {
-                this.MazeComponents.Add(componentVector, MazeComponentType.MONSTER);
+                Debug.Log("Dictionary error during adding trap");
             }
         }
 
