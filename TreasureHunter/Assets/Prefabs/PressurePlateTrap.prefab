@@ -1,5 +1,23 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &106426
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 455014}
+  - 33: {fileID: 3363882}
+  - 65: {fileID: 6534172}
+  - 23: {fileID: 2361088}
+  m_Layer: 0
+  m_Name: PressurePlateTrap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &153918
 GameObject:
   m_ObjectHideFlags: 0
@@ -8,9 +26,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 458736}
-  - 33: {fileID: 3370080}
-  - 65: {fileID: 6504690}
-  - 23: {fileID: 2328320}
   m_Layer: 0
   m_Name: PressurePlateTrap
   m_TagString: Untagged
@@ -18,6 +33,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!4 &455014
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 106426}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -.49000001, z: 0}
+  m_LocalScale: {x: .25, y: .00500000035, z: .25}
+  m_Children: []
+  m_Father: {fileID: 458736}
+  m_RootOrder: 0
 --- !u!4 &458736
 Transform:
   m_ObjectHideFlags: 1
@@ -25,17 +52,18 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 153918}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20.4899998, y: .050999999, z: 32.5029984}
-  m_LocalScale: {x: .25, y: .0250000004, z: .25}
-  m_Children: []
+  m_LocalPosition: {x: 7.375, y: 2.5, z: 35.8370018}
+  m_LocalScale: {x: 1, y: 5, z: 1}
+  m_Children:
+  - {fileID: 455014}
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2328320
+--- !u!23 &2361088
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 153918}
+  m_GameObject: {fileID: 106426}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -54,19 +82,19 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3370080
+--- !u!33 &3363882
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 153918}
+  m_GameObject: {fileID: 106426}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &6504690
+--- !u!65 &6534172
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 153918}
+  m_GameObject: {fileID: 106426}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 0
