@@ -183,9 +183,9 @@ namespace Treasure_Hunter.Controllers
                 q = q * CameraOrientation;
             }
             Camera.transform.rotation = q;
-            Camera.transform.position =
-            Camera.transform.parent.transform.position + NeckPosition;
+            //Camera.transform.position = Camera.transform.parent.transform.position + NeckPosition;
             Camera.transform.position += q * EyePosition;
+            Camera.transform.localPosition = new Vector3(Camera.transform.localPosition.x, 0, 0);
         }
 
         void LatencyTest(RenderTexture dest)

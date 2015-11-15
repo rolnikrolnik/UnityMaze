@@ -7,6 +7,15 @@ namespace Treasure_Hunter.Controllers
 {
     public class CameraController : MonoBehaviour
     {
+        #region CLASS SETTINGS
+
+        private static Vector3 MAZE_START_CAMERA_POSITION = new Vector3(-13, 104, -5);
+        private static Vector3 MAZE_START_CAMERA_ROTATION = new Vector3(30, 70, 0);
+        private static Vector3 BASE_START_CAMERA_POSITION = new Vector3(71.19169f, 60, 204.5f);
+        private static Vector3 BASE_START_CAMERA_ROTATION = new Vector3(30, 60, 0);
+
+        #endregion
+
         #region SCENE REFERENCES
 
         //Self Components
@@ -41,11 +50,25 @@ namespace Treasure_Hunter.Controllers
 
         #endregion
 
+        public void InitCameraInTheBase()
+        {
+            transform.parent = null;
+            transform.localPosition = BASE_START_CAMERA_POSITION;
+            transform.localRotation = Quaternion.Euler(BASE_START_CAMERA_ROTATION);
+        }
+
+        public void InitCameraInTheMaze()
+        {
+            transform.parent = null;
+            transform.localPosition = MAZE_START_CAMERA_POSITION;
+            transform.localRotation = Quaternion.Euler(MAZE_START_CAMERA_ROTATION);
+        }
+
         private void CheckCameraState()
         {
             bool debug = false;// Input.GetKeyDown(KeyCode.Mouse0);
-//            if (debug)
-//            {
+            if (debug)
+            {
                 if (currentDisplayMode == DisplayMode.OVRCamera && OVRDevice.SensorCount <= 0)
                 {
                     SetStandaloneCameraAsMain();
@@ -54,7 +77,7 @@ namespace Treasure_Hunter.Controllers
                 {
                     SetOVRCameraAsMain();
                 }
-//            }
+            }
         }
 
         private void SetOVRCameraAsMain()
@@ -64,6 +87,7 @@ namespace Treasure_Hunter.Controllers
             OVRCamera.SetActive(true);
             UICanvas.worldCamera = UILeftEyeCamera;
             UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            SceneManager.Instance.LoadingPage.Background.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width/2, Screen.height);
             if (SceneManager.Instance.BaseManager != null && SceneManager.Instance.BaseManager.MazeChoicePopup!=null)
             {
                 SceneManager.Instance.BaseManager.MazeChoicePopup.OVRBackground.gameObject.SetActive(true);
@@ -89,6 +113,7 @@ namespace Treasure_Hunter.Controllers
             OVRCamera.SetActive(false);
             UICanvas.worldCamera = UIStandaloneCamera;
             UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            SceneManager.Instance.LoadingPage.Background.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height);
             if (SceneManager.Instance.BaseManager != null && SceneManager.Instance.BaseManager.MazeChoicePopup != null)
             {
                 SceneManager.Instance.BaseManager.MazeChoicePopup.OVRBackground.gameObject.SetActive(false);

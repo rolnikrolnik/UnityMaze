@@ -49,6 +49,7 @@ namespace Treasure_Hunter.Abstract
             RectTransform rectTransform = popup.GetComponent<RectTransform>();
             rectTransform.anchoredPosition = Vector2.zero;
             rectTransform.sizeDelta = Vector2.zero;
+            popup.gameObject.SetActive(false);
         }
     }
 }

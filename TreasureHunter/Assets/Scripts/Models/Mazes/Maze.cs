@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.IO;
 using System.Collections.Generic;
 using Treasure_Hunter.Enumerations;
 
@@ -9,47 +8,51 @@ namespace Treasure_Hunter.Mazes
 	public class Maze : IMaze
 	{
 		
-		private List<List<Cell>> _cells;
-		private List<Point> _activeCells;
-		private readonly System.Random _rng;
-		private int _height;
-		private int _width;
+		private List<List<Cell>> cells;
+		private List<Point> activeCells;
+		private readonly System.Random random;
+		private int height;
+		private int width;
 		private bool[][] mazeArray;
 
 		public bool IsPrim { get; set; }
+        public int Length { get { return mazeArray.Length;  } }
+        public int Width { get { return mazeArray[0].Length; }}
+        public Dictionary<Vector3, MazeComponentType> MazeComponents { get; private set; }  
 		
 		public Maze()
 		{
-			_rng = new System.Random();
+			random = new System.Random();
+		    this.IsPrim = false;
 		}
 		
 		public void GenerateMaze(int heightTmp = 20, int widthTmp = 20)
 		{
-			_height = heightTmp/2;
-			_width = widthTmp/2;
+			height = heightTmp/2;
+			width = widthTmp/2;
 			
-			_activeCells = new List<Point>();
-			_cells = new List<List<Cell>>();
-			for (var i = 0; i < _height; i++)
+			activeCells = new List<Point>();
+			cells = new List<List<Cell>>();
+			for (var i = 0; i < height; i++)
 			{
 				var cellRow = new List<Cell>();
-				for (var j = 0; j < _width; j++)
+				for (var j = 0; j < width; j++)
 				{
 					cellRow.Add(new Cell());
 				}
-				_cells.Add(cellRow);
+				cells.Add(cellRow);
 			}
 			
 			// random cell to start with
 			var randomCell = GetRandomCell();
-			_cells[randomCell.Y][randomCell.X].IsVisited = true;
-			_activeCells.Add(randomCell);
+			cells[randomCell.Y][randomCell.X].IsVisited = true;
+			activeCells.Add(randomCell);
 			
-			while (_activeCells.Count > 0)
+			while (activeCells.Count > 0)
 			{
 				// select cell from list, mark as visited
 				var selectedCell = SelectCellFromList(this.IsPrim);
-				_cells[selectedCell.Y][selectedCell.X].IsVisited = true;
+				cells[selectedCell.Y][selectedCell.X].IsVisited = true;
 				
 				// select neighbor to carve into
 				MazeDirections selectedDirection;
@@ -57,30 +60,65 @@ namespace Treasure_Hunter.Mazes
 				if (neighborCell != null) //carve to the selected neighbor
 				{
 					// mark as visited
-					_cells[neighborCell.Y][neighborCell.X].IsVisited = true;
+					cells[neighborCell.Y][neighborCell.X].IsVisited = true;
 					//carving in cells
-					_cells[selectedCell.Y][selectedCell.X].DestroyWall((int) selectedDirection);
-					_cells[neighborCell.Y][neighborCell.X].DestroyWall((int) GetOppositeDirection(selectedDirection));
+					cells[selectedCell.Y][selectedCell.X].DestroyWall((int) selectedDirection);
+					cells[neighborCell.Y][neighborCell.X].DestroyWall((int) GetOppositeDirection(selectedDirection));
 					//adding to list of active cells
-					_activeCells.Add(neighborCell);
+					activeCells.Add(neighborCell);
 				}
 				else  //if neighborCell is null - all cells around starting cell were visited
 				{
-					_activeCells.Remove(selectedCell);
+					activeCells.Remove(selectedCell);
 				}
 			}
 
 			this.CreateMazeArray();
 		}
 
-		public bool IsPointAWall(int x, int y)
+	    public Point GetExitCoords()
+	    {
+            while (true)
+            {
+                var lastRowOfMaze = this.Length - 1;
+                var randomPostionX = random.Next(this.Width - 2) + 1;
+                if (!this.IsPointAWall(randomPostionX, lastRowOfMaze - 1))
+                {
+                    return new Point(randomPostionX, lastRowOfMaze);
+                }
+            }
+        }
+
+	    public Point GetPlayerCoords()
+	    {
+            while (true)
+            {
+                var randomPostionX = random.Next(this.Width);
+                if (!this.IsPointAWall(1, randomPostionX))
+                {
+                    return new Point(randomPostionX, 1);
+                }
+            }
+        }
+
+	    public bool IsPointAWall(int x, int y)
 		{
-			return this.mazeArray [x] [y];
+		    if (x < this.Length
+		        && x >= 0
+		        && y < this.Width
+		        && y >= 0)
+		    {
+		        return this.mazeArray[x][y];
+		    }
+		    else
+		    {
+                throw new Exception("Out of bounds exception!");
+		    }
 		}
 
-		#region Private methods
+        #region Private methods
 
-		private Point SelectNeighbour(Point startingCell, out MazeDirections selectedDirection)
+        private Point SelectNeighbour(Point startingCell, out MazeDirections selectedDirection)
 		{
 			Point neighborCell = null;
 			var startingX = startingCell.X;
@@ -96,28 +134,28 @@ namespace Treasure_Hunter.Mazes
 				case MazeDirections.W:
 					if (startingX > 0)
 					{
-						if(!_cells[startingY][startingX - 1].IsVisited)
+						if(!cells[startingY][startingX - 1].IsVisited)
 							neighborCell = new Point(startingX - 1, startingY);
 					}
 					break;
 				case MazeDirections.S:
-					if (startingY < _height - 1)
+					if (startingY < height - 1)
 					{
-						if (!_cells[startingY + 1][startingX].IsVisited)
+						if (!cells[startingY + 1][startingX].IsVisited)
 							neighborCell = new Point(startingX, startingY + 1);
 					}
 					break;
 				case MazeDirections.E:
-					if (startingX < _width - 1)
+					if (startingX < width - 1)
 					{
-						if (!_cells[startingY][startingX + 1].IsVisited)
+						if (!cells[startingY][startingX + 1].IsVisited)
 							neighborCell = new Point(startingX + 1, startingY);
 					}
 					break;
 				case MazeDirections.N:
 					if (startingY > 0)
 					{
-						if (!_cells[startingY - 1][startingX].IsVisited)
+						if (!cells[startingY - 1][startingX].IsVisited)
 							neighborCell = new Point(startingX, startingY - 1);
 					}
 					break;
@@ -144,8 +182,8 @@ namespace Treasure_Hunter.Mazes
 		
 		private void CreateMazeArray()
 		{
-			var mazePrintHeight = 2*_height + 1;
-			var mazePrintWidth = 2*_width + 1;
+			var mazePrintHeight = 2*height + 1;
+			var mazePrintWidth = 2*width + 1;
 			this.mazeArray = new bool[mazePrintHeight][];
 			for (var i = 0; i < mazePrintHeight; i++)
 			{
@@ -168,25 +206,25 @@ namespace Treasure_Hunter.Mazes
 			//W   E 
 			//# S #
 			
-			for (var i = 0; i < _cells.Count; i++)
+			for (var i = 0; i < cells.Count; i++)
 			{
 				var mazePrintRow = 2*i;
-				for (var j = 0; j < _cells[i].Count; j++)
+				for (var j = 0; j < cells[i].Count; j++)
 				{
 					var mazePrintColumn = 2*j;
-					if ((_cells[i][j].Walls & (int) MazeDirections.W) > 0)
+					if ((cells[i][j].Walls & (int) MazeDirections.W) > 0)
 					{
 						this.mazeArray[mazePrintRow + 1][mazePrintColumn] = true;
 					}
-					if ((_cells[i][j].Walls & (int) MazeDirections.S) > 0)
+					if ((cells[i][j].Walls & (int) MazeDirections.S) > 0)
 					{
 						this.mazeArray[mazePrintRow + 2][mazePrintColumn + 1] = true;
 					}
-					if ((_cells[i][j].Walls & (int)MazeDirections.E) > 0)
+					if ((cells[i][j].Walls & (int)MazeDirections.E) > 0)
 					{
 						this.mazeArray[mazePrintRow + 1][mazePrintColumn + 2] = true;
 					}
-					if ((_cells[i][j].Walls & (int)MazeDirections.N) > 0)
+					if ((cells[i][j].Walls & (int)MazeDirections.N) > 0)
 					{
 						this.mazeArray[mazePrintRow][mazePrintColumn + 1] = true;
 					}
@@ -194,23 +232,21 @@ namespace Treasure_Hunter.Mazes
 			}
 		}
 
-
-		
 		private Point SelectCellFromList(bool isPrim)
 		{
 			// random selection of cell - almost like Prim's algorithm  ||  latest cell from list - recursive backtracker
-			return isPrim ? _activeCells[_rng.Next(_activeCells.Count)] : _activeCells[_activeCells.Count - 1];
+			return isPrim ? activeCells[random.Next(activeCells.Count)] : activeCells[activeCells.Count - 1];
 		}
 		
 		private Point GetRandomCell()
 		{
-			return new Point(_rng.Next(_width), _rng.Next(_height));
+			return new Point(random.Next(width), random.Next(height));
 		}
 		
 		private MazeDirections GetRandomDirection()
 		{
 			var values = Enum.GetValues(typeof(MazeDirections));
-			return (MazeDirections)values.GetValue(_rng.Next(values.Length));
+			return (MazeDirections)values.GetValue(random.Next(values.Length));
 		}
 		
 		private static MazeDirections GetOppositeDirection(MazeDirections mazeDirection)

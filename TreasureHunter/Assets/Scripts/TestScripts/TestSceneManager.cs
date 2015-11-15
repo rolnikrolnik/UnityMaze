@@ -18,7 +18,10 @@ namespace Treasure_Hunter.TestScripts
 
         private void Start()
         {
-            BaseManager.Player.Init();
+            if (BaseManager != null)
+            {
+                BaseManager.Player.Init();
+            }
         }
 
         #endregion

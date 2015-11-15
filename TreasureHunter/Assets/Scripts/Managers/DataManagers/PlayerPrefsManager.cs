@@ -18,6 +18,7 @@ namespace Treasure_Hunter.Managers
         private byte[] RIJNDAEL_IV  { get { return new byte[] { 196, 216, 227, 186, 238, 234, 238, 165, 131, 52, 33, 103, 172, 171, 158, 105 }; } }
         //key names
         private const string ACHIEVEMENTS_KEY = "achievements";
+        private const string ACTIONS_KEY = "actions";
 
         #endregion
 
@@ -46,6 +47,56 @@ namespace Treasure_Hunter.Managers
 
         #endregion
 
+        #region LOADING AND SAVING
+
+        private string LoadEncodedData(string prefsKey)
+        {
+            string plaintext = null;
+            byte[] cipherText = StringToArray(PlayerPrefs.GetString(prefsKey));
+            using (RijndaelManaged rijAlg = new RijndaelManaged())
+            {
+                rijAlg.Key = RIJNDAEL_KEY;
+                rijAlg.IV = RIJNDAEL_IV;
+                ICryptoTransform decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
+                using (MemoryStream msDecrypt = new MemoryStream(cipherText))
+                {
+                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    {
+                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
+                        {
+                            plaintext = srDecrypt.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            return plaintext;
+        }
+
+        private byte[] PrepareDataToSave(string textToSave)
+        {
+            byte[] encrypted;
+            using (RijndaelManaged rijAlg = new RijndaelManaged())
+            {
+                rijAlg.Key = RIJNDAEL_KEY;
+                rijAlg.IV = RIJNDAEL_IV;
+                ICryptoTransform encryptor = rijAlg.CreateEncryptor(rijAlg.Key, rijAlg.IV);
+                using (MemoryStream msEncrypt = new MemoryStream())
+                {
+                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
+                        {
+                            swEncrypt.Write(textToSave);
+                        }
+                        encrypted = msEncrypt.ToArray();
+                    }
+                }
+            }
+            return encrypted;
+        }
+
+        #endregion
+
         #region ACHIEVEMENTS
 
         public AchievementsData Achievements;
@@ -54,24 +105,7 @@ namespace Treasure_Hunter.Managers
         {
             if (PlayerPrefs.HasKey(ACHIEVEMENTS_KEY))
             {
-                byte[] cipherText = StringToArray(PlayerPrefs.GetString(ACHIEVEMENTS_KEY));
-                string plaintext = null;
-                using (RijndaelManaged rijAlg = new RijndaelManaged())
-                {
-                    rijAlg.Key = RIJNDAEL_KEY;
-                    rijAlg.IV = RIJNDAEL_IV;
-                    ICryptoTransform decryptor = rijAlg.CreateDecryptor(rijAlg.Key, rijAlg.IV);
-                    using (MemoryStream msDecrypt = new MemoryStream(cipherText))
-                    {
-                        using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                        {
-                            using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                            {
-                                plaintext = srDecrypt.ReadToEnd();
-                            }
-                        }
-                    }
-                }
+                string plaintext = LoadEncodedData(ACHIEVEMENTS_KEY);
                 Achievements.AsignDataToCorrectDictionaries(plaintext);
             }
         }
@@ -81,24 +115,7 @@ namespace Treasure_Hunter.Managers
             string textToSave = Achievements.GetStringToSaveDictionaries();
             if (textToSave!="")
             {
-                byte[] encrypted;
-                using (RijndaelManaged rijAlg = new RijndaelManaged())
-                {
-                    rijAlg.Key = RIJNDAEL_KEY;
-                    rijAlg.IV = RIJNDAEL_IV;
-                    ICryptoTransform encryptor = rijAlg.CreateEncryptor(rijAlg.Key, rijAlg.IV);
-                    using (MemoryStream msEncrypt = new MemoryStream())
-                    {
-                        using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                        {
-                            using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                            {
-                                swEncrypt.Write(textToSave);
-                            }
-                            encrypted = msEncrypt.ToArray();
-                        }
-                    }
-                }
+                byte[] encrypted = PrepareDataToSave(textToSave);
                 PlayerPrefs.SetString(ACHIEVEMENTS_KEY, ArrayToString(encrypted));
                 PlayerPrefs.Save();
             }
@@ -116,12 +133,26 @@ namespace Treasure_Hunter.Managers
 
         public void LoadActions()
         {
-
+            if (PlayerPrefs.HasKey(ACTIONS_KEY))
+            {
+                string plaintext = LoadEncodedData(ACTIONS_KEY);
+                Actions.AsignDataToCorrectDictionaries(plaintext);
+            }
+            else
+            {
+                Actions.AsignDataToCorrectDictionaries("");
+            }
         }
 
         public void SaveActions()
         {
-            
+            string textToSave = Actions.GetStringToSaveActions();
+            if (textToSave != "")
+            {
+                byte[] encrypted = PrepareDataToSave(textToSave);
+                PlayerPrefs.SetString(ACTIONS_KEY, ArrayToString(encrypted));
+                PlayerPrefs.Save();
+            }
         }
 
         #endregion

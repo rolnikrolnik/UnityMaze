@@ -12,6 +12,13 @@ namespace Treasure_Hunter.Controllers
 {
     public class ActionChoicePopup : AbstractPopup
     {
+        #region CLASS SETTINGS
+
+        private const float INACTIVE_SIZE = 0.2f;
+        private const float ACTIVE_SIZE = 1;
+
+        #endregion
+
         #region SCENE REFERENCES
 
         //Standalone
@@ -28,6 +35,37 @@ namespace Treasure_Hunter.Controllers
         private Coroutine currentCoroutine;
         private List<PlayerAction> availableActions;
         private int SelectedItemNumber;
+        private bool isEnabled = false;
+        private bool isActive = false;
+
+        #region MONO BEHAVIOUR
+
+        private void Update()
+        {
+            if(isEnabled)
+            {
+                if(Input.GetKey(KeyCode.Mouse1))
+                {
+                    if(!isActive)
+                    {
+                        SetActiveSize();
+                        isActive = true;
+                        Time.timeScale = 0.1f;
+                    }
+                }
+                else
+                {
+                    if (isActive)
+                    {
+                        SetInactiveSize();
+                        isActive = false;
+                        Time.timeScale = 1;
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region ANIMATIONS
 
@@ -70,7 +108,7 @@ namespace Treasure_Hunter.Controllers
 
         public void SelectAsMain(PlayerAction model)
         {
-            if(StandaloneSelectedItem.Model.Type!=model.Type)
+            if (isActive&&StandaloneSelectedItem.Model.Type != model.Type)
             {
                 SelectedItemNumber = availableActions.FindIndex(action => action.Type == model.Type);
                 StandaloneSelectedItem.AddModel(availableActions[SelectedItemNumber]);
@@ -102,7 +140,6 @@ namespace Treasure_Hunter.Controllers
 
         public PlayerAction SelectAction()
         {
-            Hide();
             if (StandaloneSelectedItem.Model != null && StandaloneSelectedItem.Model.hasLimitedCharges)
             {
                 if(StandaloneSelectedItem.Model.Charges == 1)
@@ -115,14 +152,28 @@ namespace Treasure_Hunter.Controllers
                     ActionsManager.DecreaseChargesOfAction(StandaloneSelectedItem.Model.Type);
                 }
             }
-            PlayerPrefsManager.Instance.Achievements.AddPerformedAction(StandaloneSelectedItem.Model.Type);
-            return StandaloneSelectedItem.Model;
+            if (PlayerPrefsManager.Instance != null)
+            {
+                PlayerPrefsManager.Instance.Achievements.AddPerformedAction(StandaloneSelectedItem.Model.Type);
+            }
+            return StandaloneSelectedItem.Model!=null?StandaloneSelectedItem.Model:new PlayerAction(ActionType.JUMP,0, true);
         }
 
         public void Init()
         {
+            isEnabled = true;
             availableActions = ActionsManager.GetAvailableActions();
             AsignActionsToItems();
+        }
+
+        public void SetInactiveSize()
+        {
+            transform.localScale = INACTIVE_SIZE * Vector3.one;
+        }
+
+        public void SetActiveSize()
+        {
+            transform.localScale = ACTIVE_SIZE * Vector3.one;
         }
     }
 }

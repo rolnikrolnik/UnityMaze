@@ -2,12 +2,14 @@
 using System;
 using System.IO;
 using System.Collections;
+using System.Collections.Generic;
+using Treasure_Hunter.Enumerations;
 
 namespace Treasure_Hunter.Mazes
 {
+    
 	public class CellularAutomata : MonoBehaviour, IMaze
 	{
-
 		private bool[][] _map;
 		private readonly System.Random _rng;
 		private int _height;
@@ -25,7 +27,13 @@ namespace Treasure_Hunter.Mazes
 
 		public int Turns { get; set; }
 
-		public void GenerateMaze(int heightTmp = 50, int widthTmp = 50)
+	    public int Length { get { return _map.Length; } }
+
+	    public int Width { get { return _map[0].Length; } }
+
+        public Dictionary<Vector3, MazeComponentType> MazeComponents { get; private set; }
+
+	    public void GenerateMaze(int heightTmp = 50, int widthTmp = 50)
 		{
 			this._height = heightTmp;
 			this._width = widthTmp;
@@ -41,35 +49,110 @@ namespace Treasure_Hunter.Mazes
 			{
 				this.SmoothMap();
 			}
-			for (int i = 0; i < this._height; i++) {
-				for (int j = 0; j < this._width; j++) {
-				}
-			}
 
-            this.DebugPrint();
+	        if (!this.IsMapGeneratedCorrectly())
+	        {
+	            this.GenerateMaze(heightTmp, widthTmp);
+	        }
 		}
 
-        private void DebugPrint()
-        {
-            using (var sw = File.AppendText(@"C:\studia\inz\debug.txt"))
-                for (int i = 0; i < _map.Length; i++)
-                {
-                    for (int j = 0; j < _map[i].Length; j++)
-                    {
-                        sw.Write(_map[i][j] ? "#" : " ");
+	    private bool IsMapGeneratedCorrectly()
+	    {
+	        var allCells = 0;
+	        var emptyCells = 0;
+	        for (int i = 0; i < _map.Length; i++)
+	        {
+	            for (int j = 0; j < _map[0].Length; j++)
+	            {
+	                if (!_map[i][j])
+	                {
+	                    emptyCells++;
+	                }
+
+	                allCells++;
+	            }
+	        }
+
+	        var score = (float) emptyCells/(float) allCells;
+	        return score > 0.4f;
+	    }
+
+	    public Point GetExitCoords()
+	    {
+	        var foundEmptyRow = false;
+	        var firstEmptyRow = this.Length - 1;
+	        for (; firstEmptyRow > 0; firstEmptyRow--)
+	        {
+	            //if (foundEmptyRow)
+	            //{
+	            //    break;
+	            //}
+
+                for (int i = 0; i < this.Width; i++)
+	            {
+	                if (!IsPointAWall(firstEmptyRow, i))
+	                {
+                        //foundEmptyRow = true;
+                        //break;
+                        return new Point(i, firstEmptyRow);
                     }
-                    sw.Write("\n");
-                }
+	            }
+	        }
+
+            Debug.LogError("EXIT NOT FOUND");
+            return new Point(0,0);
+            //while (true)
+            //{
+            //    var randomPostionX = _rng.Next(this.Width - 2) + 1;
+            //    if (!this.IsPointAWall(randomPostionX, firstEmptyRow - 1))
+            //    {
+            //        Debug.Log(string.Format("EXIT = x = {0}, y ={1}", randomPostionX, firstEmptyRow));
+            //        return new Point(randomPostionX, firstEmptyRow);
+            //    }
+            //}
         }
 
-        public bool IsPointAWall(int x, int y)
+	    public Point GetPlayerCoords()
+	    {
+            var foundEmptyRow = false;
+            var firstEmptyRow = 0;
+            for (; firstEmptyRow < this.Length; firstEmptyRow++)
+            {
+                if (foundEmptyRow)
+                {
+                    break;
+                }
+
+                for (int i = 0; i < this.Width; i++)
+                {
+                    if (!IsPointAWall(firstEmptyRow, i))
+                    {
+                        foundEmptyRow = true;
+                        break;
+                    }
+                }
+            }
+
+            while (true)
+            {
+                var randomPostionX = _rng.Next(this.Width);
+                if (!this.IsPointAWall(firstEmptyRow, randomPostionX))
+                {
+                    Debug.Log(string.Format("PLAYER = x = {0}, y ={1}", randomPostionX, firstEmptyRow));
+                    return new Point(randomPostionX, firstEmptyRow);
+                }
+            }
+        }
+
+	    public bool IsPointAWall(int x, int y)
 		{
+            //Debug.Log(string.Format("x = {0}, y ={1}", x, y));
 			return this._map [x] [y];
 		}
 
-		#region Private methods
+        #region Private methods
 
-		private void RandomMapFill()
+        private void RandomMapFill()
 		{
 			for (var i = 0; i < this._height; i++)
 			{
@@ -122,6 +205,6 @@ namespace Treasure_Hunter.Mazes
 			}
 		}
 
-		#endregion
-	}
+        #endregion
+    }
 }

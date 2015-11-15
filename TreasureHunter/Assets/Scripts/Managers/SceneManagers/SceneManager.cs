@@ -15,6 +15,7 @@ namespace Treasure_Hunter.Managers
         public const float LOADING_PAGE_ANIMATION = 1;
         public const float CAMERA_ANIMTION = 2;
 
+
         #endregion
 
         #region SCENE REFERENCES
@@ -26,12 +27,20 @@ namespace Treasure_Hunter.Managers
         public Transform PagesContainer;
         public CameraController Camera;
         public LoadingPage LoadingPage;
+        public Skybox[] Skyboxes;
 
         public BaseManager BaseManager;
         public MazeManager MazeManager;
 
         #endregion
 
+        #region PROJECT REFERENCES
+
+        public Material BaseSkybox;
+        public Material MazeSkybox;
+
+        #endregion
+        
         #region MONO BEHAVIOUR
 
         private void Awake()
@@ -42,6 +51,7 @@ namespace Treasure_Hunter.Managers
 
         private void Start()
         {
+            PlayerPrefsManager.Instance.Init();
             StartCoroutine(LoadBase());
         }
 
@@ -49,14 +59,17 @@ namespace Treasure_Hunter.Managers
 
         private IEnumerator LoadBase()
         {
-            yield return 0;
-            PlayerPrefsManager.Instance.Init();
+            Camera.InitCameraInTheBase();
             yield return 0;
             Application.LoadLevelAdditive((int)LevelEnums.BaseLevel);
             while (BaseManager == null)
             {
                 yield return 0;
                 BaseManager = FindObjectOfType<BaseManager>();
+            }
+            for (int i = 0; i < Skyboxes.Length; i++)
+            {
+                Skyboxes[i].material = BaseSkybox;
             }
             yield return StartCoroutine(BaseManager.Activate());
             LoadingPage.Hide();
@@ -75,25 +88,31 @@ namespace Treasure_Hunter.Managers
             yield return new WaitForSeconds(POPUP_ANIMATION_TIME);
             LoadingPage.Show();
             yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
-            Camera.transform.parent = null;
+            Camera.InitCameraInTheMaze();
             Application.LoadLevelAdditive((int)LevelEnums.MazeLevel);
             while (BaseManager == null)
             {
                 yield return 0;
                 BaseManager = FindObjectOfType<BaseManager>();
             }
+            Destroy(BaseManager.MazeChoicePopup.gameObject);
+            Destroy(BaseManager.AchievementsPopup.gameObject);
             Destroy(BaseManager.LevelRootObject.gameObject);
             while (MazeManager == null)
             {
                 yield return 0;
                 MazeManager = FindObjectOfType<MazeManager>();
             }
-            yield return StartCoroutine(MazeManager.GenerateMaze(mazeType));
+            for (int i = 0; i < Skyboxes.Length; i++)
+            {
+                Skyboxes[i].material = MazeSkybox;
+            }
+            MazeManager.GenerateMaze(mazeType);
+            yield return StartCoroutine(MazeManager.Activate());
             LoadingPage.Hide();
             MazeManager.MoveUIToCanvas();
             yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
-            MazeManager.Init();
-            yield return 0;
+            yield return StartCoroutine(MazeManager.Init());
         }
     }
 }
