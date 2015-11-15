@@ -141,7 +141,7 @@ namespace Treasure_Hunter.Managers
             {
                 var mazeObject = Instantiate(prefab,
                     vector,
-                    Quaternion.identity) as GameObject;
+                    prefab.transform.rotation) as GameObject;
                 mazeObject.transform.parent = this.transform;
             }
             catch (Exception e)
