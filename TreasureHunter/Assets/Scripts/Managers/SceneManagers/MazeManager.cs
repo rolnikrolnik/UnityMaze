@@ -31,6 +31,7 @@ namespace Treasure_Hunter.Managers
         public int Width;
         public int Length;
         public int TrapProbability;
+        public int MonsterProbability;
         public bool Prim;
         public MazeType MazeType;
         public GameObject WallPrefab;
@@ -101,7 +102,11 @@ namespace Treasure_Hunter.Managers
             }
 
             this.Maze.GenerateMaze(this.Length, this.Width);
-            this.MazeConverter = new MazeConverter(this.Maze, this.mazeWallScale, this.TrapProbability);
+            this.MazeConverter = new MazeConverter(
+                this.Maze, 
+                this.mazeWallScale, 
+                this.TrapProbability, 
+                this.MonsterProbability);
         }
 
         private void GenerateMazeComponents()

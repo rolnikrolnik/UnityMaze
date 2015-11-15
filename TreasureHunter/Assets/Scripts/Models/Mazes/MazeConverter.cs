@@ -16,22 +16,25 @@ namespace Treasure_Hunter.Mazes
 
         #endregion
 
-        public MazeConverter(IMaze maze, Vector3 mazeWallScale, int trapProbability)
+        public MazeConverter(IMaze maze, Vector3 mazeWallScale, int trapProbability, int monsterProbability)
         {
             this.maze = maze;
             this.random = new Random();
             this.mazeWallScale = mazeWallScale;
             this.PlayerCoords = new Vector3();
             this.TrapProbability = trapProbability;
+            this.MonsterProbability = monsterProbability;
 
             this.ConvertMaze();
         }
+
 
         #region Properties
 
         public Dictionary<Vector3, MazeComponentType> MazeComponents { get; private set; }
         public Vector3 PlayerCoords { get; private set; }
         public int TrapProbability { get; set; }
+        public int MonsterProbability { get; set; }
 
         #endregion
 
@@ -147,8 +150,8 @@ namespace Treasure_Hunter.Mazes
         {
             try
             {
-                var trapProbability = random.Next(10);
-                if (trapProbability < 5)
+                var trapProbability = random.Next(100);
+                if (trapProbability > this.MonsterProbability)
                 {
                     var trapTypeProbability = random.Next(10);
                     if (trapTypeProbability < 3
