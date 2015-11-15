@@ -123,15 +123,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 264620360}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a12e47b1ce316a42ba47d911629de5a, type: 3}
+  m_Script: {fileID: 11500000, guid: b111df1fdd6e0fb4983dcac7278e2c42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LevelRootObject: {fileID: 1559645710}
   ObjectsWhichNeedActivation: []
   ObjectsWhichNeedInitiation: []
-  height: 20
-  width: 20
+  ActionChoicePopup: {fileID: 0}
+  width: 100
+  length: 100
   prim: 0
+  heightOfMaze: 1
+  mazeType: 1
+  mazeWallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
+  floorMaterial: {fileID: 2100000, guid: 3303f2d75d9ac924385bb7842aab9a67, type: 2}
+  wallMaterial: {fileID: 2100000, guid: 76edd1a4c7bd3b6449fb0f577361ea25, type: 2}
 --- !u!1 &903216930
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,8 +276,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1502054503}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: .713100851, y: 0, z: 0, w: .701061547}
+  m_LocalPosition: {x: 50, y: 100, z: 50}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 903216932}

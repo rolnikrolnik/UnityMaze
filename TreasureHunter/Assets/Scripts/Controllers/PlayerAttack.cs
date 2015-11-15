@@ -1,23 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class PlayerAttack : MonoBehaviour {
 
-	public float attack_range = 4f;
+	public float attackRange = 4f;
 	Collider[] colliders;
-	float view_time;
-
-	bool healthbar_exists = false;
+	float viewTime;
+	public int currentHealth;
+	public int maxHealth = 100;
+	public UnityEngine.UI.Image healthbar;
+	public UnityEngine.UI.Text healthText;
+	public float healthBarLength;
 
 
 
 	// Use this for initialization
 	void Start () {
+		currentHealth = maxHealth;
 	}
-	
+
+	public void updateHealthbar () {
+		healthBarLength = 200*((float)currentHealth / (float)maxHealth);
+		healthbar.rectTransform.sizeDelta = new Vector2 (healthBarLength, 20);
+		healthText.text = Convert.ToString (100 * (float)currentHealth / (float)maxHealth) + "%";
+
+	}
+
 	// Update is called once per frame
 	void Update () {
-		colliders = Physics.OverlapSphere (transform.position, attack_range);
+		updateHealthbar ();
+		colliders = Physics.OverlapSphere (transform.position, attackRange);
 		foreach (Collider col in colliders) {
 			if (col && col.tag == "Monster") {
 				EnemyHealth eh = col.GetComponent<EnemyHealth> ();
@@ -42,6 +55,10 @@ public class PlayerAttack : MonoBehaviour {
 			var relativePoint = transform.InverseTransformPoint (enemy.transform.position);
 		}
 
+	}
+
+	public void TakeDamage(int amount) {
+		currentHealth -= amount;
 	}
 }
 

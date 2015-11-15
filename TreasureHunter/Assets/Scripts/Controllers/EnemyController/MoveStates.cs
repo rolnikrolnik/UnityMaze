@@ -6,56 +6,94 @@ public class MoveStates : MonoBehaviour {
 	public enum MoveState { idle, aggressive_idle, running, attack };
 	
 	private Transform target;
-	public int move_speed = 5;
-	public int rotation_speed = 2;
-	public float sight_range = 20f;
-	public float danger_range = 15f;
-	public float attack_range = 2f;
-	private Transform dino_transform;
-	public int moving_state = (int)MoveState.idle;
-	private EnemyHealth enemy_health;
+	public int moveSpeed = 5;
+	public int rotationSpeed = 2;
+	public float sightRange = 20f;
+	public float dangerRange = 15f;
+	public float attackRange = 2f;
+	public float sightAngle = 35.0f;
+	public float attackSpeed = 1.0f;
+	public bool attackBlocked = false;
+	public bool enemySpotted = false;
+	public int movingState = (int)MoveState.idle;
+	private EnemyHealth enemyHealth;
+	public GameObject player;
 
-	Vector3 _vec;
-	Vector3 _tmp;
+	Vector3 sightVector;
+	Color sightColor = Color.green;
+
+
 	
 	// Use this for initialization
 	void Start () {
 		target = GameObject.FindWithTag ("Player").transform;
-		enemy_health = gameObject.GetComponent<EnemyHealth> ();
-		dino_transform = transform;
+		enemyHealth = gameObject.GetComponent<EnemyHealth> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (!enemy_health.is_dead) {
-			_vec = target.position;
-			_tmp = new Vector3 ();
+		DrawSight ();
+
+		if (!enemyHealth.is_dead) {
 			
-			var _distance = Vector3.Distance (target.position, dino_transform.position);
+			var _distance = Vector3.Distance (target.position, transform.position);
+
+			var angle = Vector3.Angle(transform.forward, target.position - transform.position);
 			
 			//Jeśli gracz jest za daleko, to sobie po prostu siedź jakby nigdy nic
-			if (_distance > sight_range) {
-				moving_state = (int)MoveState.idle;
+			if (_distance > sightRange) {
+				movingState = (int)MoveState.idle;
+				sightColor = Color.green;
 			}
-			// Jeśli gracz podejdzie za blisko, to uruchamiamy gotowość do ataku
-			else if (_distance <= sight_range && _distance > danger_range) {
-				
-				dino_transform.rotation = Quaternion.Slerp (dino_transform.rotation, Quaternion.LookRotation (target.position - dino_transform.position), rotation_speed * Time.deltaTime);
-				moving_state = (int)MoveState.aggressive_idle;
+
+			else if (angle < sightAngle && angle > -sightAngle) {
+				enemySpotted = true;
+
+				// Jeśli gracz podejdzie za blisko, to uruchamiamy gotowość do ataku
+				if (_distance <= sightRange && _distance > dangerRange) {
+					
+					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (target.position - transform.position), rotationSpeed * Time.deltaTime);
+					movingState = (int)MoveState.aggressive_idle;
+
+					sightColor = Color.yellow;
+				}
+				// Gracz się zbliża, dinuś czuje się zagrożony i biegnie aby go zjeść
+				else if (_distance <= dangerRange && _distance > attackRange) {
+					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (target.position - transform.position), rotationSpeed * Time.deltaTime);
+					transform.position += transform.forward * moveSpeed * Time.deltaTime;
+					movingState = (int)MoveState.running;
+					sightColor = Color.red;
+				}
+				// Dino jest wystarczająco blisko żeby rozszarpać gracza
+				else if (_distance < attackRange) {
+					movingState = (int)MoveState.attack;
+					if (!attackBlocked){
+						if (target.GetComponent<PlayerAttack>().currentHealth > 0)
+							target.GetComponent<PlayerAttack> ().TakeDamage (10);
+						StartCoroutine(AttackPause());
+					}
+				}
 			}
-			// Gracz się zbliża, dinuś czuje się zagrożony i biegnie aby go zjeść
-			else if (_distance <= danger_range && _distance > attack_range) {
-				dino_transform.rotation = Quaternion.Slerp (dino_transform.rotation, Quaternion.LookRotation (target.position - dino_transform.position), rotation_speed * Time.deltaTime);
-				dino_transform.position += dino_transform.forward * move_speed * Time.deltaTime;
-				_tmp = dino_transform.position;
-				//_tmp.y = 0.1f;
-				dino_transform.position = _tmp;
-				moving_state = (int)MoveState.running;
-			}
-			// Dino jest wystarczająco blisko żeby rozszarpać gracza
-			else if (_distance < attack_range) {
-				moving_state = (int)MoveState.attack;
+
+			else if (enemySpotted) {
+				movingState = (int)MoveState.aggressive_idle;
+				sightColor = Color.yellow;
 			}
 		}
+	}
+
+	void DrawSight() {
+		sightVector = Vector3.Scale (transform.forward, new Vector3 (sightRange, 0.0f, sightRange));
+		sightVector = Quaternion.Euler (0, sightAngle, 0) * sightVector;
+		Debug.DrawRay (transform.position, sightVector, sightColor, 0.01f);
+		sightVector = Quaternion.Euler (0, -2*sightAngle, 0) * sightVector;
+		Debug.DrawRay (transform.position, sightVector, sightColor, 0.01f);
+	}
+
+	public IEnumerator AttackPause() {
+		attackBlocked = true;
+		yield return new WaitForSeconds(attackSpeed);
+		attackBlocked = false;
+		
 	}
 }

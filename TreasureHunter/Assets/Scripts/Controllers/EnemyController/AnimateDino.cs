@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class AnimateDino : MonoBehaviour {
@@ -18,22 +18,22 @@ public class AnimateDino : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!dino_health.is_dead) {
-			if (dino_movement.moving_state == (int)MoveStates.MoveState.idle) {
+			if (dino_movement.movingState == (int)MoveStates.MoveState.idle) {
 				if (!animation.IsPlaying ("Allosaurus_Idle")) {
 					animation.Stop ();
 					animation.Play ("Allosaurus_Idle");
 				}
-			} else if (dino_movement.moving_state == (int)MoveStates.MoveState.aggressive_idle) {
+			} else if (dino_movement.movingState == (int)MoveStates.MoveState.aggressive_idle) {
 				if (!animation.IsPlaying ("Allosaurus_IdleAggressive")) {
 					animation.Stop ();
 					animation.Play ("Allosaurus_IdleAggressive");
 				}
-			} else if (dino_movement.moving_state == (int)MoveStates.MoveState.running) {
+			} else if (dino_movement.movingState == (int)MoveStates.MoveState.running) {
 				if (!animation.IsPlaying ("Allosaurus_Run")) {
 					animation.Stop ();
 					animation.Play ("Allosaurus_Run");
 				}
-			} else if (dino_movement.moving_state == (int)MoveStates.MoveState.attack) {
+			} else if (dino_movement.movingState == (int)MoveStates.MoveState.attack) {
 				if (!animation.IsPlaying ("Allosaurus_Attack02")) {
 					animation.Stop ();
 					animation.Play ("Allosaurus_Attack02");

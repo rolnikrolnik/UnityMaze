@@ -23,12 +23,6 @@ public class EnemyHealth : MonoBehaviour {
 		healthbar.rectTransform.sizeDelta = new Vector2 (healthBarLength, 0.2f);
 	}
 
-//	void OnGUI() {
-//		if (view_health) {
-//			GUI.Box (new Rect (10, 10, healthBarLength, 20), current_health + "/" + max_health);
-//		}
-//	}
-
 
 	public void TakeDamage(int amount) {
 		current_health -= amount;

@@ -27,6 +27,7 @@ namespace Treasure_Hunter.Managers
         public GameObject mazeWallPrefab;
         public Material floorMaterial;
         public Material wallMaterial;
+		public GameObject cube;
 
         #endregion
 
@@ -51,6 +52,7 @@ namespace Treasure_Hunter.Managers
 
         public void Start()
         {
+				cube.transform.localScale *= 0.25f;
         }
 
         public void Update()
@@ -76,6 +78,7 @@ namespace Treasure_Hunter.Managers
                         this.MazeCreator = new CellularAutomata();
                         break;
                 }
+
 
                 this.MazeCreator.GenerateMaze(length, width);
 
