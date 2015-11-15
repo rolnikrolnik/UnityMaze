@@ -453,7 +453,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 447320, guid: b4311c58f143713409e2e17e7495f329, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b4311c58f143713409e2e17e7495f329, type: 2}
@@ -546,7 +546,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 289468acb721faa4ba21ac561daea1de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attack_range: 4
+  attackRange: 4
+  currentHealth: 0
+  maxHealth: 100
+  healthbar: {fileID: 0}
+  healthText: {fileID: 0}
+  healthBarLength: 0
 --- !u!1001 &1424177081
 Prefab:
   m_ObjectHideFlags: 0
@@ -749,7 +754,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 458736, guid: 065e2e16ecb665b418fc811700e83cfa, type: 2}
       propertyPath: m_RootOrder
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 065e2e16ecb665b418fc811700e83cfa, type: 2}
@@ -791,7 +796,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 458544, guid: 77710d2e4551b274b858c0ca3f6d02f1, type: 2}
       propertyPath: m_RootOrder
-      value: 9
+      value: 11
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 77710d2e4551b274b858c0ca3f6d02f1, type: 2}
@@ -879,7 +884,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 430766, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
       propertyPath: m_RootOrder
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
