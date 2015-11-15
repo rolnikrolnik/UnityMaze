@@ -49,7 +49,33 @@ namespace Treasure_Hunter.Mazes
 			{
 				this.SmoothMap();
 			}
+
+	        if (!this.IsMapGeneratedCorrectly())
+	        {
+	            this.GenerateMaze(heightTmp, widthTmp);
+	        }
 		}
+
+	    private bool IsMapGeneratedCorrectly()
+	    {
+	        var allCells = 0;
+	        var emptyCells = 0;
+	        for (int i = 0; i < _map.Length; i++)
+	        {
+	            for (int j = 0; j < _map[0].Length; j++)
+	            {
+	                if (!_map[i][j])
+	                {
+	                    emptyCells++;
+	                }
+
+	                allCells++;
+	            }
+	        }
+
+	        var score = (float) emptyCells/(float) allCells;
+	        return score > 0.4f;
+	    }
 
 	    public Point GetExitCoords()
 	    {
@@ -57,30 +83,33 @@ namespace Treasure_Hunter.Mazes
 	        var firstEmptyRow = this.Length - 1;
 	        for (; firstEmptyRow > 0; firstEmptyRow--)
 	        {
-	            if (foundEmptyRow)
-	            {
-	                break;
-	            }
+	            //if (foundEmptyRow)
+	            //{
+	            //    break;
+	            //}
 
                 for (int i = 0; i < this.Width; i++)
 	            {
 	                if (!IsPointAWall(firstEmptyRow, i))
 	                {
-	                    foundEmptyRow = true;
-	                    break;
-	                }
+                        //foundEmptyRow = true;
+                        //break;
+                        return new Point(i, firstEmptyRow);
+                    }
 	            }
 	        }
 
-            while (true)
-            {
-                var randomPostionX = _rng.Next(this.Width - 2) + 1;
-                if (!this.IsPointAWall(randomPostionX, firstEmptyRow - 1))
-                {
-                    Debug.Log(string.Format("EXIT = x = {0}, y ={1}", randomPostionX, firstEmptyRow));
-                    return new Point(randomPostionX, firstEmptyRow);
-                }
-            }
+            Debug.LogError("EXIT NOT FOUND");
+            return new Point(0,0);
+            //while (true)
+            //{
+            //    var randomPostionX = _rng.Next(this.Width - 2) + 1;
+            //    if (!this.IsPointAWall(randomPostionX, firstEmptyRow - 1))
+            //    {
+            //        Debug.Log(string.Format("EXIT = x = {0}, y ={1}", randomPostionX, firstEmptyRow));
+            //        return new Point(randomPostionX, firstEmptyRow);
+            //    }
+            //}
         }
 
 	    public Point GetPlayerCoords()

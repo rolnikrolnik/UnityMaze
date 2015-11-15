@@ -21,7 +21,6 @@ namespace Treasure_Hunter.Mazes
             this.maze = maze;
             this.random = new Random();
             this.mazeWallScale = mazeWallScale;
-            this.MazeComponents = new Dictionary<Vector3, MazeComponentType>();
             this.PlayerCoords = new Vector3();
 
             this.ConvertMaze();
@@ -38,11 +37,19 @@ namespace Treasure_Hunter.Mazes
 
         private void ConvertMaze()
         {
-            this.SetPlayerPosition();
-            this.AddExitComponent();
-            this.AddWalls();
-            this.AddTraps();
-
+            try
+            {
+                this.MazeComponents = new Dictionary<Vector3, MazeComponentType>();
+                this.SetPlayerPosition();
+                this.AddExitComponent();
+                this.AddWalls();
+                this.AddTraps();
+            }
+            catch (Exception e)
+            {
+                var a = e;
+                Debug.Log(e.Message);
+            }
         }
 
         private void AddTraps()
