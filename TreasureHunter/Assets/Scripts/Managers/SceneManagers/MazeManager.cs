@@ -66,22 +66,6 @@ namespace Treasure_Hunter.Managers
             rectTransform.sizeDelta = Vector2.zero;
         }
 
-        public void Update()
-        {
-            if (Application.loadedLevel != (int)LevelEnums.MazeLevel)
-            {
-                if (Input.GetKeyUp(KeyCode.Space))
-                {
-                    foreach (var wall in GameObject.FindGameObjectsWithTag("MazeComponent"))
-                    {
-                        Destroy(wall);
-                    }
-
-                    this.GenerateMaze(this.MazeType);
-                }
-            }
-        }
-
         public void GenerateMaze(MazeType mazeType)
         {
             //zmienić skybox'y

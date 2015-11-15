@@ -152,8 +152,11 @@ namespace Treasure_Hunter.Controllers
                     ActionsManager.DecreaseChargesOfAction(StandaloneSelectedItem.Model.Type);
                 }
             }
-            PlayerPrefsManager.Instance.Achievements.AddPerformedAction(StandaloneSelectedItem.Model.Type);
-            return StandaloneSelectedItem.Model;
+            if (PlayerPrefsManager.Instance != null)
+            {
+                PlayerPrefsManager.Instance.Achievements.AddPerformedAction(StandaloneSelectedItem.Model.Type);
+            }
+            return StandaloneSelectedItem.Model!=null?StandaloneSelectedItem.Model:new PlayerAction(ActionType.JUMP,0, true);
         }
 
         public void Init()

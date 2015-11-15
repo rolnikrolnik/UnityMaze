@@ -38,7 +38,7 @@ namespace Treasure_Hunter.Controllers
 
         #endregion
 
-        public bool IsEnabled { get; private set; }
+        public bool IsEnabled { get; set; }
         private bool attack = false;
         private bool jump = false;
         private float jumpForce = 0;
