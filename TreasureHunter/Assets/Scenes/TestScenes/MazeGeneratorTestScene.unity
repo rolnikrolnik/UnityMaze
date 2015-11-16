@@ -771,11 +771,13 @@ MonoBehaviour:
   Player: {fileID: 1128423543}
   Width: 20
   Length: 20
+  TrapProbability: 30
+  MonsterProbability: 30
   Prim: 0
   MazeType: 1
   WallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
   FloorPrefab: {fileID: 141030, guid: b4311c58f143713409e2e17e7495f329, type: 2}
-  ExitPrefab: {fileID: 143512, guid: 136c8226cf2780b42baa0a24e9d10de2, type: 2}
+  ExitPrefab: {fileID: 144940, guid: f7b6bfc1f7f101e4299da4f55c7248f7, type: 2}
   StationaryTrapPrefab: {fileID: 153918, guid: 065e2e16ecb665b418fc811700e83cfa, type: 2}
   AcrossTrapPrefab: {fileID: 132456, guid: a4cec0c50a1dabe4bbb2d4a0aa0bb53c, type: 2}
   DownTrapPrefab: {fileID: 180228, guid: 77710d2e4551b274b858c0ca3f6d02f1, type: 2}
