@@ -19,9 +19,14 @@ public class TriggeredTrapScript : MonoBehaviour {
         FirePrefab.SetActive(true);
     }
 
+    void OnTriggerStay(Collider other)
+    {
+        StartCoroutine(WaitAndTakeDamage());
+    }
+
     void OnTriggerExit(Collider other)
     {
-        StartCoroutine(Wait());
+        StartCoroutine(WaitAndMakeFireInactive());
     }
 
 	// Update is called once per frame
@@ -29,10 +34,24 @@ public class TriggeredTrapScript : MonoBehaviour {
 	
 	}
 
-    IEnumerator Wait()
+    void TakeDamageWithFire()
+    {
+        // TODO
+    }
+
+    IEnumerator WaitAndTakeDamage()
+    {
+        Debug.Log("Waiting for 1 second");
+        yield return new WaitForSeconds(1.0F);
+        TakeDamageWithFire();
+        Debug.Log("Took damage!");
+    }
+
+    IEnumerator WaitAndMakeFireInactive()
     {
         Debug.Log("Waiting for 5 seconds...");
         yield return new WaitForSeconds(5.0F);
         FirePrefab.SetActive(false);
+        Debug.Log("Made a fire trap inactive!");
     }
 }
