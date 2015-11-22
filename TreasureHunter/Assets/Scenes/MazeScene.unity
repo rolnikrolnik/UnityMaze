@@ -411,6 +411,8 @@ MonoBehaviour:
   Player: {fileID: 1572267093}
   Width: 20
   Length: 20
+  TrapProbability: 0
+  MonsterProbability: 0
   Prim: 0
   MazeType: 4
   WallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}

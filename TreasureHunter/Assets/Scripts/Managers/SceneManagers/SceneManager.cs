@@ -78,9 +78,30 @@ namespace Treasure_Hunter.Managers
             yield return StartCoroutine(BaseManager.Init());
         }
 
+        public void BackToBase()
+        {
+            StartCoroutine(BackToBaseCoroutine());
+        }
+
         public void LoadMaze(MazeType mazeType)
         {
             StartCoroutine(LoadMazeCoroutine(mazeType));
+        }
+
+        private IEnumerator BackToBaseCoroutine()
+        {
+            //Save additional data (add points to achievements, add owned items)
+            LoadingPage.Show();
+            yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
+            Camera.transform.SetParent(null);
+            while (MazeManager == null)
+            {
+                yield return 0;
+                MazeManager = FindObjectOfType<MazeManager>();
+            }
+            Destroy(MazeManager.ActionChoicePopup.gameObject);
+            Destroy(MazeManager.LevelRootObject.gameObject);
+            yield return StartCoroutine(LoadBase());
         }
 
         private IEnumerator LoadMazeCoroutine(MazeType mazeType)

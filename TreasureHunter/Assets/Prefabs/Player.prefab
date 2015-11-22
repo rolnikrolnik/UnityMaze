@@ -542,7 +542,7 @@ GameObject:
   - 114: {fileID: 11445260}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3214,7 +3214,7 @@ Animator:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 135028}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 268489779a498034297d3aea47337dcc, type: 3}
   m_Controller: {fileID: 9100000, guid: 351ee4d61560616419d2399968797a30, type: 2}
   m_CullingMode: 1
@@ -4219,7 +4219,7 @@ CharacterController:
   m_GameObject: {fileID: 135028}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
   m_Height: 3.70000005
   m_Radius: .5
