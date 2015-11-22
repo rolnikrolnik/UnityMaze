@@ -29,6 +29,7 @@ GameObject:
   - 33: {fileID: 3366548}
   - 135: {fileID: 13551882}
   - 23: {fileID: 2340414}
+  - 114: {fileID: 11481780}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -132,7 +133,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 014a39cb15d7d6844aea462223ce2937, type: 2}
+  - {fileID: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -156,7 +157,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 014a39cb15d7d6844aea462223ce2937, type: 2}
+  - {fileID: 0}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
@@ -270,6 +271,17 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!114 &11481780
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 131810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab44b7fa06ec254f9488bff1c6515fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &13551882
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -277,7 +289,7 @@ SphereCollider:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 131810}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: .5
