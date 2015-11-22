@@ -4,35 +4,34 @@ using UnityEditor;
 
 public class TriggeredTrapScript : MonoBehaviour {
 
-    public GameObject FirePrefab;
+    public GameObject Fire;
 
+    private bool isSomeoneStayOnTrigger = false;
 	// Use this for initialization
 	void Start () {
-        FirePrefab.SetActive(false);
+        Fire.SetActive(false);
 	}
 
     void OnTriggerEnter(Collider other)
     {
+        isSomeoneStayOnTrigger = true;
         Debug.Log("Stepped on a pressure plate!");
         Debug.Log("Activated the trap!");
 
-        FirePrefab.SetActive(true);
+        Fire.SetActive(true);
     }
 
     void OnTriggerStay(Collider other)
     {
+        isSomeoneStayOnTrigger = true;
         StartCoroutine(WaitAndTakeDamage());
     }
 
     void OnTriggerExit(Collider other)
     {
+        isSomeoneStayOnTrigger = false;
         StartCoroutine(WaitAndMakeFireInactive());
     }
-
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
     void TakeDamageWithFire()
     {
@@ -51,7 +50,10 @@ public class TriggeredTrapScript : MonoBehaviour {
     {
         Debug.Log("Waiting for 5 seconds...");
         yield return new WaitForSeconds(5.0F);
-        FirePrefab.SetActive(false);
-        Debug.Log("Made a fire trap inactive!");
+        if (!isSomeoneStayOnTrigger)
+        {
+            Fire.SetActive(false);
+            Debug.Log("Made a fire trap inactive!");
+        }
     }
 }

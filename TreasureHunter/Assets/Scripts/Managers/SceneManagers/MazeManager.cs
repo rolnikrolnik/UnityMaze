@@ -39,7 +39,6 @@ namespace Treasure_Hunter.Managers
         public bool Prim;
         public MazeType MazeType;
         public GameObject WallPrefab;
-        public GameObject FloorPrefab;
         public GameObject ExitPrefab;
         public GameObject StationaryTrapPrefab;
         public GameObject AcrossTrapPrefab;
@@ -75,7 +74,6 @@ namespace Treasure_Hunter.Managers
         public void GenerateMaze(MazeType mazeType)
         {
             this.MazeType = mazeType;
-            //zmienić skybox'y
             this.RestoreDefaultPositions();
             this.InstantiateMazeObject(mazeType);
             this.GenerateMazeComponents();
@@ -149,7 +147,7 @@ namespace Treasure_Hunter.Managers
 
         private GameObject InstantiateMazeComponent(Vector3 vector, GameObject prefab)
         {
-            GameObject mazeObject = new GameObject();
+            GameObject mazeObject = null;
             try
             {
                 mazeObject = Instantiate(prefab,
@@ -188,13 +186,12 @@ namespace Treasure_Hunter.Managers
             {
                 Debug.DrawLine(navMeshPath.corners[i], navMeshPath.corners[i + 1], Color.cyan, 2f, false);
             }
-
             if (navMeshPath.status != NavMeshPathStatus.PathComplete)
             {
-                Debug.Log("POWTARZAM GENERACJE");
+                Debug.LogWarning("generation repeated");
                 foreach (var wall in GameObject.FindGameObjectsWithTag("MazeComponent"))
                 {
-                    DestroyImmediate(wall);
+                    Destroy(wall);
                 }
                 this.GenerateMaze(this.MazeType);
             }

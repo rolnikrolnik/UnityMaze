@@ -26,7 +26,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 455014}
   - 33: {fileID: 3363882}
-  - 65: {fileID: 6534172}
   - 23: {fileID: 2361088}
   m_Layer: 0
   m_Name: PressurePlateTrap
@@ -112,9 +111,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 494730}
-  - 33: {fileID: 3324444}
   - 65: {fileID: 6542356}
-  - 23: {fileID: 2365782}
   - 114: {fileID: 11438360}
   m_Layer: 0
   m_Name: Cube
@@ -408,43 +405,12 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!23 &2365782
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 153558}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
-  m_ProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_ImportantGI: 0
-  m_AutoUVMaxDistance: .5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
 --- !u!33 &3302256
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 130922}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!33 &3324444
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 153558}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &3363882
 MeshFilter:
@@ -453,18 +419,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 106426}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &6534172
-BoxCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 106426}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!65 &6542356
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -532,7 +486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcf1c573bb46b22478e57a42d988fa69, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FirePrefab: {fileID: 130922}
+  Fire: {fileID: 130922}
 --- !u!114 &11452452
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -555,7 +509,7 @@ ParticleSystem:
   speed: 1
   randomSeed: 0
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   moveWithTransform: 1
   InitialModule:
@@ -1525,7 +1479,7 @@ ParticleSystem:
       minMaxState: 1
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 1
+    enabled: 0
     type: 1
     plane0: {fileID: 0}
     plane1: {fileID: 0}
@@ -1563,13 +1517,13 @@ ParticleSystem:
   speed: 1
   randomSeed: 0
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   moveWithTransform: 0
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 1
+      scalar: .75
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1584,7 +1538,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .699999988
+          value: .733333349
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -1709,7 +1663,7 @@ ParticleSystem:
         rgba: 4294967295
       minMaxState: 0
     startSize:
-      scalar: 1.20000005
+      scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -1756,7 +1710,7 @@ ParticleSystem:
       minMaxState: 3
     gravityModifier: -.200000003
     inheritVelocity: 0
-    maxNumParticles: 10
+    maxNumParticles: 50
   ShapeModule:
     serializedVersion: 2
     enabled: 0
@@ -1775,7 +1729,7 @@ ParticleSystem:
     enabled: 1
     m_Type: 0
     rate:
-      scalar: 3
+      scalar: 10
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -2576,7 +2530,7 @@ ParticleSystem:
   speed: 1
   randomSeed: 0
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   moveWithTransform: 1
   InitialModule:
@@ -3549,13 +3503,13 @@ ParticleSystem:
   speed: 1
   randomSeed: 0
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   moveWithTransform: 1
   InitialModule:
     enabled: 1
     startLifetime:
-      scalar: 2
+      scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -3570,7 +3524,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .300000012
+          value: .600000024
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -3695,7 +3649,7 @@ ParticleSystem:
         rgba: 2365587455
       minMaxState: 0
     startSize:
-      scalar: 1.25
+      scalar: 1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -3710,7 +3664,7 @@ ParticleSystem:
         serializedVersion: 2
         m_Curve:
         - time: 0
-          value: .560000002
+          value: .5
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -4552,7 +4506,7 @@ ParticleSystem:
   speed: 1
   randomSeed: 0
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   moveWithTransform: 0
   InitialModule:
@@ -5570,7 +5524,7 @@ ParticleSystem:
   speed: 1
   randomSeed: 0
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   moveWithTransform: 1
   InitialModule:
@@ -6688,7 +6642,7 @@ ParticleSystem:
   speed: 1
   randomSeed: 0
   looping: 1
-  prewarm: 0
+  prewarm: 1
   playOnAwake: 1
   moveWithTransform: 0
   InitialModule:
@@ -7719,8 +7673,8 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_RenderMode: 3
-  m_MaxParticleSize: .449999988
+  m_RenderMode: 0
+  m_MaxParticleSize: 3
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
   m_LengthScale: 2
@@ -7827,7 +7781,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
-  m_RenderMode: 3
+  m_RenderMode: 0
   m_MaxParticleSize: .400000006
   m_CameraVelocityScale: 0
   m_VelocityScale: 0
