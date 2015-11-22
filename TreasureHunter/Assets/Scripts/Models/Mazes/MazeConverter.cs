@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Treasure_Hunter.Enumerations;
 using UnityEngine;
 using Random = System.Random;
@@ -13,6 +14,7 @@ namespace Treasure_Hunter.Mazes
         private IMaze maze;
         private Random random;
         private readonly Vector3 mazeWallScale;
+        private Vector3 playersVector;
 
         #endregion
 
@@ -47,6 +49,58 @@ namespace Treasure_Hunter.Mazes
             this.AddExitComponent();
             this.AddWalls();
             this.AddTraps();
+            this.RemoveTrapsAroundPlayer();
+            this.MakeSpaceForTrophyRoom();
+        }
+
+        private void MakeSpaceForTrophyRoom()
+        {
+            var exitPosition = this.MazeComponents.FirstOrDefault(pair => pair.Value == MazeComponentType.EXIT).Key;
+            var exitX = exitPosition.x;
+            var exitZ = exitPosition.z;
+            var wallX = mazeWallScale.x/2;
+            var wallZ = mazeWallScale.z/2;
+            var startingX = exitX - 4 * wallX;
+            var startingY = exitZ + wallZ;
+            for (float i = startingX; i <= startingX + 9 * wallX; i += wallX)
+            {
+                for (float j = startingY ; j <= startingY + 9*wallZ; j += wallZ)
+                {
+                    var neighbourVector = new Vector3(i, 1 + mazeWallScale.y / 2, j);
+                    if (this.MazeComponents.ContainsKey(neighbourVector))
+                    {
+                        if (this.MazeComponents[neighbourVector] == MazeComponentType.WALL)
+                        {
+                            this.MazeComponents.Remove(neighbourVector);
+                            this.MazeComponents.Add(neighbourVector, MazeComponentType.FLOOR);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void RemoveTrapsAroundPlayer()
+        {
+            var playerX = this.PlayerCoords.x;
+            var playerZ = this.PlayerCoords.z;
+            for (float i = playerX - 1f; i <= playerX + 1; i += mazeWallScale.x / 2)
+            {
+                for (float j = playerZ - 1f; j <= playerZ + 1; j += mazeWallScale.z / 2)
+                {
+                    var neighbourVector = new Vector3(i, 1 + mazeWallScale.y / 2, j);
+                    if (this.MazeComponents.ContainsKey(neighbourVector))
+                    {
+                        if (this.MazeComponents[neighbourVector] == MazeComponentType.STATIONARY_TRAP
+                            || this.MazeComponents[neighbourVector] == MazeComponentType.ACROSS_TRAP
+                            || this.MazeComponents[neighbourVector] == MazeComponentType.DOWN_TRAP
+                            || this.MazeComponents[neighbourVector] == MazeComponentType.MONSTER)
+                        {
+                            this.MazeComponents.Remove(neighbourVector);
+                            this.MazeComponents.Add(neighbourVector, MazeComponentType.FLOOR);
+                        }
+                    }
+                }
+            }
         }
 
         private void AddTraps()
@@ -85,8 +139,8 @@ namespace Treasure_Hunter.Mazes
         private void SetPlayerPosition()
         {
             var playerCoords = this.maze.GetPlayerCoords();
-            var playerVector = new Vector3(playerCoords.X, 1, playerCoords.Y);
-            this.PlayerCoords = playerVector + mazeWallScale / 2;
+            this.playersVector = new Vector3(playerCoords.X, 1, playerCoords.Y);
+            this.PlayerCoords = this.playersVector + mazeWallScale / 2;
         }
 
         private void AddExitComponent()

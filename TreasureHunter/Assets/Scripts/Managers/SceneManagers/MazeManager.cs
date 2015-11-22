@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using Treasure_Hunter.Enumerations;
 using Treasure_Hunter.Abstract;
 using Treasure_Hunter.Controllers;
@@ -14,6 +16,7 @@ namespace Treasure_Hunter.Managers
 
         private static Vector3 MAZE_SCALE = new Vector3(10, 4, 10);
         private static string TerrainName = "Terrain";
+        private static Vector3 TerrainTransform = new Vector3(1, 5, 1);
 
         #endregion
 
@@ -27,6 +30,7 @@ namespace Treasure_Hunter.Managers
         #region Fields
 
         private Vector3 mazeWallScale;
+        private GameObject exitComponent;
 
         public int Width;
         public int Length;
@@ -70,11 +74,13 @@ namespace Treasure_Hunter.Managers
 
         public void GenerateMaze(MazeType mazeType)
         {
+            this.MazeType = mazeType;
             //zmienić skybox'y
             this.RestoreDefaultPositions();
             this.InstantiateMazeObject(mazeType);
             this.GenerateMazeComponents();
             this.ChangeMazeScale();
+            StartCoroutine(this.CheckIfCorrect());
         }
 
         private void RestoreDefaultPositions()
@@ -103,9 +109,9 @@ namespace Treasure_Hunter.Managers
 
             this.Maze.GenerateMaze(this.Length, this.Width);
             this.MazeConverter = new MazeConverter(
-                this.Maze, 
-                this.mazeWallScale, 
-                this.TrapProbability, 
+                this.Maze,
+                this.mazeWallScale,
+                this.TrapProbability,
                 this.MonsterProbability);
         }
 
@@ -133,7 +139,7 @@ namespace Treasure_Hunter.Managers
                         this.InstantiateMazeComponent(componentVector, DownTrapPrefab);
                         break;
                     case MazeComponentType.EXIT:
-                        this.InstantiateMazeComponent(componentVector, ExitPrefab);
+                        this.exitComponent = this.InstantiateMazeComponent(componentVector, ExitPrefab);
                         break;
                     default:
                         break;
@@ -141,11 +147,12 @@ namespace Treasure_Hunter.Managers
             }
         }
 
-        private void InstantiateMazeComponent(Vector3 vector, GameObject prefab)
+        private GameObject InstantiateMazeComponent(Vector3 vector, GameObject prefab)
         {
+            GameObject mazeObject = new GameObject();
             try
             {
-                var mazeObject = Instantiate(prefab,
+                mazeObject = Instantiate(prefab,
                     vector,
                     prefab.transform.rotation) as GameObject;
                 mazeObject.transform.parent = this.transform;
@@ -154,6 +161,7 @@ namespace Treasure_Hunter.Managers
             {
                 Debug.LogError(e);
             }
+            return mazeObject;
         }
 
         private void ChangeMazeScale()
@@ -161,10 +169,35 @@ namespace Treasure_Hunter.Managers
             this.transform.localScale = MAZE_SCALE;
             Player.transform.localPosition = Vector3.Scale(this.MazeConverter.PlayerCoords, MAZE_SCALE);
             var terrain = GameObject.Find(TerrainName);
-            terrain.transform.position = new Vector3(
-                terrain.transform.position.x,
-                terrain.transform.position.y + MAZE_SCALE.y,
-                terrain.transform.position.z);
+            terrain.transform.position = TerrainTransform;
+        }
+
+        private IEnumerator CheckIfCorrect()
+        {
+            Vector3 terrainPosition = GameObject.Find(TerrainName).transform.position;
+            Vector3 startPosition = this.Player.transform.position;
+            Vector3 exitPosition = this.exitComponent.transform.position;
+            startPosition.y = terrainPosition.y;
+            exitPosition.y = terrainPosition.y;
+
+            NavMeshPath navMeshPath = new NavMeshPath();
+            yield return 0;
+
+            NavMesh.CalculatePath(startPosition, exitPosition, NavMesh.AllAreas, navMeshPath);
+            for (int i = 0; i < navMeshPath.corners.Length - 1; i++)
+            {
+                Debug.DrawLine(navMeshPath.corners[i], navMeshPath.corners[i + 1], Color.cyan, 2f, false);
+            }
+
+            if (navMeshPath.status != NavMeshPathStatus.PathComplete)
+            {
+                Debug.Log("POWTARZAM GENERACJE");
+                foreach (var wall in GameObject.FindGameObjectsWithTag("MazeComponent"))
+                {
+                    DestroyImmediate(wall);
+                }
+                this.GenerateMaze(this.MazeType);
+            }
         }
     }
 }

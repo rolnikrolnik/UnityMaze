@@ -774,7 +774,7 @@ MonoBehaviour:
   TrapProbability: 30
   MonsterProbability: 30
   Prim: 0
-  MazeType: 1
+  MazeType: 4
   WallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
   FloorPrefab: {fileID: 141030, guid: b4311c58f143713409e2e17e7495f329, type: 2}
   ExitPrefab: {fileID: 144940, guid: f7b6bfc1f7f101e4299da4f55c7248f7, type: 2}
@@ -854,7 +854,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2120038469}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 374700286}
