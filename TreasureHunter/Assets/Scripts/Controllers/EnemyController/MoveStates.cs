@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Treasure_Hunter.Managers;
 
 public class MoveStates : MonoBehaviour {
 	
@@ -16,8 +17,10 @@ public class MoveStates : MonoBehaviour {
 	public bool attackBlocked = false;
 	public bool enemySpotted = false;
 	public int movingState = (int)MoveState.idle;
-	private EnemyHealth enemyHealth;
-	public GameObject player;
+	public EnemyHealth enemyHealth;
+	private GameObject player {
+		get { return SceneManager.Instance.MazeManager.Player.gameObject; }
+	}
 
 	Vector3 sightVector;
 	Color sightColor = Color.green;
@@ -27,7 +30,8 @@ public class MoveStates : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		target = GameObject.FindWithTag ("Player").transform;
-		enemyHealth = gameObject.GetComponent<EnemyHealth> ();
+
+
 	}
 	
 	// Update is called once per frame
@@ -38,7 +42,7 @@ public class MoveStates : MonoBehaviour {
 			
 			var _distance = Vector3.Distance (target.position, transform.position);
 
-			var angle = Vector3.Angle(transform.forward, target.position - transform.position);
+			var angle = Vector3.Angle(-transform.forward, target.position - transform.position);
 			
 			//Jeśli gracz jest za daleko, to sobie po prostu siedź jakby nigdy nic
 			if (_distance > sightRange) {
@@ -52,15 +56,15 @@ public class MoveStates : MonoBehaviour {
 				// Jeśli gracz podejdzie za blisko, to uruchamiamy gotowość do ataku
 				if (_distance <= sightRange && _distance > dangerRange) {
 					
-					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (target.position - transform.position), rotationSpeed * Time.deltaTime);
+					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (transform.position - target.position), rotationSpeed * Time.deltaTime);
 					movingState = (int)MoveState.aggressive_idle;
 
 					sightColor = Color.yellow;
 				}
 				// Gracz się zbliża, dinuś czuje się zagrożony i biegnie aby go zjeść
 				else if (_distance <= dangerRange && _distance > attackRange) {
-					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (target.position - transform.position), rotationSpeed * Time.deltaTime);
-					transform.position += transform.forward * moveSpeed * Time.deltaTime;
+					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (transform.position - target.position), rotationSpeed * Time.deltaTime);
+					transform.position += -transform.forward * moveSpeed * Time.deltaTime;
 					movingState = (int)MoveState.running;
 					sightColor = Color.red;
 				}
@@ -83,7 +87,7 @@ public class MoveStates : MonoBehaviour {
 	}
 
 	void DrawSight() {
-		sightVector = Vector3.Scale (transform.forward, new Vector3 (sightRange, 0.0f, sightRange));
+		sightVector = Vector3.Scale (-transform.forward, new Vector3 (sightRange, 0.0f, sightRange));
 		sightVector = Quaternion.Euler (0, sightAngle, 0) * sightVector;
 		Debug.DrawRay (transform.position, sightVector, sightColor, 0.01f);
 		sightVector = Quaternion.Euler (0, -2*sightAngle, 0) * sightVector;
