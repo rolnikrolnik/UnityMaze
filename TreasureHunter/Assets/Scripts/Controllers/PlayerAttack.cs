@@ -18,11 +18,12 @@ public class PlayerAttack : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		currentHealth = maxHealth;
+		healthText.text = Convert.ToString (100 * (float)currentHealth / (float)maxHealth) + "%";
 	}
 
 	public void updateHealthbar () {
-		healthBarLength = 200*((float)currentHealth / (float)maxHealth);
-		healthbar.rectTransform.sizeDelta = new Vector2 (healthBarLength, 20);
+		healthBarLength = 100*((float)currentHealth / (float)maxHealth);
+		healthbar.rectTransform.sizeDelta = new Vector2 (healthBarLength, 10);
 		healthText.text = Convert.ToString (100 * (float)currentHealth / (float)maxHealth) + "%";
 
 	}
@@ -39,7 +40,7 @@ public class PlayerAttack : MonoBehaviour {
 					if (relativePoint.x <= 0.5 && relativePoint.x >= -0.5) {
 						if (Input.GetMouseButtonDown(0)) {
 							eh.TakeDamage (5);
-							eh.updateHealthbar();
+//							eh.updateHealthbar();
 						}
 					}
 				}
