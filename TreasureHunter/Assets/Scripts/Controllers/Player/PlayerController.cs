@@ -39,7 +39,7 @@ namespace Treasure_Hunter.Controllers
         #endregion
 
         public bool IsEnabled { get; set; }
-        private bool attack = false;
+        public bool Attack = false;
         private bool jump = false;
         private float jumpForce = 0;
         private float speed = 0;
@@ -122,10 +122,10 @@ namespace Treasure_Hunter.Controllers
 
         private void CheckCurrentAction()
         {
-            if (attack)
+            if (Attack)
             {
-                attack = Input.GetKey(KeyCode.Mouse0);
-                Animator.SetBool(ATTACK_ANIMATION_PARAMETER_NAME, attack);
+                Attack = Input.GetKey(KeyCode.Mouse0);
+                Animator.SetBool(ATTACK_ANIMATION_PARAMETER_NAME, Attack);
             }
             else if (jump)
             {
@@ -155,7 +155,7 @@ namespace Treasure_Hunter.Controllers
         private void ApplyAttack()
         {
             Animator.SetBool(ATTACK_ANIMATION_PARAMETER_NAME, true);
-            attack = true;
+            Attack = true;
         }
 
         public void ApplyAction()
@@ -183,10 +183,5 @@ namespace Treasure_Hunter.Controllers
         }
 
         #endregion
-
-        public void MakeHit()
-        {
-
-        }
     }
 }

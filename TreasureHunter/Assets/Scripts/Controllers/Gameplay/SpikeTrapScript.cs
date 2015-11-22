@@ -1,20 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Treasure_Hunter.Interfaces;
 
-public class SpikeTrapScript : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-
+public class SpikeTrapScript : MonoBehaviour 
+{
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Stepped into a spike trap!");
+        IDamageable damageableObject = other.GetComponent<IDamageable>();
+        if (damageableObject != null)
+        {
+            damageableObject.TakeDamage(0.05f);
+            Debug.Log("Stepped into a spike trap!");
+        }
     }
-
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }

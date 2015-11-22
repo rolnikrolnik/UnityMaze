@@ -73,7 +73,7 @@ public class MoveStates : MonoBehaviour {
 					movingState = (int)MoveState.attack;
 					if (!attackBlocked){
 						if (target.GetComponent<PlayerAttack>().currentHealth > 0)
-							target.GetComponent<PlayerAttack> ().TakeDamage (10);
+							target.GetComponent<PlayerAttack> ().TakeDamage (0.025f);
 						StartCoroutine(AttackPause());
 					}
 				}

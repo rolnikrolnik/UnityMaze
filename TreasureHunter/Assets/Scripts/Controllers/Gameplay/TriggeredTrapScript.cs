@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEditor;
+using Treasure_Hunter.Interfaces;
 
 public class TriggeredTrapScript : MonoBehaviour {
 
@@ -17,14 +18,14 @@ public class TriggeredTrapScript : MonoBehaviour {
         isSomeoneStayOnTrigger = true;
         Debug.Log("Stepped on a pressure plate!");
         Debug.Log("Activated the trap!");
-
         Fire.SetActive(true);
+        TakeDamageWithFire(other);
     }
 
     void OnTriggerStay(Collider other)
     {
         isSomeoneStayOnTrigger = true;
-        StartCoroutine(WaitAndTakeDamage());
+        TakeDamageWithFire(other);
     }
 
     void OnTriggerExit(Collider other)
@@ -33,17 +34,14 @@ public class TriggeredTrapScript : MonoBehaviour {
         StartCoroutine(WaitAndMakeFireInactive());
     }
 
-    void TakeDamageWithFire()
+    void TakeDamageWithFire(Collider other)
     {
-        // TODO
-    }
-
-    IEnumerator WaitAndTakeDamage()
-    {
-        Debug.Log("Waiting for 1 second");
-        yield return new WaitForSeconds(1.0F);
-        TakeDamageWithFire();
-        Debug.Log("Took damage!");
+        IDamageable damageableObject = other.GetComponent<IDamageable>();
+        if (damageableObject != null)
+        {
+            damageableObject.TakeDamage(0.05f * Time.deltaTime);
+            Debug.Log("Took fire damage!");
+        }
     }
 
     IEnumerator WaitAndMakeFireInactive()

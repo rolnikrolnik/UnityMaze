@@ -22,9 +22,15 @@ namespace Treasure_Hunter.Controllers
         #region SCENE REFERENCES
 
         //Standalone
+        public Image StandaloneHealthBarFill;
+        public Image StandaloneHealthBarBackground;
+        public Text StandaloneHealthBarLabel;
         public ActionItem[] StandaloneItems;
         public ActionItem StandaloneSelectedItem;
         //OVR
+        public Image OVRHealthBarFill;
+        public Image OVRHealthBarBackground;
+        public Text OVRHealthBarLabel;
         public ActionItem[] OVRItems;
         public ActionItem OVRSelectedItem;
         //Manager
@@ -79,6 +85,12 @@ namespace Treasure_Hunter.Controllers
             }
             StandaloneSelectedItem.SetAlphaChannel(alpha);
             OVRSelectedItem.SetAlphaChannel(alpha);
+            OVRHealthBarFill.SetAlphaChannel(alpha);
+            OVRHealthBarBackground.SetAlphaChannel(alpha);
+            OVRHealthBarLabel.SetAlphaChannel(alpha);
+            StandaloneHealthBarFill.SetAlphaChannel(alpha);
+            StandaloneHealthBarBackground.SetAlphaChannel(alpha);
+            StandaloneHealthBarLabel.SetAlphaChannel(alpha);
         }
 
         #endregion

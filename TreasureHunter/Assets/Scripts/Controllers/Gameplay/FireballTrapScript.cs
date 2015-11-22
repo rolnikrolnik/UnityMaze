@@ -1,20 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Treasure_Hunter.Interfaces;
 
-public class FireballTrapScript : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-
+public class FireballTrapScript : MonoBehaviour 
+{
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Stepped into a fireball!");
+        IDamageable damageableObject = other.GetComponent<IDamageable>();
+        if (damageableObject != null)
+        {
+            damageableObject.TakeDamage(0.05f);
+            Debug.Log("Stepped into a fireball!");
+        }
     }
-
-	// Update is called once per frame
-	void Update () {
-	
-	}
 }
