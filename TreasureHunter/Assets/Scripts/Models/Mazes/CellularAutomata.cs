@@ -47,35 +47,21 @@ namespace Treasure_Hunter.Mazes
 			this.RandomMapFill();
 			for (var i = 0; i < this.Turns; i++)
 			{
-				this.SmoothMap();
+				this.SmoothMap(isFirstSmoothing: true);
 			}
 
-	        if (!this.IsMapGeneratedCorrectly())
+            for (var i = 0; i < this.Turns - 1; i++)
+            {
+                this.SmoothMap(isFirstSmoothing: false);
+            }
+
+            if (!this.IsMapGeneratedCorrectly())
 	        {
 	            this.GenerateMaze(heightTmp, widthTmp);
 	        }
 		}
 
-	    private bool IsMapGeneratedCorrectly()
-	    {
-	        var allCells = 0;
-	        var emptyCells = 0;
-	        for (int i = 0; i < _map.Length; i++)
-	        {
-	            for (int j = 0; j < _map[0].Length; j++)
-	            {
-	                if (!_map[i][j])
-	                {
-	                    emptyCells++;
-	                }
 
-	                allCells++;
-	            }
-	        }
-
-	        var score = (float) emptyCells/(float) allCells;
-	        return score > 0.4f;
-	    }
 
 	    public Point GetExitCoords()
 	    {
@@ -138,7 +124,6 @@ namespace Treasure_Hunter.Mazes
                 var randomPostionX = _rng.Next(this.Width);
                 if (!this.IsPointAWall(firstEmptyRow, randomPostionX))
                 {
-                    Debug.Log(string.Format("PLAYER = x = {0}, y ={1}", randomPostionX, firstEmptyRow));
                     return new Point(randomPostionX, firstEmptyRow);
                 }
             }
@@ -146,7 +131,6 @@ namespace Treasure_Hunter.Mazes
 
 	    public bool IsPointAWall(int x, int y)
 		{
-            //Debug.Log(string.Format("x = {0}, y ={1}", x, y));
 			return this._map [x] [y];
 		}
 
@@ -166,12 +150,12 @@ namespace Treasure_Hunter.Mazes
 			}
 		}
 		
-		private int GetNeighboursCount(int cellX, int cellY)
+		private int GetNeighboursCount(int cellX, int cellY, int steps)
 		{
 			var count = 0;
-			for (var i = cellY - 1; i <= cellY + 1; i++)
+			for (var i = cellY - steps; i <= cellY + steps; i++)
 			{
-				for (var j = cellX - 1; j <= cellX + 1; j++)
+				for (var j = cellX - steps; j <= cellX + steps; j++)
 				{
 					if (i >= 0 && j >= 0 && i < this._height && j < this._width)
 					{
@@ -186,24 +170,66 @@ namespace Treasure_Hunter.Mazes
 			return count;
 		}
 		
-		private void SmoothMap()
+		private void SmoothMap(bool isFirstSmoothing)
 		{
 			for (var i = 0; i < this._height; i++)
 			{
 				for (var j = 0; j < this._width; j++)
 				{
-					var neighbourCount = this.GetNeighboursCount(i, j);
-					if (neighbourCount > 4)
-					{
-						_map[i][j] = true;
-					}
-					else if (neighbourCount < 4)
-					{
-						_map[i][j] = false;
-					}
+				    if (isFirstSmoothing)
+				    {
+				        var oneStepNeighbour = this.GetNeighboursCount(i, j, 1);
+				        var twoStepsNieghbours = this.GetNeighboursCount(i, j, 2);
+				        if (oneStepNeighbour >= 5 || twoStepsNieghbours <= 2)
+				        {
+				            _map[i][j] = true;
+				        }
+				        else
+				        {
+				            _map[i][j] = false;
+				        }
+				    }
+				    else
+				    {
+                        var oneStepNeighbour = this.GetNeighboursCount(i, j, 1);
+                        if (oneStepNeighbour >= 5)
+                        {
+                            _map[i][j] = true;
+                        }
+                        else
+                        {
+                            _map[i][j] = false;
+                        }
+                    }
 				}
 			}
 		}
+
+        private bool IsMapGeneratedCorrectly()
+        {
+            return IsFillPercentageHigherThan(0.4f);
+        }
+
+        private bool IsFillPercentageHigherThan(float fillPercentageLevel)
+        {
+            var allCells = 0;
+            var emptyCells = 0;
+            for (int i = 0; i < _map.Length; i++)
+            {
+                for (int j = 0; j < _map[0].Length; j++)
+                {
+                    if (!_map[i][j])
+                    {
+                        emptyCells++;
+                    }
+
+                    allCells++;
+                }
+            }
+
+            var score = (float)emptyCells / (float)allCells;
+            return score > fillPercentageLevel;
+        }
 
         #endregion
     }

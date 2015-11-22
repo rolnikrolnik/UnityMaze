@@ -16,7 +16,7 @@ namespace UnityStandardAssets.Effects
             foreach (ParticleSystem system in systems)
             {
                 system.startSize *= multiplier;
-                system.startSpeed *= multiplier;
+                system.startSpeed *= multiplier * 2.5F;
                 system.startLifetime *= Mathf.Lerp(multiplier, 1, 0.5f);
                 system.Clear();
                 system.Play();
