@@ -7,14 +7,25 @@ public class TriggeredTrapScript : MonoBehaviour {
 
     public GameObject Fire;
 
+    public AudioClip FireBurningAudioClip;
+
+    public AudioClip PressurePlateStepAudioClip;
+
+    private AudioSource _audioSource;
+
+    private float _timeSinceLastFireBurning;
+
     private bool isSomeoneStayOnTrigger = false;
 	// Use this for initialization
 	void Start () {
         Fire.SetActive(false);
+        _audioSource = GetComponent<AudioSource>();
+        _timeSinceLastFireBurning = 0.0F;
 	}
 
     void OnTriggerEnter(Collider other)
     {
+        _audioSource.PlayOneShot(PressurePlateStepAudioClip, 2.0F);
         isSomeoneStayOnTrigger = true;
         Debug.Log("Stepped on a pressure plate!");
         Debug.Log("Activated the trap!");
@@ -36,6 +47,7 @@ public class TriggeredTrapScript : MonoBehaviour {
 
     void TakeDamageWithFire(Collider other)
     {
+        PlayFireBurningSound();
         IDamageable damageableObject = other.GetComponent<IDamageable>();
         if (damageableObject != null)
         {
@@ -52,6 +64,24 @@ public class TriggeredTrapScript : MonoBehaviour {
         {
             Fire.SetActive(false);
             Debug.Log("Made a fire trap inactive!");
+
+            _audioSource.Stop();
+            _timeSinceLastFireBurning = 0.0F;
+        }
+    }
+
+    private void PlayFireBurningSound()
+    {
+        if (_timeSinceLastFireBurning == 0.0F)
+        {
+            _audioSource.PlayOneShot(FireBurningAudioClip);
+        }
+
+        _timeSinceLastFireBurning += Time.deltaTime;
+
+        if (_timeSinceLastFireBurning >= 60.0F)
+        {
+            _timeSinceLastFireBurning = 0.0F;
         }
     }
 }

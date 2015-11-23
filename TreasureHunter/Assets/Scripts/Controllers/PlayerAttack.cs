@@ -16,10 +16,15 @@ public class PlayerAttack : MonoBehaviour, IDamageable
     [HideInInspector]
     public float currentHealth;
 
+    private AudioSource _playerAudioSource;
+    private float _timeSinceLastOuch;
+
 	void Start () 
     {
         currentHealth = 1;
         UpdateProgressBars();
+        _playerAudioSource = Player.GetComponent<AudioSource>();
+        _timeSinceLastOuch = 0.0F;
 	}
 
 	void Update () 
@@ -48,9 +53,25 @@ public class PlayerAttack : MonoBehaviour, IDamageable
 
 	public void TakeDamage(float amount) 
     {
+        PlayOuchSound();
 		currentHealth -= amount;
         UpdateProgressBars();
 	}
+
+    private void PlayOuchSound()
+    {
+        if (_timeSinceLastOuch == 0.0F)
+        {
+            _playerAudioSource.PlayOneShot(Player.OuchAudioClip);
+        }
+
+        _timeSinceLastOuch += Time.deltaTime;
+
+        if (_timeSinceLastOuch >= 1.5F)
+        {
+            _timeSinceLastOuch = 0.0F;
+        }
+    }
 
     private void UpdateProgressBars()
     {

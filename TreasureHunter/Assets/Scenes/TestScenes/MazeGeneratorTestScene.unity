@@ -708,6 +708,10 @@ Prefab:
       propertyPath: StandaloneBar
       value: 
       objectReference: {fileID: 569910415}
+    - target: {fileID: 11486490, guid: 35424e977ba25c041b626dbd68aefa68, type: 2}
+      propertyPath: OuchAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 6dcc00a1efe684144826802001c0d2b2, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 35424e977ba25c041b626dbd68aefa68, type: 2}
   m_IsPrefabParent: 0

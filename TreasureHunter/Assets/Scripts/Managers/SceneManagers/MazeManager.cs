@@ -154,6 +154,17 @@ namespace Treasure_Hunter.Managers
                     vector,
                     prefab.transform.rotation) as GameObject;
                 mazeObject.transform.parent = this.transform;
+
+                var fireballTrap = mazeObject.GetComponentInChildren<FireballSoundScript>();
+                var spikeTrap = mazeObject.GetComponentInChildren<SpikeTrapScript>();
+                if (fireballTrap != null)
+                {
+                    fireballTrap.Player = Player;
+                }
+                else if (spikeTrap != null)
+                {
+                    spikeTrap.Player = Player;
+                }
             }
             catch (Exception e)
             {

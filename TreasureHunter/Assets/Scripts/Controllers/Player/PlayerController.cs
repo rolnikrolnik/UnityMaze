@@ -45,6 +45,8 @@ namespace Treasure_Hunter.Controllers
         private float speed = 0;
         private float verticalSpeed = 0;
 
+        public AudioClip OuchAudioClip;
+
         private bool isGrounded
         {
             get
