@@ -71,14 +71,18 @@ namespace Treasure_Hunter.Managers
             rectTransform.sizeDelta = Vector2.zero;
         }
 
-        public void GenerateMaze(MazeType mazeType)
+        public IEnumerator GenerateMaze(MazeType mazeType)
         {
-            this.MazeType = mazeType;
-            this.RestoreDefaultPositions();
-            this.InstantiateMazeObject(mazeType);
-            this.GenerateMazeComponents();
-            this.ChangeMazeScale();
-            StartCoroutine(this.CheckIfCorrect());
+            do
+            {
+                this.MazeType = mazeType;
+                this.RestoreDefaultPositions();
+                this.InstantiateMazeObject(mazeType);
+                this.GenerateMazeComponents();
+                this.ChangeMazeScale();
+                yield return 0;
+            }
+            while (!this.CheckIfCorrect());
         }
 
         private void RestoreDefaultPositions()
@@ -154,17 +158,6 @@ namespace Treasure_Hunter.Managers
                     vector,
                     prefab.transform.rotation) as GameObject;
                 mazeObject.transform.parent = this.transform;
-
-                var fireballTrap = mazeObject.GetComponentInChildren<FireballSoundScript>();
-                var spikeTrap = mazeObject.GetComponentInChildren<SpikeTrapScript>();
-                if (fireballTrap != null)
-                {
-                    fireballTrap.Player = Player;
-                }
-                else if (spikeTrap != null)
-                {
-                    spikeTrap.Player = Player;
-                }
             }
             catch (Exception e)
             {
@@ -181,17 +174,14 @@ namespace Treasure_Hunter.Managers
             terrain.transform.position = TerrainTransform;
         }
 
-        private IEnumerator CheckIfCorrect()
+        private bool CheckIfCorrect()
         {
             Vector3 terrainPosition = GameObject.Find(TerrainName).transform.position;
             Vector3 startPosition = this.Player.transform.position;
             Vector3 exitPosition = this.exitComponent.transform.position;
             startPosition.y = terrainPosition.y;
             exitPosition.y = terrainPosition.y;
-
             NavMeshPath navMeshPath = new NavMeshPath();
-            yield return 0;
-
             NavMesh.CalculatePath(startPosition, exitPosition, NavMesh.AllAreas, navMeshPath);
             for (int i = 0; i < navMeshPath.corners.Length - 1; i++)
             {
@@ -204,7 +194,11 @@ namespace Treasure_Hunter.Managers
                 {
                     Destroy(wall);
                 }
-                this.GenerateMaze(this.MazeType);
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
     }

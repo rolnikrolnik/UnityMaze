@@ -128,7 +128,7 @@ namespace Treasure_Hunter.Managers
             {
                 Skyboxes[i].material = MazeSkybox;
             }
-            MazeManager.GenerateMaze(mazeType);
+            yield return StartCoroutine(MazeManager.GenerateMaze(mazeType));
             yield return StartCoroutine(MazeManager.Activate());
             LoadingPage.Hide();
             MazeManager.MoveUIToCanvas();

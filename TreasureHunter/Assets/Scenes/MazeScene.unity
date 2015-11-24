@@ -83,10 +83,10 @@ NavMeshSettings:
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     accuratePlacement: 0
-    minRegionArea: 2
-    cellSize: .166666672
-    manualCellSize: 0
-  m_NavMeshData: {fileID: 0}
+    minRegionArea: 1
+    cellSize: .063000001
+    manualCellSize: 1
+  m_NavMeshData: {fileID: 23800000, guid: 33aa8af270b08754487c0f09a8a8dd39, type: 2}
 --- !u!1001 &272294886
 Prefab:
   m_ObjectHideFlags: 0
@@ -166,22 +166,14 @@ Prefab:
       propertyPath: m_Pivot.y
       value: .5
       objectReference: {fileID: 0}
-    - target: {fileID: 22414738, guid: 3e4503fce2dade942b323277c58a3829, type: 2}
-      propertyPath: m_LocalScale.x
-      value: .0500000045
+    - target: {fileID: 22462226, guid: 3e4503fce2dade942b323277c58a3829, type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 22414738, guid: 3e4503fce2dade942b323277c58a3829, type: 2}
-      propertyPath: m_LocalScale.y
-      value: .0500000045
+    - target: {fileID: 22462226, guid: 3e4503fce2dade942b323277c58a3829, type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 22414738, guid: 3e4503fce2dade942b323277c58a3829, type: 2}
-      propertyPath: m_LocalScale.z
-      value: .0500000007
-      objectReference: {fileID: 0}
-    - target: {fileID: 11458534, guid: 3e4503fce2dade942b323277c58a3829, type: 2}
-      propertyPath: ActionsManager
-      value: 
-      objectReference: {fileID: 1671760595}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3e4503fce2dade942b323277c58a3829, type: 2}
   m_IsPrefabParent: 0
@@ -191,6 +183,18 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 272294886}
   m_Script: {fileID: 11500000, guid: 0091805f39216754bb9fb70b5e065a40, type: 3}
+--- !u!114 &272294888 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11445278, guid: 3e4503fce2dade942b323277c58a3829,
+    type: 2}
+  m_PrefabInternal: {fileID: 272294886}
+  m_Script: {fileID: 11500000, guid: 0371a0c6444a00241b148586da5f902c, type: 3}
+--- !u!114 &272294889 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11465704, guid: 3e4503fce2dade942b323277c58a3829,
+    type: 2}
+  m_PrefabInternal: {fileID: 272294886}
+  m_Script: {fileID: 11500000, guid: 0371a0c6444a00241b148586da5f902c, type: 3}
 --- !u!1 &903216930
 GameObject:
   m_ObjectHideFlags: 0
@@ -280,7 +284,6 @@ Transform:
   - {fileID: 1572267090}
   - {fileID: 1764031150}
   - {fileID: 1613851466}
-  - {fileID: 1671760596}
   m_Father: {fileID: 0}
   m_RootOrder: 0
 --- !u!1001 &1572267089
@@ -342,6 +345,14 @@ Prefab:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 11486490, guid: 35424e977ba25c041b626dbd68aefa68, type: 2}
+      propertyPath: OVRHealthBar
+      value: 
+      objectReference: {fileID: 272294889}
+    - target: {fileID: 11486490, guid: 35424e977ba25c041b626dbd68aefa68, type: 2}
+      propertyPath: StandaloneBar
+      value: 
+      objectReference: {fileID: 272294888}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 35424e977ba25c041b626dbd68aefa68, type: 2}
   m_IsPrefabParent: 0
@@ -411,59 +422,16 @@ MonoBehaviour:
   Player: {fileID: 1572267093}
   Width: 20
   Length: 20
-  TrapProbability: 0
-  MonsterProbability: 0
+  TrapProbability: 30
+  MonsterProbability: 30
   Prim: 0
   MazeType: 4
   WallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
-  FloorPrefab: {fileID: 141030, guid: b4311c58f143713409e2e17e7495f329, type: 2}
   ExitPrefab: {fileID: 144940, guid: f7b6bfc1f7f101e4299da4f55c7248f7, type: 2}
-  StationaryTrapPrefab: {fileID: 102680, guid: 933e7eb59163b414882282554643ae8e, type: 2}
-  AcrossTrapPrefab: {fileID: 188886, guid: 4a8274d7c5b0e3d4ca5f4ca409a48375, type: 2}
-  DownTrapPrefab: {fileID: 178758, guid: 641bfba5914ef944faa1cbe7a3a0745d, type: 2}
-  MonsterPrefab: {fileID: 116974, guid: fe57e0a0d5098d244a0feb3d986c6ad3, type: 2}
---- !u!1 &1671760594
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1671760596}
-  - 114: {fileID: 1671760595}
-  m_Layer: 0
-  m_Name: ActionManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1671760595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1671760594}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 141809aa72bf41e408c1e462a1bef1b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AttackImage: {fileID: 21300000, guid: 2a887f63df4a395478ff546cfd05dfdb, type: 3}
-  RopeImage: {fileID: 21300000, guid: 71b56effcaef71b4ebef745f405b2eb6, type: 3}
-  JumpImage: {fileID: 21300000, guid: b0ada5802c41c494db7e52ee3d1ade2d, type: 3}
---- !u!4 &1671760596
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1671760594}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1559645711}
-  m_RootOrder: 4
+  StationaryTrapPrefab: {fileID: 153918, guid: 065e2e16ecb665b418fc811700e83cfa, type: 2}
+  AcrossTrapPrefab: {fileID: 132456, guid: a4cec0c50a1dabe4bbb2d4a0aa0bb53c, type: 2}
+  DownTrapPrefab: {fileID: 180228, guid: 77710d2e4551b274b858c0ca3f6d02f1, type: 2}
+  MonsterPrefab: {fileID: 127556, guid: 33be24a94bd052e42b1d52405ddb1ed6, type: 2}
 --- !u!1 &1764031149
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +456,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1764031149}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1559645711}

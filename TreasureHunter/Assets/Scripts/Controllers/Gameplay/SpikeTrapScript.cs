@@ -2,10 +2,11 @@
 using System.Collections;
 using Treasure_Hunter.Controllers;
 using Treasure_Hunter.Interfaces;
+using Treasure_Hunter.Managers;
 
 public class SpikeTrapScript : MonoBehaviour 
 {
-    public PlayerController Player;
+    public PlayerController Player { get { return SceneManager.Instance.MazeManager.Player; } }
 
     public AudioClip SpikesOutAudioClip;
 

@@ -24,7 +24,7 @@ public class MazeGeneratorTest : MonoBehaviour {
             {
                 Destroy(wall);
             }
-            MazeManager.GenerateMaze(MazeManager.MazeType);
+            StartCoroutine(MazeManager.GenerateMaze(MazeManager.MazeType));
         }
     }
 }

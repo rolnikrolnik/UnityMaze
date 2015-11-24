@@ -5,8 +5,7 @@ using Treasure_Hunter.Managers;
 public class MoveStates : MonoBehaviour {
 	
 	public enum MoveState { idle, aggressive_idle, running, attack };
-	
-	private Transform target;
+
 	public int moveSpeed = 5;
 	public int rotationSpeed = 2;
 	public float sightRange = 20f;
@@ -18,21 +17,11 @@ public class MoveStates : MonoBehaviour {
 	public bool enemySpotted = false;
 	public int movingState = (int)MoveState.idle;
 	public EnemyHealth enemyHealth;
-	private GameObject player {
-		get { return SceneManager.Instance.MazeManager.Player.gameObject; }
-	}
+    private GameObject player { get { return SceneManager.Instance.MazeManager.Player.gameObject; } }
+    private Transform target { get { return SceneManager.Instance.MazeManager.Player.transform; } }
 
 	Vector3 sightVector;
 	Color sightColor = Color.green;
-
-
-	
-	// Use this for initialization
-	void Start () {
-		target = GameObject.FindWithTag ("Player").transform;
-
-
-	}
 	
 	// Update is called once per frame
 	void Update () {
