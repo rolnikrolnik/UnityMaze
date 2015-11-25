@@ -54,6 +54,7 @@ namespace Treasure_Hunter.Controllers
         private AudioSource _audioSource;
 
         private int _milliseconds;
+        private int _seconds;
 
         private bool isGrounded
         {
@@ -70,6 +71,7 @@ namespace Treasure_Hunter.Controllers
         {
             _audioSource = GetComponent<AudioSource>();
             _milliseconds = DateTime.Now.Millisecond;
+            _seconds = DateTime.Now.Second;
         }
 
         private void Update()
@@ -173,7 +175,13 @@ namespace Treasure_Hunter.Controllers
         {
             Animator.SetBool(ATTACK_ANIMATION_PARAMETER_NAME, true);
             Attack = true;
-            _audioSource.PlayOneShot(AttackAudioClip);
+
+            var secondsNow = DateTime.Now.Second;
+            if (Math.Abs(_seconds - secondsNow) >= 2)
+            {
+                StartCoroutine(WaitAndPlaySwordSound());
+                _seconds = secondsNow;
+            }
         }
 
         public void ApplyAction()
@@ -212,6 +220,12 @@ namespace Treasure_Hunter.Controllers
                     _milliseconds = millisecondsNow;
                 }
             }
+        }
+
+        IEnumerator WaitAndPlaySwordSound()
+        {
+            yield return new WaitForSeconds(0.8F);
+            _audioSource.PlayOneShot(AttackAudioClip, 0.5F);
         }
 
         #endregion
