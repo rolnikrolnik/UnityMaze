@@ -198,7 +198,8 @@ namespace Treasure_Hunter.Controllers
 
         public void PlayStepSound()
         {
-            _audioSource.PlayOneShot(StepAudioClip, 0.5F);
+            if (isGrounded)
+                _audioSource.PlayOneShot(StepAudioClip, 0.5F);
         }
 
         public void PlaySwordSound()
