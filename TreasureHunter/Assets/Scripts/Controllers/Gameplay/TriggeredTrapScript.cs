@@ -43,6 +43,7 @@ public class TriggeredTrapScript : MonoBehaviour {
     {
         isSomeoneStayOnTrigger = false;
         StartCoroutine(WaitAndMakeFireInactive());
+        _timeSinceLastFireBurning = 0.0F;
     }
 
     void TakeDamageWithFire(Collider other)

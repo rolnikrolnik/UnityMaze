@@ -110,6 +110,7 @@ GameObject:
   - 114: {fileID: 11419250}
   - 114: {fileID: 11441358}
   - 111: {fileID: 11150638}
+  - 82: {fileID: 8279752}
   m_Layer: 0
   m_Name: Allosaurus_03_Controller
   m_TagString: Monster
@@ -1586,6 +1587,75 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.02999997, y: 2.68000007, z: 2.72000003}
   m_Center: {x: .0199999996, y: 1.32000005, z: -.5}
+--- !u!82 &8279752
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 107968}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 4
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
 --- !u!111 &11150638
 Animation:
   m_ObjectHideFlags: 1
@@ -1758,6 +1828,8 @@ MonoBehaviour:
   is_dead: 0
   Healthbar: {fileID: 11412584}
   EnemyRoot: {fileID: 127556}
+  DinosaurGettingHitAudioClip: {fileID: 8300000, guid: f70ee81d56a410c40909cf02f7a9aeab,
+    type: 3}
 --- !u!114 &11469396
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1827,6 +1899,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 063fe3db766d9714f9b29ceb4e49fe8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DinosaurAttackingAudioClip: {fileID: 8300000, guid: 922b9f7db79cf024d94ecb9bdc019c5f,
+    type: 3}
+  DinosaurDyingAudioClip: {fileID: 8300000, guid: 3508ef2cec499f8449d893aa21cc9e28,
+    type: 3}
 --- !u!137 &13738546
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

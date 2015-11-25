@@ -1201,7 +1201,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 4
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -1226,7 +1226,7 @@ AudioSource:
     serializedVersion: 2
     m_Curve:
     - time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -1280,6 +1280,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e45e08be81f53d44845126bf3c741ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Player: {fileID: 0}
   SpikesOutAudioClip: {fileID: 0}
   SpikesInAudioClip: {fileID: 0}
 --- !u!114 &11459774
@@ -1293,6 +1294,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e45e08be81f53d44845126bf3c741ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Player: {fileID: 0}
   SpikesOutAudioClip: {fileID: 8300000, guid: 39718f251b62a97478ab984398f8eb0a, type: 3}
   SpikesInAudioClip: {fileID: 8300000, guid: f72086ceeb8a4f44faad7af5378c46d4, type: 3}
 --- !u!1001 &100100000

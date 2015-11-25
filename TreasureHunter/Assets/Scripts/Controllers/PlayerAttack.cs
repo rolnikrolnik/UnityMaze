@@ -17,14 +17,15 @@ public class PlayerAttack : MonoBehaviour, IDamageable
     public float currentHealth;
 
     private AudioSource _playerAudioSource;
-    private float _timeSinceLastOuch;
+    private int _seconds;
 
 	void Start () 
     {
         currentHealth = 1;
         UpdateProgressBars();
         _playerAudioSource = Player.GetComponent<AudioSource>();
-        _timeSinceLastOuch = 0.0F;
+
+        _seconds = DateTime.Now.Second;
 	}
 
 	void Update () 
@@ -60,16 +61,12 @@ public class PlayerAttack : MonoBehaviour, IDamageable
 
     private void PlayOuchSound()
     {
-        if (_timeSinceLastOuch == 0.0F)
+        var secondsNow = DateTime.Now.Second;
+
+        if (Math.Abs(_seconds - secondsNow) >= 2)
         {
             _playerAudioSource.PlayOneShot(Player.OuchAudioClip);
-        }
-
-        _timeSinceLastOuch += Time.deltaTime;
-
-        if (_timeSinceLastOuch >= 1.5F)
-        {
-            _timeSinceLastOuch = 0.0F;
+            _seconds = secondsNow;
         }
     }
 

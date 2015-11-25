@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using UnityStandardAssets.Characters.ThirdPerson;
 using Treasure_Hunter.Managers;
@@ -46,6 +47,13 @@ namespace Treasure_Hunter.Controllers
         private float verticalSpeed = 0;
 
         public AudioClip OuchAudioClip;
+        public AudioClip JumpAudioClip;
+        public AudioClip StepAudioClip;
+        public AudioClip AttackAudioClip;
+
+        private AudioSource _audioSource;
+
+        private int _milliseconds;
 
         private bool isGrounded
         {
@@ -57,6 +65,12 @@ namespace Treasure_Hunter.Controllers
         }
 
         #region MONO BEHAVIOUR
+
+        void Start()
+        {
+            _audioSource = GetComponent<AudioSource>();
+            _milliseconds = DateTime.Now.Millisecond;
+        }
 
         private void Update()
         {
@@ -151,6 +165,7 @@ namespace Treasure_Hunter.Controllers
             {
                 jump = true;
                 jumpForce = JUMP_STRENGTH;
+                _audioSource.PlayOneShot(JumpAudioClip);
             }
         }
 
@@ -158,6 +173,7 @@ namespace Treasure_Hunter.Controllers
         {
             Animator.SetBool(ATTACK_ANIMATION_PARAMETER_NAME, true);
             Attack = true;
+            _audioSource.PlayOneShot(AttackAudioClip);
         }
 
         public void ApplyAction()
@@ -180,6 +196,20 @@ namespace Treasure_Hunter.Controllers
                 else
                 {
                     ApplyJump();
+                }
+            }
+            else if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow) ||
+                Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
+            {
+                var millisecondsNow = DateTime.Now.Millisecond;
+
+                if (Math.Abs(_milliseconds - millisecondsNow) >= 500)
+                {
+                    if (!jump)
+                    {
+                        _audioSource.PlayOneShot(StepAudioClip, 0.5F);
+                    }
+                    _milliseconds = millisecondsNow;
                 }
             }
         }

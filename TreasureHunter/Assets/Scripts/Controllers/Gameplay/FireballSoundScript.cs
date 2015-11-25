@@ -18,13 +18,6 @@ public class FireballSoundScript : MonoBehaviour {
 
     public void PlayFireballSound()
     {
-        var distance = Vector3.Distance(transform.position, Player.transform.position);
-        var scale = 1.0F - 0.03F * distance;
-        if (scale < 0.0F)
-        {
-            scale = 0.0F;
-        }
-
-        _audioSource.PlayOneShot(FireballAudioClip, scale);
+        _audioSource.PlayOneShot(FireballAudioClip);
     }
 }

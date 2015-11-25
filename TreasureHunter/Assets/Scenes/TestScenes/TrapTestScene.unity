@@ -98,7 +98,6 @@ GameObject:
   - 20: {fileID: 114342707}
   - 92: {fileID: 114342706}
   - 124: {fileID: 114342705}
-  - 81: {fileID: 114342704}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -106,13 +105,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &114342704
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 114342703}
-  m_Enabled: 1
 --- !u!124 &114342705
 Behaviour:
   m_ObjectHideFlags: 0
@@ -210,10 +202,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11450684, guid: a4cec0c50a1dabe4bbb2d4a0aa0bb53c, type: 2}
-      propertyPath: PlayerController
-      value: 
-      objectReference: {fileID: 1265204569}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: a4cec0c50a1dabe4bbb2d4a0aa0bb53c, type: 2}
   m_IsPrefabParent: 0
@@ -451,10 +439,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 11438360, guid: 065e2e16ecb665b418fc811700e83cfa, type: 2}
-      propertyPath: PressurePlateStepAudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 5ace3bc890eb25e4f82aa5e373b2ee6e, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 065e2e16ecb665b418fc811700e83cfa, type: 2}
   m_IsPrefabParent: 0
@@ -535,6 +519,13 @@ Transform:
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: 5e9e851c0e142814dac026a256ba2ac0, type: 2}
   m_PrefabInternal: {fileID: 602201892}
+--- !u!81 &1265204570
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1265204569}
+  m_Enabled: 1
 --- !u!114 &1265204575
 MonoBehaviour:
   m_ObjectHideFlags: 0
