@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEditor;
 using Treasure_Hunter.Interfaces;
 
 public class TriggeredTrapScript : MonoBehaviour {

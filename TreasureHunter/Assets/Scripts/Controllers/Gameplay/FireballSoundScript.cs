@@ -24,7 +24,6 @@ public class FireballSoundScript : MonoBehaviour {
         {
             scale = 0.0F;
         }
-
         _audioSource.PlayOneShot(FireballAudioClip, scale);
     }
 }
