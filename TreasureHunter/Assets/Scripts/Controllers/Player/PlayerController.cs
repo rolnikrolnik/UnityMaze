@@ -53,9 +53,6 @@ namespace Treasure_Hunter.Controllers
 
         private AudioSource _audioSource;
 
-        private int _milliseconds;
-        private int _seconds;
-
         private bool isGrounded
         {
             get
@@ -70,8 +67,6 @@ namespace Treasure_Hunter.Controllers
         void Start()
         {
             _audioSource = GetComponent<AudioSource>();
-            _milliseconds = DateTime.Now.Millisecond;
-            _seconds = DateTime.Now.Second;
         }
 
         private void Update()
@@ -175,13 +170,6 @@ namespace Treasure_Hunter.Controllers
         {
             Animator.SetBool(ATTACK_ANIMATION_PARAMETER_NAME, true);
             Attack = true;
-
-            var secondsNow = DateTime.Now.Second;
-            if (Math.Abs(_seconds - secondsNow) >= 2)
-            {
-                StartCoroutine(WaitAndPlaySwordSound());
-                _seconds = secondsNow;
-            }
         }
 
         public void ApplyAction()
@@ -206,25 +194,15 @@ namespace Treasure_Hunter.Controllers
                     ApplyJump();
                 }
             }
-            else if (Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow) ||
-                Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S))
-            {
-                var millisecondsNow = DateTime.Now.Millisecond;
-
-                if (Math.Abs(_milliseconds - millisecondsNow) >= 500)
-                {
-                    if (!jump)
-                    {
-                        _audioSource.PlayOneShot(StepAudioClip, 0.5F);
-                    }
-                    _milliseconds = millisecondsNow;
-                }
-            }
         }
 
-        IEnumerator WaitAndPlaySwordSound()
+        public void PlayStepSound()
         {
-            yield return new WaitForSeconds(0.8F);
+            _audioSource.PlayOneShot(StepAudioClip, 0.5F);
+        }
+
+        public void PlaySwordSound()
+        {
             _audioSource.PlayOneShot(AttackAudioClip, 0.5F);
         }
 

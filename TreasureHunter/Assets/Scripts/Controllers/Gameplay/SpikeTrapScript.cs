@@ -31,11 +31,13 @@ public class SpikeTrapScript : MonoBehaviour
 
     public void PlaySpikesInSound()
     {
-        _audioSource.PlayOneShot(SpikesInAudioClip);
+        if (_audioSource != null && SpikesInAudioClip!=null)
+            _audioSource.PlayOneShot(SpikesInAudioClip);
     }
 
     public void PlaySpikesOutSound()
     {
-        _audioSource.PlayOneShot(SpikesOutAudioClip);
+        if (_audioSource != null && SpikesOutAudioClip != null)
+            _audioSource.PlayOneShot(SpikesOutAudioClip);
     }
 }

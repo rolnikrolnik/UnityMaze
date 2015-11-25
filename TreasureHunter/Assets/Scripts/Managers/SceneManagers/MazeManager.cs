@@ -61,7 +61,7 @@ namespace Treasure_Hunter.Managers
 
         public override void MoveUIToCanvas()
         {
-            ActionChoicePopup.transform.parent = SceneManager.Instance.PagesContainer;
+            ActionChoicePopup.transform.SetParent(SceneManager.Instance.PagesContainer);
             ActionChoicePopup.transform.localRotation = Quaternion.identity;
             ActionChoicePopup.SetInactiveSize();
             ActionChoicePopup.transform.localPosition = Vector3.zero;

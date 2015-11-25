@@ -42,7 +42,7 @@ namespace Treasure_Hunter.Abstract
 
         protected void MovePopupToCanvas(Transform popup)
         {
-            popup.parent = SceneManager.Instance.PagesContainer;
+            popup.SetParent(SceneManager.Instance.PagesContainer);
             popup.localRotation = Quaternion.identity;
             popup.localScale = Vector3.one;
             popup.localPosition = Vector3.zero;

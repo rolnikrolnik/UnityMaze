@@ -18,6 +18,9 @@ public class FireballSoundScript : MonoBehaviour {
 
     public void PlayFireballSound()
     {
-        _audioSource.PlayOneShot(FireballAudioClip);
+        if (_audioSource != null && FireballAudioClip != null)
+        {
+            _audioSource.PlayOneShot(FireballAudioClip);
+        }
     }
 }
