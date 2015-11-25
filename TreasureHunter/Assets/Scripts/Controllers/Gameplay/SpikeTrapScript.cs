@@ -31,27 +31,11 @@ public class SpikeTrapScript : MonoBehaviour
 
     public void PlaySpikesInSound()
     {
-        var scale = GetVolumeScaleBasedOnDistance();
-
-        _audioSource.PlayOneShot(SpikesInAudioClip, scale);
+        _audioSource.PlayOneShot(SpikesInAudioClip);
     }
 
     public void PlaySpikesOutSound()
     {
-        var scale = GetVolumeScaleBasedOnDistance();
-
-        _audioSource.PlayOneShot(SpikesOutAudioClip, scale);
-    }
-
-    private float GetVolumeScaleBasedOnDistance()
-    {
-        var distance = Vector3.Distance(transform.position, Player.transform.position);
-        var scale = 1.0F - 0.03F * distance;
-        if (scale < 0.0F)
-        {
-            scale = 0.0F;
-        }
-
-        return scale;
+        _audioSource.PlayOneShot(SpikesOutAudioClip);
     }
 }

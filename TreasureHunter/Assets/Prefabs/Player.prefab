@@ -3312,6 +3312,9 @@ MonoBehaviour:
   CameraPosition: {fileID: 478670}
   Attack: 0
   OuchAudioClip: {fileID: 8300000, guid: 6dcc00a1efe684144826802001c0d2b2, type: 3}
+  JumpAudioClip: {fileID: 8300000, guid: cca2dd3573f6b314284a8aa2e4915976, type: 3}
+  StepAudioClip: {fileID: 8300000, guid: a4bfe9af7cfd9094d85a8599e09665ef, type: 3}
+  AttackAudioClip: {fileID: 8300000, guid: de12dbb84f735984da9a7af2df57bded, type: 3}
 --- !u!114 &11486490
 MonoBehaviour:
   m_ObjectHideFlags: 1
