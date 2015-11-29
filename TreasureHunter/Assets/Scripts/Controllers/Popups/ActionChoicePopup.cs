@@ -41,31 +41,35 @@ namespace Treasure_Hunter.Controllers
         private Coroutine currentCoroutine;
         private List<PlayerAction> availableActions;
         private int SelectedItemNumber;
-        private bool isEnabled = false;
         private bool isActive = false;
 
         #region MONO BEHAVIOUR
 
         private void Update()
         {
-            if(isEnabled)
+            if (Input.GetKey(KeyCode.Mouse1))
             {
-                if(Input.GetKey(KeyCode.Mouse1))
+                if (!isActive)
                 {
-                    if(!isActive)
+                    SetActiveSize();
+                    isActive = true;
+                    Time.timeScale = 0.1f;
+                    if( SceneManager.Instance.MazeManager!=null)
                     {
-                        SetActiveSize();
-                        isActive = true;
-                        Time.timeScale = 0.1f;
+                        SceneManager.Instance.MazeManager.Player.AnyPopupIsVisible = true;
                     }
                 }
-                else
+            }
+            else
+            {
+                if (isActive)
                 {
-                    if (isActive)
+                    SetInactiveSize();
+                    isActive = false;
+                    Time.timeScale = 1;
+                    if (SceneManager.Instance.MazeManager != null)
                     {
-                        SetInactiveSize();
-                        isActive = false;
-                        Time.timeScale = 1;
+                        SceneManager.Instance.MazeManager.Player.AnyPopupIsVisible = false;
                     }
                 }
             }
@@ -99,6 +103,10 @@ namespace Treasure_Hunter.Controllers
 
         public void AddAction(PlayerAction _action)
         {
+            if (availableActions==null)
+            {
+                availableActions = new List<PlayerAction>();
+            }
             if (!availableActions.Exists(action => action.Type == _action.Type))
             {
                 availableActions.Add(_action);
@@ -173,7 +181,7 @@ namespace Treasure_Hunter.Controllers
 
         public void Init()
         {
-            isEnabled = true;
+            gameObject.SetActive(true);
             availableActions = ActionsManager.GetAvailableActions();
             AsignActionsToItems();
         }

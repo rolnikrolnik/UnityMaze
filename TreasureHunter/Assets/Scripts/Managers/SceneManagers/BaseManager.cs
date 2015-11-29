@@ -13,6 +13,7 @@ namespace Treasure_Hunter.Managers
 
         public MazeChoicePopup MazeChoicePopup;
         public AchievementsPopup AchievementsPopup;
+        public EndGamePopup EndGamePopup;
         public AchievementsManager AchievementsManager;
         public PlayerController Player;
 
@@ -39,6 +40,7 @@ namespace Treasure_Hunter.Managers
         {
             MovePopupToCanvas(MazeChoicePopup.transform);
             MovePopupToCanvas(AchievementsPopup.transform);
+            MovePopupToCanvas(EndGamePopup.transform);
         }
 
         public void EnqueueAchievementPopup(Achievement achievement)

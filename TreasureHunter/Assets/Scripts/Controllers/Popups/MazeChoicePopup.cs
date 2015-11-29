@@ -61,6 +61,10 @@ namespace Treasure_Hunter.Controllers
                 isEnabled = false;
                 Hide();
                 SceneManager.Instance.LoadMaze(mazeType);
+                if (SceneManager.Instance.BaseManager != null)
+                {
+                    SceneManager.Instance.BaseManager.Player.AnyPopupIsVisible = false;
+                }
             }
         }
 

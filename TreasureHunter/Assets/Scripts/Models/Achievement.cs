@@ -71,10 +71,10 @@ namespace Treasure_Hunter.Models
             if (newThreshold > CurrentThreshold)
             {
                 CurrentThreshold = newThreshold;
-                PlayerPrefsManager.Instance.Achievements.ChangeThreshold(Title, CurrentThreshold);
                 if (SceneManager.Instance != null && SceneManager.Instance.BaseManager != null)
                 {
-                    SceneManager.Instance.BaseManager.EnqueueAchievementPopup(this);
+					SceneManager.Instance.BaseManager.EnqueueAchievementPopup(this);
+					PlayerPrefsManager.Instance.Achievements.ChangeThreshold(Title, CurrentThreshold);
                 }
             }
         }

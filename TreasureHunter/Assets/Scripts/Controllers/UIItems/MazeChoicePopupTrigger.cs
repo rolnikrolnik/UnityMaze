@@ -43,6 +43,10 @@ namespace Treasure_Hunter.Controllers
                 }
                 MazeChoicePopup.Show();
                 MazeChoicePopup.CheckMazeType(mazeType);
+                if (SceneManager.Instance.BaseManager != null)
+                {
+                    SceneManager.Instance.BaseManager.Player.AnyPopupIsVisible = true;
+                }
             }
         }
 
@@ -66,6 +70,10 @@ namespace Treasure_Hunter.Controllers
             if (other.tag == Globals.PLAYER_TAG)
             {
                 MazeChoicePopup.Hide();
+                if (SceneManager.Instance.BaseManager != null)
+                {
+                    SceneManager.Instance.BaseManager.Player.AnyPopupIsVisible = false;
+                }
             }
         }
 

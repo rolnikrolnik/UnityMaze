@@ -1,8 +1,11 @@
 using UnityEngine;
 using System;
 using System.Collections;
+using Treasure_Hunter.Enumerations;
 
-public class AnimateDino : MonoBehaviour {
+
+public class AnimateDino : MonoBehaviour 
+{
     public AudioClip DinosaurAttackingAudioClip;
     public AudioClip DinosaurDyingAudioClip;
 
@@ -26,26 +29,36 @@ public class AnimateDino : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+    {
 		if (!dino_health.is_dead) {
-			if (dino_movement.movingState == (int)MoveStates.MoveState.idle) {
-				if (!animation.IsPlaying ("Allosaurus_Idle")) {
+			if (dino_movement.movingState == MoveState.idle) {
+                if (!animation.IsPlaying("Allosaurus_Idle") && !animation.IsPlaying("Allosaurus_Attack02"))
+                {
 					animation.Stop ();
 					animation.Play ("Allosaurus_Idle");
 				}
-			} else if (dino_movement.movingState == (int)MoveStates.MoveState.aggressive_idle) {
+            }
+            else if (dino_movement.movingState == MoveState.aggressive_idle && !animation.IsPlaying("Allosaurus_Attack02"))
+            {
 				if (!animation.IsPlaying ("Allosaurus_IdleAggressive")) {
 					animation.Stop ();
 					animation.Play ("Allosaurus_IdleAggressive");
                     _audioSource.PlayOneShot(DinosaurAttackingAudioClip);
 				}
-			} else if (dino_movement.movingState == (int)MoveStates.MoveState.running) {
-				if (!animation.IsPlaying ("Allosaurus_Run")) {
+            }
+            else if (dino_movement.movingState == MoveState.running)
+            {
+				if (!animation.IsPlaying ("Allosaurus_Run")&&!animation.IsPlaying ("Allosaurus_Attack02")) 
+                {
 					animation.Stop ();
 					animation.Play ("Allosaurus_Run");
 				}
-			} else if (dino_movement.movingState == (int)MoveStates.MoveState.attack) {
-				if (!animation.IsPlaying ("Allosaurus_Attack02")) {
+            }
+            else if (dino_movement.movingState == MoveState.attack)
+            {
+				if (!animation.IsPlaying ("Allosaurus_Attack02")) 
+                {
 					animation.Stop ();
 					animation.Play ("Allosaurus_Attack02");
                     _audioSource.PlayOneShot(DinosaurAttackingAudioClip);
@@ -57,15 +70,4 @@ public class AnimateDino : MonoBehaviour {
 			died = true;
 		}
 	}
-
-    private void PlayAttackingSound()
-    {
-        var secondsNow = DateTime.Now.Second;
-
-        if (Math.Abs(_seconds - secondsNow) >= 1)
-        {
-            _audioSource.PlayOneShot(DinosaurAttackingAudioClip);
-            _seconds = secondsNow;
-        }
-    }
 }

@@ -23,8 +23,11 @@ namespace Treasure_Hunter.TestScripts
 
         private void Start()
         {
-            PlayerPrefsManager.Instance.Init();
-            AchievementsManager.Init();
+            if (PlayerPrefsManager.Instance != null)
+            {
+                PlayerPrefsManager.Instance.Init();
+                AchievementsManager.Init();
+            }
         }
 
         private void Update()
@@ -33,15 +36,15 @@ namespace Treasure_Hunter.TestScripts
             {
                 ManageTestCases();
             }
-            else if (Input.GetKeyDown(KeyCode.S))
+            else if (Input.GetKeyDown(KeyCode.J))
             {
                 PlayerPrefsManager.Instance.SaveAchievements();
             }
-            else if (Input.GetKeyDown(KeyCode.R))
+            else if (Input.GetKeyDown(KeyCode.K))
             {
                 Application.LoadLevel(Application.loadedLevel);
             }
-            else if (Input.GetKeyDown(KeyCode.D))
+            else if (Input.GetKeyDown(KeyCode.M))
             {
                 PlayerPrefs.DeleteAll();
                 PlayerPrefs.Save();

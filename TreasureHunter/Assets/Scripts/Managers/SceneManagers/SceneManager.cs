@@ -55,6 +55,11 @@ namespace Treasure_Hunter.Managers
             StartCoroutine(LoadBase());
         }
 
+		private void OnApplicationQuit() 
+		{
+			PlayerPrefsManager.Instance.SaveAchievements();
+		}
+
         #endregion
 
         private IEnumerator LoadBase()
@@ -90,9 +95,9 @@ namespace Treasure_Hunter.Managers
 
         private IEnumerator BackToBaseCoroutine()
         {
-            //Save additional data (add points to achievements, add owned items)
             LoadingPage.Show();
             yield return new WaitForSeconds(LOADING_PAGE_ANIMATION);
+            PlayerPrefsManager.Instance.SaveAchievements();
             Camera.transform.SetParent(null);
             while (MazeManager == null)
             {

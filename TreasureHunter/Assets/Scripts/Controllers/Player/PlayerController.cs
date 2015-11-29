@@ -24,6 +24,10 @@ namespace Treasure_Hunter.Controllers
         private const float PLAYER_HEIGHT = 1.5f;
         private const float JUMP_STRENGTH = 1;
         private const float FULL_ANGLE = 360;
+        private const float ROTATION = 1;
+        private const float SPINE_X = 30;
+        private const float MIN_SPINE_Y = 50;
+        private const float MAX_SPINE_Y = 120;
 
         #endregion
 
@@ -33,18 +37,25 @@ namespace Treasure_Hunter.Controllers
         public GameObject GameObject;
         public CharacterController ChController;
         public Animator Animator;
-
+        public PlayerAttack PlayerAttack;
+        public MovementControllers[] MovementControllers;
+        public Transform Spine;
+        public GameObject MovementControllersParent;
+        
         //Other Gameobjects Components
         public Transform CameraPosition;
 
         #endregion
 
         public bool IsEnabled { get; set; }
-        public bool Attack = false;
+        private bool _isAnyPopupIsVisible = false;
+        public bool AnyPopupIsVisible { get { return _isAnyPopupIsVisible; } set { _isAnyPopupIsVisible = value; MovementControllersParent.SetActive(!_isAnyPopupIsVisible); } }
+        private bool Attack = false;
         private bool jump = false;
         private float jumpForce = 0;
         private float speed = 0;
         private float verticalSpeed = 0;
+        private Vector3 currentRotation = new Vector3(0, 75, 0);
 
         public AudioClip OuchAudioClip;
         public AudioClip JumpAudioClip;
@@ -66,7 +77,7 @@ namespace Treasure_Hunter.Controllers
 
         void Start()
         {
-            _audioSource = GetComponent<AudioSource>();
+            _audioSource = GetComponent<AudioSource>(); 
         }
 
         private void Update()
@@ -79,6 +90,27 @@ namespace Treasure_Hunter.Controllers
                 Animator.SetFloat(SPEED_ANIMATION_PARAMETER_NAME, Mathf.Abs(speed) / MAX_SPEED);
                 ChController.Move((-transform.up * speed + transform.forward * verticalSpeed) * Time.deltaTime * AVERAGE_SPEED);
                 transform.Rotate(0, 0, Input.GetAxis(ROTATION_AXIS) * MAX_ROTATION_SPEED);
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    if (SceneManager.Instance.MazeManager != null)
+                    {
+                        SceneManager.Instance.MazeManager.EndGamePopup.Show();
+                        AnyPopupIsVisible = true;
+                    }
+                    else if (SceneManager.Instance.BaseManager != null)
+                    {
+                        SceneManager.Instance.BaseManager.EndGamePopup.Show();
+                        AnyPopupIsVisible = true;
+                    }
+                }
+            }
+        }
+
+        private void LateUpdate()
+        {
+            if (IsEnabled)
+            {
+                ApplyMouseMovement();
             }
         }
 
@@ -119,7 +151,6 @@ namespace Treasure_Hunter.Controllers
         {
             IsEnabled = false;
             ChController.enabled = false;
-            Animator.enabled = false;
         }
 
         public void EnablePlayer()
@@ -163,6 +194,7 @@ namespace Treasure_Hunter.Controllers
                 jump = true;
                 jumpForce = JUMP_STRENGTH;
                 _audioSource.PlayOneShot(JumpAudioClip);
+                PlayerPrefsManager.Instance.Achievements.AddPerformedAction(ActionType.JUMP);
             }
         }
 
@@ -172,9 +204,36 @@ namespace Treasure_Hunter.Controllers
             Attack = true;
         }
 
+        private void ApplyMouseMovement()
+        {
+            Vector3 rotationChange = Vector3.zero;
+            if(!AnyPopupIsVisible)
+            {
+                for(int i=0;i<MovementControllers.Length;i++)
+                {
+                    if(MovementControllers[i].IsActive)
+                    {
+                        rotationChange += ApplyMovementInDirection(MovementControllers[i].Direction);
+                    }
+                }
+            }
+            currentRotation = currentRotation + rotationChange;
+            currentRotation = new Vector3(currentRotation.x > SPINE_X ? SPINE_X : currentRotation.x < -SPINE_X ? -SPINE_X : currentRotation.x,
+                                          currentRotation.y > MAX_SPINE_Y ? MAX_SPINE_Y : currentRotation.y < MIN_SPINE_Y ? MIN_SPINE_Y : currentRotation.y,
+                                          0);
+            Spine.localRotation = Quaternion.Euler(currentRotation);
+        }
+
+        private Vector3 ApplyMovementInDirection(MovementDirections direction)
+        {
+            return new Vector3(direction == MovementDirections.RIGHT ? -ROTATION : direction == MovementDirections.LEFT ? ROTATION : 0, 
+                               direction == MovementDirections.UP ? -ROTATION : direction == MovementDirections.DOWN?ROTATION:0,
+                               0);
+        }
+
         public void ApplyAction()
         {
-            if(Input.GetKeyDown(KeyCode.Mouse0))
+            if (Input.GetKeyDown(KeyCode.Mouse0) && !AnyPopupIsVisible)
             {
                 if(SceneManager.Instance.MazeManager!=null)
                 {
@@ -205,6 +264,8 @@ namespace Treasure_Hunter.Controllers
         public void PlaySwordSound()
         {
             _audioSource.PlayOneShot(AttackAudioClip, 0.5F);
+            PlayerPrefsManager.Instance.Achievements.AddPerformedAction(ActionType.ATTACK);
+            PlayerAttack.MakeAttack();
         }
 
         #endregion

@@ -1,92 +1,126 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Treasure_Hunter.Managers;
+using Treasure_Hunter.Enumerations;
+using Treasure_Hunter.Interfaces;
+using System.Collections.Generic;
 
-public class MoveStates : MonoBehaviour {
-	
-	public enum MoveState { idle, aggressive_idle, running, attack };
-
-	public int moveSpeed = 5;
-	public int rotationSpeed = 2;
-	public float sightRange = 20f;
-	public float dangerRange = 15f;
-	public float attackRange = 2f;
-	public float sightAngle = 35.0f;
-	public float attackSpeed = 1.0f;
-	public bool attackBlocked = false;
-	public bool enemySpotted = false;
-	public int movingState = (int)MoveState.idle;
-	public EnemyHealth enemyHealth;
-    private GameObject player { get { return SceneManager.Instance.MazeManager.Player.gameObject; } }
+public class MoveStates : MonoBehaviour
+{
     private Transform target { get { return SceneManager.Instance.MazeManager.Player.transform; } }
 
-	Vector3 sightVector;
-	Color sightColor = Color.green;
+    #region CLASS SETTINGS
+
+    private const float ROTATION_SPEED = 5;
+
+    #endregion
+
+    #region SCENE REFERENCES
+
+    public EnemyHealth enemyHealth;
+    //NavigationTransforms
+    public Transform SightLeftCorner;
+    public Transform SightRightCorner;
+    public Transform AttackLimit;
+    public Transform AttackPosition;
+
+    #endregion
+
+    public int Speed = 5;
+    [HideInInspector]
+    public MoveState movingState = MoveState.idle;
+    private Color sightColor = Color.green;
 	
-	// Update is called once per frame
-	void Update () {
-		DrawSight ();
-
-		if (!enemyHealth.is_dead) {
-			
+	private void Update () 
+    {
+		if (!enemyHealth.is_dead) 
+        {
+            CheckIsOnTheFloor();
 			var _distance = Vector3.Distance (target.position, transform.position);
-
 			var angle = Vector3.Angle(-transform.forward, target.position - transform.position);
-			
-			//Jeśli gracz jest za daleko, to sobie po prostu siedź jakby nigdy nic
-			if (_distance > sightRange) {
+			if (!IsPlayerVisible()) 
+            {
+                //Do nothing
 				movingState = (int)MoveState.idle;
 				sightColor = Color.green;
 			}
-
-			else if (angle < sightAngle && angle > -sightAngle) {
-				enemySpotted = true;
-
-				// Jeśli gracz podejdzie za blisko, to uruchamiamy gotowość do ataku
-				if (_distance <= sightRange && _distance > dangerRange) {
-					
-					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (transform.position - target.position), rotationSpeed * Time.deltaTime);
-					movingState = (int)MoveState.aggressive_idle;
-
+			else
+            {
+				if (Vector3.Distance(target.position, transform.position) > Vector3.Distance(SightLeftCorner.position, transform.position))
+                {
+                    //Observe player
+					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (transform.position - target.position), ROTATION_SPEED * Time.deltaTime);
+                    transform.localRotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
+                    movingState = MoveState.aggressive_idle;
 					sightColor = Color.yellow;
 				}
-				// Gracz się zbliża, dinuś czuje się zagrożony i biegnie aby go zjeść
-				else if (_distance <= dangerRange && _distance > attackRange) {
-					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (transform.position - target.position), rotationSpeed * Time.deltaTime);
-					transform.position += -transform.forward * moveSpeed * Time.deltaTime;
-					movingState = (int)MoveState.running;
+                else if (_distance > Vector3.Distance(AttackLimit.position, transform.position)) 
+                {
+                    //Run to player
+					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (transform.position - target.position), ROTATION_SPEED * Time.deltaTime);
+                    transform.localRotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
+                    transform.position += -transform.forward * Speed * Time.deltaTime;
+					movingState = MoveState.running;
 					sightColor = Color.red;
 				}
-				// Dino jest wystarczająco blisko żeby rozszarpać gracza
-				else if (_distance < attackRange) {
-					movingState = (int)MoveState.attack;
-					if (!attackBlocked){
-						if (target.GetComponent<PlayerAttack>().currentHealth > 0)
-							target.GetComponent<PlayerAttack> ().TakeDamage (0.025f);
-						StartCoroutine(AttackPause());
-					}
-				}
+				else
+                {
+                    //make hit
+					movingState = MoveState.attack;
+                }
 			}
+        }
+    }
 
-			else if (enemySpotted) {
-				movingState = (int)MoveState.aggressive_idle;
-				sightColor = Color.yellow;
-			}
-		}
+    private void CheckIsOnTheFloor()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, -Vector3.up, out hit))
+        {
+            if (hit.collider.tag == "terrain")
+            {
+                transform.Translate(0, -hit.distance, 0);
+            }
+        }
+    }
+
+    private bool IsPlayerVisible()
+    {
+        RaycastHit hit;
+        Debug.DrawRay(transform.position, target.position - transform.position);
+        return !Physics.Raycast(transform.position, target.position - transform.position, out hit, LayerMask.NameToLayer("Wall"));
+    }
+
+    public void MakeHit()
+    {
+        Collider[] colliders = Physics.OverlapSphere(AttackPosition.position, Vector3.Distance(transform.position, AttackLimit.position));
+        List<IDamageable> hittedMonsters = new List<IDamageable>();
+        foreach (Collider col in colliders)
+        {
+            PlayerAttack eh = col.GetComponentInParent<PlayerAttack>();
+            if (eh != null)
+            {
+                if (!hittedMonsters.Exists(id => id == eh))
+                {
+                    hittedMonsters.Add(eh);
+                    eh.TakeDamage(0.05f);
+                }
+            }
+        }
+    }
+
+	private void DrawSight() 
+    {
+        Debug.DrawLine(transform.position, SightLeftCorner.position, sightColor, 0.01f);
+        Debug.DrawLine(transform.position, SightRightCorner.position, sightColor, 0.01f);
 	}
 
-	void DrawSight() {
-		sightVector = Vector3.Scale (-transform.forward, new Vector3 (sightRange, 0.0f, sightRange));
-		sightVector = Quaternion.Euler (0, sightAngle, 0) * sightVector;
-		Debug.DrawRay (transform.position, sightVector, sightColor, 0.01f);
-		sightVector = Quaternion.Euler (0, -2*sightAngle, 0) * sightVector;
-		Debug.DrawRay (transform.position, sightVector, sightColor, 0.01f);
-	}
-
-	public IEnumerator AttackPause() {
-		attackBlocked = true;
-		yield return new WaitForSeconds(attackSpeed);
-		attackBlocked = false;
-		
-	}
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1, 0, 0, 0.5f);
+        Gizmos.DrawSphere(transform.position + Vector3.up*4, Vector3.Distance(AttackLimit.position, transform.position));
+        Gizmos.color = new Color(0, 1, 1, 0.5f);
+        Gizmos.DrawSphere(AttackPosition.position, Vector3.Distance(transform.position, AttackLimit.position));
+        DrawSight();
+    }
 }

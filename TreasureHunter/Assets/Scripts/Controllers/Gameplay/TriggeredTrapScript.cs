@@ -51,19 +51,16 @@ public class TriggeredTrapScript : MonoBehaviour {
         IDamageable damageableObject = other.GetComponent<IDamageable>();
         if (damageableObject != null)
         {
-            damageableObject.TakeDamage(0.05f * Time.deltaTime);
-            Debug.Log("Took fire damage!");
+            damageableObject.TakeDamage(0.2f * Time.deltaTime);
         }
     }
 
     IEnumerator WaitAndMakeFireInactive()
     {
-        Debug.Log("Waiting for 5 seconds...");
         yield return new WaitForSeconds(5.0F);
         if (!isSomeoneStayOnTrigger)
         {
             Fire.SetActive(false);
-            Debug.Log("Made a fire trap inactive!");
 
             _audioSource.Stop();
             _timeSinceLastFireBurning = 0.0F;

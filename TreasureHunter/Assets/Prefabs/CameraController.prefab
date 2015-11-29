@@ -63,6 +63,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 22488050}
   - 114: {fileID: 11471050}
+  - 223: {fileID: 22347870}
   m_Layer: 5
   m_Name: LoadingPage
   m_TagString: Untagged
@@ -904,6 +905,23 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingLayerID: 0
   m_SortingOrder: 1
+--- !u!223 &22347870
+Canvas:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 128664}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 2
 --- !u!224 &22420234
 RectTransform:
   m_ObjectHideFlags: 1

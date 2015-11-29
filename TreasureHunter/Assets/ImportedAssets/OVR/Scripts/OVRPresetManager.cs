@@ -120,7 +120,7 @@ public class OVRPresetManager
 	// DeleteAll
 	public bool DeleteAll()
 	{
-		PlayerPrefs.DeleteAll();
+		//PlayerPrefs.DeleteAll();
 		return true;
 	}
 }

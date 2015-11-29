@@ -54,6 +54,10 @@ namespace Treasure_Hunter.Controllers
         {
             SceneManager.Instance.BaseManager.Player.EnablePlayer();
             Hide();
+            if (SceneManager.Instance.BaseManager != null)
+            {
+                SceneManager.Instance.BaseManager.Player.AnyPopupIsVisible = false;
+            }
         }
 
         #endregion
@@ -70,6 +74,10 @@ namespace Treasure_Hunter.Controllers
             OVRAchievementDescription.text = StandaloneAchievementDescription.text;
             StandaloneButtonBackground.gameObject.SetActive(showButton);
             OVRButtonBackground.gameObject.SetActive(showButton);
+            if (SceneManager.Instance.BaseManager != null)
+            {
+                SceneManager.Instance.BaseManager.Player.AnyPopupIsVisible = showButton;
+            }
         }
 
         private string SetAchievementDescription()

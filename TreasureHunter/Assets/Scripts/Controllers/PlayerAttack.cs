@@ -3,21 +3,23 @@ using System.Collections;
 using System;
 using Treasure_Hunter.Controllers;
 using Treasure_Hunter.Interfaces;
+using Treasure_Hunter.Managers;
+using System.Collections.Generic;
 
 public class PlayerAttack : MonoBehaviour, IDamageable
 {
-
-    Collider[] colliders;
     public HealthBar OVRHealthBar;
     public HealthBar StandaloneBar;
     public PlayerController Player;
+    public Transform AttackLimit;
+    public Transform AttackPosition;
 
-	public float attackRange = 4f;
     [HideInInspector]
     public float currentHealth;
 
     private AudioSource _playerAudioSource;
     private int _seconds;
+    private bool dieAnimationFinished;
 
 	void Start () 
     {
@@ -28,36 +30,54 @@ public class PlayerAttack : MonoBehaviour, IDamageable
         _seconds = DateTime.Now.Second;
 	}
 
-	void Update () 
+	public void MakeAttack()
     {
-        if (Player.Attack)
+        Collider[] colliders = Physics.OverlapSphere(AttackPosition.position, Vector3.Distance(transform.position, AttackLimit.position));
+        List<IDamageable> hittedMonsters = new List<IDamageable>();
+        foreach (Collider col in colliders)
         {
-            colliders = Physics.OverlapSphere(transform.position, attackRange);
-            foreach (Collider col in colliders)
+            EnemyHealth eh = col.GetComponentInParent<EnemyHealth>();
+            if (eh != null)
             {
-                EnemyHealth eh = col.GetComponent<EnemyHealth>();
-                if (eh!= null)
+                if (!hittedMonsters.Exists(id=>id==eh))
                 {
-                    if (!eh.is_dead)
-                    {
-                        var relativePoint = transform.InverseTransformPoint(col.transform.position);
-                        if (relativePoint.x <= 0.5 && relativePoint.x >= -0.5)
-                        {
-                            eh.TakeDamage(0.1f);
-                        }
-                    }
-
+                    hittedMonsters.Add(eh);
+                    eh.TakeDamage(0.4f);
                 }
+            }
+        }
+    }
+
+	public void TakeDamage(float amount) 
+    {
+        if (Player.IsEnabled && currentHealth>0)
+        {
+            PlayOuchSound();
+            currentHealth -= amount;
+            UpdateProgressBars();
+            if (currentHealth <= 0)
+            {
+                Die();
             }
         }
 	}
 
-	public void TakeDamage(float amount) 
+    private void Die()
     {
-        PlayOuchSound();
-		currentHealth -= amount;
-        UpdateProgressBars();
-	}
+        dieAnimationFinished = false;
+        Player.DisablePlayer();
+        Player.Animator.SetTrigger("Die");
+        PlayerPrefsManager.Instance.Achievements.AddLostMaze(SceneManager.Instance.MazeManager.MazeType);
+    }
+
+    private void EndOFDieAnimation()
+    {
+        if (!dieAnimationFinished)
+        {
+            SceneManager.Instance.BackToBase();
+            dieAnimationFinished = true;
+        }
+    }
 
     private void PlayOuchSound()
     {
@@ -80,6 +100,14 @@ public class PlayerAttack : MonoBehaviour, IDamageable
         {
             StandaloneBar.SetValue(currentHealth);
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(0, 1, 0, 0.5f);
+        Gizmos.DrawSphere(transform.position + Vector3.up * 4, Vector3.Distance(AttackLimit.position, transform.position));
+        Gizmos.color = new Color(0, 0, 1, 0.5f);
+        Gizmos.DrawSphere(AttackPosition.position, Vector3.Distance(transform.position, AttackLimit.position));
     }
 }
 

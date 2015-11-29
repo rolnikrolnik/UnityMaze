@@ -15,7 +15,7 @@ namespace Treasure_Hunter.Managers
         #region CLASS SETTINGS
 
         private static Vector3 MAZE_SCALE = new Vector3(10, 4, 10);
-        private static string TerrainName = "Terrain";
+        public static string TerrainName = "Terrain";
         private static Vector3 TerrainTransform = new Vector3(1, 5, 1);
 
         #endregion
@@ -23,6 +23,7 @@ namespace Treasure_Hunter.Managers
         #region SCENE REFERENCES
 
         public ActionChoicePopup ActionChoicePopup;
+        public EndGamePopup EndGamePopup;
         public PlayerController Player;
 
         #endregion
@@ -30,7 +31,8 @@ namespace Treasure_Hunter.Managers
         #region Fields
 
         private Vector3 mazeWallScale;
-        private GameObject exitComponent;
+        [HideInInspector]
+        public GameObject exitComponent;
 
         public int Width;
         public int Length;
@@ -61,14 +63,10 @@ namespace Treasure_Hunter.Managers
 
         public override void MoveUIToCanvas()
         {
-            ActionChoicePopup.transform.SetParent(SceneManager.Instance.PagesContainer);
-            ActionChoicePopup.transform.localRotation = Quaternion.identity;
-            ActionChoicePopup.SetInactiveSize();
-            ActionChoicePopup.transform.localPosition = Vector3.zero;
+            MovePopupToCanvas(ActionChoicePopup.transform);
+            MovePopupToCanvas(EndGamePopup.transform);
             ActionChoicePopup.Init();
-            RectTransform rectTransform = ActionChoicePopup.GetComponent<RectTransform>();
-            rectTransform.anchoredPosition = Vector2.zero;
-            rectTransform.sizeDelta = Vector2.zero;
+            ActionChoicePopup.SetInactiveSize();
         }
 
         public IEnumerator GenerateMaze(MazeType mazeType)
