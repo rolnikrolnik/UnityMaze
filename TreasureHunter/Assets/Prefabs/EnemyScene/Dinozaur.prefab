@@ -1567,13 +1567,13 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 107968}
   serializedVersion: 2
-  m_Mass: 100000
+  m_Mass: 1e+08
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 84
   m_CollisionDetection: 0
 --- !u!65 &6597180
 BoxCollider:
@@ -1715,10 +1715,16 @@ MonoBehaviour:
   attackRange: 2
   sightAngle: 35
   attackSpeed: 1
+  targetingTime: 5
+  idleAfterRunTime: 5
   attackBlocked: 0
   enemySpotted: 0
   movingState: 0
   enemyHealth: {fileID: 11441358}
+  targetEnemy: 0
+  currentPathCornerIndex: 0
+  followingPath: 0
+  pathLength: 0
 --- !u!114 &11426552
 MonoBehaviour:
   m_ObjectHideFlags: 1
