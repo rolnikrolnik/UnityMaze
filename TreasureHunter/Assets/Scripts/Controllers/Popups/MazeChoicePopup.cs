@@ -16,10 +16,10 @@ namespace Treasure_Hunter.Controllers
         private const string WORMSWORLD_TITLE = "WORMS\nWORLD\nMAZE";
         private const string SWAMP_TITLE = "SWAMP\nMAZE";
 
-        private const string NECROPOLIS_MESSAGE = "MESSAGE";
-        private const string PREHISTORIC_MESSAGE = "MESSAGE";
-        private const string WORMSWORLD_MESSAGE = "MESSAGE";
-        private const string SWAMP_MESSAGE = "MESSAGE";
+        private const string NECROPOLIS_MESSAGE = "Fight with undeads and try to reach to the end of the catacombs to find the treasure.";
+        private const string PREHISTORIC_MESSAGE = "Fight with prehistoric dinosuars and try to reach to the end of the maze to find the treasure.";
+        private const string WORMSWORLD_MESSAGE = "Fight with big worms and try to reach to the end of the cave to find the treasure.";
+        private const string SWAMP_MESSAGE = "Fight with mythical trolls and try to reach to the end of the swamp to find the treasure.";
 
         #endregion
 

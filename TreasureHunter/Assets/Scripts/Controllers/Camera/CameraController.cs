@@ -66,7 +66,7 @@ namespace Treasure_Hunter.Controllers
 
         private void CheckCameraState()
         {
-            bool debug = false;// Input.GetKeyDown(KeyCode.Mouse0);
+            bool debug = true;// Input.GetKeyDown(KeyCode.Mouse0);
             if (debug)
             {
                 if (currentDisplayMode == DisplayMode.OVRCamera && OVRDevice.SensorCount <= 0)
@@ -87,7 +87,6 @@ namespace Treasure_Hunter.Controllers
             OVRCamera.SetActive(true);
             UICanvas.worldCamera = UILeftEyeCamera;
             UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
-            SceneManager.Instance.LoadingPage.Background.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width/2, Screen.height);
             if (SceneManager.Instance.BaseManager != null && SceneManager.Instance.BaseManager.MazeChoicePopup!=null)
             {
                 SceneManager.Instance.BaseManager.MazeChoicePopup.OVRBackground.gameObject.SetActive(true);
@@ -103,6 +102,8 @@ namespace Treasure_Hunter.Controllers
                 SceneManager.Instance.MazeManager.ActionChoicePopup.OVRBackground.transform.parent.gameObject.SetActive(true);
                 SceneManager.Instance.MazeManager.ActionChoicePopup.StandaloneBackground.transform.parent.gameObject.SetActive(false);
             }
+            SceneManager.Instance.LoadingPage.OVRBackground.gameObject.SetActive(true);
+            SceneManager.Instance.LoadingPage.StandaloneBackground.gameObject.SetActive(false);
             StartCoroutine(SetRenderModeToWorldAfterShortDelay());
         }
 
@@ -113,7 +114,6 @@ namespace Treasure_Hunter.Controllers
             OVRCamera.SetActive(false);
             UICanvas.worldCamera = UIStandaloneCamera;
             UICanvas.renderMode = RenderMode.ScreenSpaceCamera;
-            SceneManager.Instance.LoadingPage.Background.GetComponent<RectTransform>().sizeDelta = new Vector2(Screen.width, Screen.height);
             if (SceneManager.Instance.BaseManager != null && SceneManager.Instance.BaseManager.MazeChoicePopup != null)
             {
                 SceneManager.Instance.BaseManager.MazeChoicePopup.OVRBackground.gameObject.SetActive(false);
@@ -129,6 +129,8 @@ namespace Treasure_Hunter.Controllers
                 SceneManager.Instance.MazeManager.ActionChoicePopup.OVRBackground.gameObject.SetActive(false);
                 SceneManager.Instance.MazeManager.ActionChoicePopup.StandaloneBackground.gameObject.SetActive(true);
             }
+            SceneManager.Instance.LoadingPage.OVRBackground.gameObject.SetActive(false);
+            SceneManager.Instance.LoadingPage.StandaloneBackground.gameObject.SetActive(true);
         }
 
         private IEnumerator SetRenderModeToWorldAfterShortDelay()

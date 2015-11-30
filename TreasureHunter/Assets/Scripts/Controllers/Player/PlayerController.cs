@@ -21,7 +21,7 @@ namespace Treasure_Hunter.Controllers
         private const float AVERAGE_SPEED = 20;
         private const float GRAVITY = 0.5f;
         private const float MAX_ROTATION_SPEED = 3;
-        private const float PLAYER_HEIGHT = 1.5f;
+        private const float PLAYER_HEIGHT = 2;
         private const float JUMP_STRENGTH = 1;
         private const float FULL_ANGLE = 360;
         private const float ROTATION = 1;
@@ -69,7 +69,7 @@ namespace Treasure_Hunter.Controllers
             get
             {
                 RaycastHit hit;
-                return Physics.Raycast(transform.position, -transform.forward, out hit, PLAYER_HEIGHT);
+                return Physics.Raycast(transform.position+new Vector3(0,0.1f,0), -transform.forward, out hit, PLAYER_HEIGHT);
             }
         }
 
@@ -94,11 +94,13 @@ namespace Treasure_Hunter.Controllers
                 {
                     if (SceneManager.Instance.MazeManager != null)
                     {
+                        SceneManager.Instance.MazeManager.EndGamePopup.SetMessage("Do you really want go back to the base?");
                         SceneManager.Instance.MazeManager.EndGamePopup.Show();
                         AnyPopupIsVisible = true;
                     }
                     else if (SceneManager.Instance.BaseManager != null)
                     {
+                        SceneManager.Instance.BaseManager.EndGamePopup.SetMessage("Do you really want leave the game?");
                         SceneManager.Instance.BaseManager.EndGamePopup.Show();
                         AnyPopupIsVisible = true;
                     }
@@ -195,6 +197,10 @@ namespace Treasure_Hunter.Controllers
                 jumpForce = JUMP_STRENGTH;
                 _audioSource.PlayOneShot(JumpAudioClip);
                 PlayerPrefsManager.Instance.Achievements.AddPerformedAction(ActionType.JUMP);
+            }
+            else
+            {
+                Debug.Log("IsNotGrounded");
             }
         }
 

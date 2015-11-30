@@ -28,8 +28,15 @@ namespace Treasure_Hunter.Controllers
 
         public void OnYesButtonClick()
         {
-            PlayerPrefsManager.Instance.SaveAchievements();
-            Application.Quit();
+            if (SceneManager.Instance.MazeManager != null)
+            {
+                SceneManager.Instance.MazeManager.Player.PlayerAttack.Die();
+            }
+            else
+            {
+                PlayerPrefsManager.Instance.SaveAchievements();
+                Application.Quit();
+            }
         }
         public void OnNoButtonClick()
         {
@@ -59,6 +66,12 @@ namespace Treasure_Hunter.Controllers
             OVRMessage.color = new Color(OVRMessage.color.r, OVRMessage.color.g, OVRMessage.color.b, alpha);
             OVRYesButtonText.color = new Color(OVRYesButtonText.color.r, OVRYesButtonText.color.g, OVRYesButtonText.color.b, alpha);
             OVRNoButtonText.color = new Color(OVRNoButtonText.color.r, OVRNoButtonText.color.g, OVRNoButtonText.color.b, alpha);
+        }
+
+        public void SetMessage(string message)
+        {
+            StandaloneMessage.text = message;
+            OVRMessage.text = message;
         }
     }
 }
