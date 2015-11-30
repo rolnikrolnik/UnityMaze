@@ -306,11 +306,11 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 22424572, guid: 33be24a94bd052e42b1d52405ddb1ed6, type: 2}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22424572, guid: 33be24a94bd052e42b1d52405ddb1ed6, type: 2}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 33be24a94bd052e42b1d52405ddb1ed6, type: 2}
@@ -829,6 +829,7 @@ MonoBehaviour:
   ObjectsWhichNeedActivation: []
   ObjectsWhichNeedInitiation: []
   ActionChoicePopup: {fileID: 2048122874}
+  EndGamePopup: {fileID: 0}
   Player: {fileID: 899147584}
   exitComponent: {fileID: 0}
   Width: 0

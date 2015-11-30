@@ -29,36 +29,92 @@ public class MoveStates : MonoBehaviour
     public int Speed = 5;
     [HideInInspector]
     public MoveState movingState = MoveState.idle;
+    public float targetingTime = 5.0f;
+    public float idleAfterRunTime = 5.0f;
+
+    private int currentPathCornerIndex = 0;
+    private bool followingPath = false;
+    private bool backToStart = true;
+    private float followingTimer = 0;
+    private NavMeshPath navPath;
+    private Vector3 startingPosition = Vector3.zero;
+    private Vector3 targetPosition;
     private Color sightColor = Color.green;
-	
+
+    private void Start()
+    {
+        navPath = new NavMeshPath();
+        SetStartPosition(transform.position);
+    }
+
 	private void Update () 
     {
-		if (!enemyHealth.is_dead) 
+		if (!enemyHealth.is_dead)
         {
             CheckIsOnTheFloor();
-			var _distance = Vector3.Distance (target.position, transform.position);
-			var angle = Vector3.Angle(-transform.forward, target.position - transform.position);
 			if (!IsPlayerVisible()) 
             {
-                //Do nothing
-				movingState = (int)MoveState.idle;
-				sightColor = Color.green;
+                //Follow the path
+                if (followingPath)
+                {
+                    followingTimer+=Time.deltaTime;
+                    if (navPath.corners.Length - 1 > currentPathCornerIndex && (followingTimer < targetingTime||backToStart))
+                    {
+                        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(transform.position - navPath.corners[currentPathCornerIndex + 1]), ROTATION_SPEED * Time.deltaTime);
+                        transform.position += -transform.forward * Speed * Time.deltaTime;
+                        movingState = MoveState.running;
+                        sightColor = Color.green;
+                        if (Vector3.Distance(transform.position, targetPosition) > 1)
+                        {
+                            NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, navPath);
+                        }
+                        else if (targetPosition == startingPosition)
+                        {
+                            followingPath = false;
+                        }
+                    }
+                    else
+                    {
+                        if (!backToStart)
+                        {
+                            NavMesh.CalculatePath(transform.position, startingPosition, NavMesh.AllAreas, navPath);
+                            backToStart = true;
+                            currentPathCornerIndex = 0;
+                            targetPosition = startingPosition;
+                        }
+                        else
+                        {
+                            followingPath = false;
+                        }
+                    }
+                }
+                else
+                {
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(transform.position - target.position), ROTATION_SPEED * Time.deltaTime);
+                    movingState = MoveState.idle;
+                    sightColor = Color.green;
+                }
 			}
 			else
             {
-				if (Vector3.Distance(target.position, transform.position) > Vector3.Distance(SightLeftCorner.position, transform.position))
+                followingTimer = 0;
+                followingPath = true;
+                backToStart = false;
+                currentPathCornerIndex = 0;
+                float distanceToPlayer = Vector3.Distance(target.position, transform.position);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(transform.position - target.position), ROTATION_SPEED * Time.deltaTime);
+                transform.localRotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
+                targetPosition = new Vector3(target.position.x, 5, target.position.z);
+                NavMesh.CalculatePath(transform.position, targetPosition, NavMesh.AllAreas, navPath);
+                if (distanceToPlayer > Vector3.Distance(SightLeftCorner.position, transform.position))
                 {
                     //Observe player
-					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (transform.position - target.position), ROTATION_SPEED * Time.deltaTime);
-                    transform.localRotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
                     movingState = MoveState.aggressive_idle;
 					sightColor = Color.yellow;
 				}
-                else if (_distance > Vector3.Distance(AttackLimit.position, transform.position)) 
+                else if (distanceToPlayer > Vector3.Distance(AttackLimit.position, transform.position)) 
                 {
                     //Run to player
-					transform.rotation = Quaternion.Slerp (transform.rotation, Quaternion.LookRotation (transform.position - target.position), ROTATION_SPEED * Time.deltaTime);
-                    transform.localRotation = Quaternion.Euler(0, transform.localEulerAngles.y, 0);
                     transform.position += -transform.forward * Speed * Time.deltaTime;
 					movingState = MoveState.running;
 					sightColor = Color.red;
@@ -87,8 +143,15 @@ public class MoveStates : MonoBehaviour
     private bool IsPlayerVisible()
     {
         RaycastHit hit;
-        Debug.DrawRay(transform.position, target.position - transform.position);
-        return !Physics.Raycast(transform.position, target.position - transform.position, out hit, LayerMask.NameToLayer("Wall"));
+        Vector3 start = transform.position + new Vector3(0, 2, 0);
+        Vector3 direction = (target.position - transform.position).normalized;
+        return !Physics.Raycast(start, direction, out hit, Vector3.Distance(start, target.position), 1<<LayerMask.NameToLayer("Wall"));
+    }
+
+    public void SetStartPosition(Vector3 start)
+    {
+        startingPosition = new Vector3(start.y, 5, start.z);
+        Debug.DrawLine(start, start+ new Vector3(0,50,0), Color.red, 30);
     }
 
     public void MakeHit()
@@ -109,10 +172,14 @@ public class MoveStates : MonoBehaviour
         }
     }
 
-	private void DrawSight() 
+	private void DrawAdditionalGizmos() 
     {
         Debug.DrawLine(transform.position, SightLeftCorner.position, sightColor, 0.01f);
         Debug.DrawLine(transform.position, SightRightCorner.position, sightColor, 0.01f);
+        for (int i = 0; navPath!=null&& i < navPath.corners.Length - 1; i++)
+        {
+            Debug.DrawLine(navPath.corners[i], navPath.corners[i + 1], Color.magenta, 0.01f, false);
+        }
 	}
 
     private void OnDrawGizmos()
@@ -121,6 +188,6 @@ public class MoveStates : MonoBehaviour
         Gizmos.DrawSphere(transform.position + Vector3.up*4, Vector3.Distance(AttackLimit.position, transform.position));
         Gizmos.color = new Color(0, 1, 1, 0.5f);
         Gizmos.DrawSphere(AttackPosition.position, Vector3.Distance(transform.position, AttackLimit.position));
-        DrawSight();
+        DrawAdditionalGizmos();
     }
 }

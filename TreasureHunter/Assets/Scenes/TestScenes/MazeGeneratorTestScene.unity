@@ -2704,6 +2704,7 @@ MonoBehaviour:
   - {fileID: 1128423544}
   ObjectsWhichNeedInitiation: []
   ActionChoicePopup: {fileID: 145283341}
+  EndGamePopup: {fileID: 0}
   Player: {fileID: 1128423543}
   exitComponent: {fileID: 0}
   Width: 20
