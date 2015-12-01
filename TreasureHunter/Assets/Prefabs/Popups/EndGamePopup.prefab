@@ -97,6 +97,8 @@ GameObject:
   - 222: {fileID: 22293914}
   - 114: {fileID: 11484834}
   - 114: {fileID: 11457928}
+  - 65: {fileID: 6546594}
+  - 114: {fileID: 11449296}
   m_Layer: 5
   m_Name: YesButton
   m_TagString: Untagged
@@ -169,6 +171,8 @@ GameObject:
   - 222: {fileID: 22208572}
   - 114: {fileID: 11432668}
   - 114: {fileID: 11436942}
+  - 65: {fileID: 6521138}
+  - 114: {fileID: 11473478}
   m_Layer: 5
   m_Name: NoButton
   m_TagString: Untagged
@@ -230,6 +234,30 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!65 &6521138
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167014}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 100, y: 70, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &6546594
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 125626}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 100, y: 70, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &11401616
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -426,7 +454,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
@@ -443,7 +471,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 11432668}
   m_OnClick:
     m_PersistentCalls:
@@ -476,6 +504,18 @@ MonoBehaviour:
   m_EffectColor: {r: .426470578, g: .426470578, b: .426470578, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!114 &11449296
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 125626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802bf58c587ca424c9612e52821f304c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonComponent: {fileID: 11457928}
 --- !u!114 &11450976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -533,7 +573,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: .960784316, g: .960784316, b: .960784316, a: 1}
@@ -550,7 +590,7 @@ MonoBehaviour:
     m_HighlightedTrigger: Highlighted
     m_PressedTrigger: Pressed
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 11484834}
   m_OnClick:
     m_PersistentCalls:
@@ -669,6 +709,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Do you really want leave the game?
+--- !u!114 &11473478
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167014}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 802bf58c587ca424c9612e52821f304c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonComponent: {fileID: 11436942}
 --- !u!114 &11474530
 MonoBehaviour:
   m_ObjectHideFlags: 1

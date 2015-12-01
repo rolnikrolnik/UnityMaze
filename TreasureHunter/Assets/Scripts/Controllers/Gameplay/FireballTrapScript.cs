@@ -6,7 +6,7 @@ public class FireballTrapScript : MonoBehaviour
 {
     void OnTriggerEnter(Collider other)
     {
-        IDamageable damageableObject = other.GetComponent<IDamageable>();
+        IDamageable damageableObject = other.GetComponentInParent<IDamageable>();
         if (damageableObject != null)
         {
             damageableObject.TakeDamage(0.05f);

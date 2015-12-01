@@ -31,6 +31,7 @@ namespace Treasure_Hunter.Controllers
             if (SceneManager.Instance.MazeManager != null)
             {
                 SceneManager.Instance.MazeManager.Player.PlayerAttack.Die();
+                Hide();
             }
             else
             {

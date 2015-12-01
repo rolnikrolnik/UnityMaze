@@ -268,8 +268,11 @@ MonoBehaviour:
   exitComponent: {fileID: 0}
   Width: 20
   Length: 20
-  TrapProbability: 0
-  MonsterProbability: 0
+  GeneralObstaclesProbability: 35
+  StationaryTrapProbability: 15
+  SpikesProbability: 50
+  FireballProbability: 15
+  MonsterProbability: 20
   Prim: 0
   MazeType: 4
   WallPrefab: {fileID: 128318, guid: 814514ee0c5877a45a1dd4adf4c223c9, type: 2}
@@ -621,8 +624,8 @@ LineRenderer:
   - {x: 0, y: 20, z: 40}
   - {x: 0, y: 20, z: 1}
   m_Parameters:
-    startWidth: 1
-    endWidth: 1
+    startWidth: 5
+    endWidth: 5
     m_StartColor:
       serializedVersion: 2
       rgba: 4294967295

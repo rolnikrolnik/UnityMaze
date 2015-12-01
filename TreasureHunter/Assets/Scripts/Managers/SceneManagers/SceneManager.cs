@@ -104,6 +104,7 @@ namespace Treasure_Hunter.Managers
                 yield return 0;
                 MazeManager = FindObjectOfType<MazeManager>();
             }
+            Destroy(MazeManager.EndGamePopup.gameObject);
             Destroy(MazeManager.ActionChoicePopup.gameObject);
             Destroy(MazeManager.LevelRootObject.gameObject);
             yield return StartCoroutine(LoadBase());
@@ -121,6 +122,7 @@ namespace Treasure_Hunter.Managers
                 yield return 0;
                 BaseManager = FindObjectOfType<BaseManager>();
             }
+            Destroy(BaseManager.EndGamePopup.gameObject);
             Destroy(BaseManager.MazeChoicePopup.gameObject);
             Destroy(BaseManager.AchievementsPopup.gameObject);
             Destroy(BaseManager.LevelRootObject.gameObject);

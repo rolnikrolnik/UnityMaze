@@ -32,6 +32,7 @@ namespace Treasure_Hunter.Controllers
 
         #endregion
 
+        [HideInInspector]
         public DisplayMode currentDisplayMode = DisplayMode.OVRCamera;
 
         #region MONO BEHAVIOUR
