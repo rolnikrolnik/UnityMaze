@@ -113,7 +113,7 @@ namespace Treasure_Hunter.Managers
         public void SaveAchievements()
         {
             string textToSave = Achievements.GetStringToSaveDictionaries();
-            if (textToSave!="")
+            if (textToSave != "")
             {
                 byte[] encrypted = PrepareDataToSave(textToSave);
                 PlayerPrefs.SetString(ACHIEVEMENTS_KEY, ArrayToString(encrypted));

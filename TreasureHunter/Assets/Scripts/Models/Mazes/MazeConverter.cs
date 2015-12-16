@@ -18,13 +18,16 @@ namespace Treasure_Hunter.Mazes
 
         #endregion
 
-        public MazeConverter(IMaze maze, Vector3 mazeWallScale, int trapProbability, int monsterProbability)
+        public MazeConverter(IMaze maze, Vector3 mazeWallScale, int obstacleProbability, int stationaryProbability, int spikesProbability, int fireballProbability, int monsterProbability)
         {
             this.maze = maze;
             this.random = new Random();
             this.mazeWallScale = mazeWallScale;
             this.PlayerCoords = new Vector3();
-            this.TrapProbability = trapProbability;
+            this.ObstacleProbability = obstacleProbability;
+            this.StationaryTrapProbability = stationaryProbability;
+            this.SpikesProbability = spikesProbability;
+            this.FireballProbability = fireballProbability;
             this.MonsterProbability = monsterProbability;
 
             this.ConvertMaze();
@@ -35,7 +38,10 @@ namespace Treasure_Hunter.Mazes
 
         public Dictionary<Vector3, MazeComponentType> MazeComponents { get; private set; }
         public Vector3 PlayerCoords { get; private set; }
-        public int TrapProbability { get; set; }
+        public int ObstacleProbability { get; set; }
+        public int StationaryTrapProbability { get; set; }
+        public int FireballProbability { get; set; }
+        public int SpikesProbability { get; set; }
         public int MonsterProbability { get; set; }
 
         #endregion
@@ -166,7 +172,7 @@ namespace Treasure_Hunter.Mazes
 
         private bool IsTrapPossible(Vector3 componentVector)
         {
-            var trapProbability = this.TrapProbability; // TODO : pass obstacle probability to Maze class
+            var trapProbability = this.ObstacleProbability; // TODO : pass obstacle probability to Maze class
             var isTrap = random.Next(100) < trapProbability;
             if (!isTrap)
             {
@@ -199,33 +205,56 @@ namespace Treasure_Hunter.Mazes
             return true;
         }
 
-
         private void AddTrapComponent(Vector3 componentVector)
         {
             try
             {
-                var trapProbability = random.Next(100);
-                if (trapProbability > this.MonsterProbability)
+                var trapTypeProbability = 0;
+                if (this.IsDownTrapPossible(componentVector))
                 {
-                    var trapTypeProbability = random.Next(10);
-                    if (trapTypeProbability < 3
-                        && this.IsDownTrapPossible(componentVector))
+                    trapTypeProbability =
+                        random.Next(this.SpikesProbability + this.StationaryTrapProbability + this.MonsterProbability);
+                    if (trapTypeProbability < this.SpikesProbability)
                     {
                         this.MazeComponents.Add(componentVector, MazeComponentType.DOWN_TRAP);
                     }
-                    else if (trapTypeProbability < 7
-                             && this.IsAcrossTrapPossible(componentVector))
+                    else if (trapTypeProbability < this.SpikesProbability + this.StationaryTrapProbability)
+                    {
+                        this.MazeComponents.Add(componentVector, MazeComponentType.STATIONARY_TRAP);
+                    }
+                    else if (trapTypeProbability < this.SpikesProbability + this.StationaryTrapProbability + this.MonsterProbability)
+                    {
+                        this.MazeComponents.Add(componentVector, MazeComponentType.MONSTER);
+                    }
+                }
+                else if (this.IsAcrossTrapPossible(componentVector))
+                {
+                    trapTypeProbability =
+                        random.Next(this.FireballProbability + this.StationaryTrapProbability + this.MonsterProbability);
+                    if (trapTypeProbability < this.FireballProbability)
                     {
                         this.MazeComponents.Add(componentVector, MazeComponentType.ACROSS_TRAP);
                     }
-                    else
+                    else if (trapTypeProbability < this.FireballProbability + this.StationaryTrapProbability)
                     {
                         this.MazeComponents.Add(componentVector, MazeComponentType.STATIONARY_TRAP);
+                    }
+                    else if (trapTypeProbability < this.FireballProbability + this.StationaryTrapProbability + this.MonsterProbability)
+                    {
+                        this.MazeComponents.Add(componentVector, MazeComponentType.MONSTER);
                     }
                 }
                 else
                 {
-                    this.MazeComponents.Add(componentVector, MazeComponentType.MONSTER);
+                    trapTypeProbability = random.Next(this.StationaryTrapProbability + this.MonsterProbability);
+                    if (trapTypeProbability < this.StationaryTrapProbability)
+                    {
+                        this.MazeComponents.Add(componentVector, MazeComponentType.STATIONARY_TRAP);
+                    }
+                    else if (trapTypeProbability < this.StationaryTrapProbability + this.MonsterProbability)
+                    {
+                        this.MazeComponents.Add(componentVector, MazeComponentType.MONSTER);
+                    }
                 }
             }
             catch (Exception e)

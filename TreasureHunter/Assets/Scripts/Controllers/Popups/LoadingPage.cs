@@ -13,7 +13,8 @@ namespace Treasure_Hunter.Controllers
         public GameObject GameObject;
 
         //Other Gameobjects Components
-        public Image Background;
+        public Image StandaloneBackground;
+        public Image OVRBackground;
 
         #endregion
 
@@ -32,7 +33,8 @@ namespace Treasure_Hunter.Controllers
         {
             for(float time=0;time<animationTime;time+=Time.deltaTime)
             {
-                Background.color = new Color(Background.color.r, Background.color.g, Background.color.b, isShow ? time / animationTime : (1 - time / animationTime));
+                StandaloneBackground.color = new Color(StandaloneBackground.color.r, StandaloneBackground.color.g, StandaloneBackground.color.b, isShow ? time / animationTime : (1 - time / animationTime));
+                OVRBackground.color = new Color(OVRBackground.color.r, OVRBackground.color.g, OVRBackground.color.b, isShow ? time / animationTime : (1 - time / animationTime));
                 yield return 0;
             }
             GameObject.SetActive(isShow);

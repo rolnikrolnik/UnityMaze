@@ -36,7 +36,10 @@ namespace Treasure_Hunter.Managers
 
         public int Width;
         public int Length;
-        public int TrapProbability;
+        public int GeneralObstaclesProbability;
+        public int StationaryTrapProbability;
+        public int SpikesProbability;
+        public int FireballProbability;
         public int MonsterProbability;
         public bool Prim;
         public MazeType MazeType;
@@ -111,7 +114,10 @@ namespace Treasure_Hunter.Managers
             this.MazeConverter = new MazeConverter(
                 this.Maze,
                 this.mazeWallScale,
-                this.TrapProbability,
+                this.GeneralObstaclesProbability,
+                this.StationaryTrapProbability,
+                this.SpikesProbability,
+                this.FireballProbability,
                 this.MonsterProbability);
         }
 

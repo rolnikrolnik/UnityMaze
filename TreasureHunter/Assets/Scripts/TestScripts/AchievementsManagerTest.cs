@@ -48,6 +48,7 @@ namespace Treasure_Hunter.TestScripts
             {
                 PlayerPrefs.DeleteAll();
                 PlayerPrefs.Save();
+                Debug.Log("Clean prefs");
             }
         }
 

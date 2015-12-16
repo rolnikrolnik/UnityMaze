@@ -2709,7 +2709,10 @@ MonoBehaviour:
   exitComponent: {fileID: 0}
   Width: 20
   Length: 20
-  TrapProbability: 30
+  GeneralObstaclesProbability: 20
+  StationaryTrapProbability: 20
+  SpikesProbability: 50
+  FireballProbability: 50
   MonsterProbability: 30
   Prim: 0
   MazeType: 1

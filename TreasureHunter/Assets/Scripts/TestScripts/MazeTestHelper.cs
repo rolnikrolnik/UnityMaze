@@ -34,7 +34,7 @@ namespace Treasure_Hunter.TestScripts
         {
             Line.enabled = true;
             Vector3 terrainPosition = GameObject.Find(MazeManager.TerrainName).transform.position;
-            Vector3 startPosition = Player.transform.position;
+            Vector3 startPosition = new Vector3(Player.transform.position.x, 5, Player.transform.position.z);
             Vector3 exitPosition = MazeManager.exitComponent.transform.position;
             startPosition.y = terrainPosition.y;
             exitPosition.y = terrainPosition.y;

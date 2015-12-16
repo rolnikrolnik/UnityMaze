@@ -62,7 +62,7 @@ public class PlayerAttack : MonoBehaviour, IDamageable
         }
 	}
 
-    private void Die()
+    public void Die()
     {
         dieAnimationFinished = false;
         Player.DisablePlayer();

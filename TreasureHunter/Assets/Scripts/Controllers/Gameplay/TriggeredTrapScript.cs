@@ -48,7 +48,7 @@ public class TriggeredTrapScript : MonoBehaviour {
     void TakeDamageWithFire(Collider other)
     {
         PlayFireBurningSound();
-        IDamageable damageableObject = other.GetComponent<IDamageable>();
+        IDamageable damageableObject = other.GetComponentInParent<IDamageable>();
         if (damageableObject != null)
         {
             damageableObject.TakeDamage(0.2f * Time.deltaTime);

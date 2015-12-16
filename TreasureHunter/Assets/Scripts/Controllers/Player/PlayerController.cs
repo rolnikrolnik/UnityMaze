@@ -21,13 +21,15 @@ namespace Treasure_Hunter.Controllers
         private const float AVERAGE_SPEED = 20;
         private const float GRAVITY = 0.5f;
         private const float MAX_ROTATION_SPEED = 3;
-        private const float PLAYER_HEIGHT = 1.5f;
+        private const float PLAYER_HEIGHT = 2;
         private const float JUMP_STRENGTH = 1;
         private const float FULL_ANGLE = 360;
         private const float ROTATION = 1;
         private const float SPINE_X = 30;
         private const float MIN_SPINE_Y = 50;
         private const float MAX_SPINE_Y = 120;
+        private const float OCULUS_MAX_X_ROTATION = 45;
+        private const float OCULUS_MAX_Y_ROTATION = 30;
 
         #endregion
 
@@ -55,6 +57,7 @@ namespace Treasure_Hunter.Controllers
         private float jumpForce = 0;
         private float speed = 0;
         private float verticalSpeed = 0;
+        private Vector3 startRotation = new Vector3(0, 75, 0);
         private Vector3 currentRotation = new Vector3(0, 75, 0);
 
         public AudioClip OuchAudioClip;
@@ -69,7 +72,7 @@ namespace Treasure_Hunter.Controllers
             get
             {
                 RaycastHit hit;
-                return Physics.Raycast(transform.position, -transform.forward, out hit, PLAYER_HEIGHT);
+                return Physics.Raycast(transform.position+new Vector3(0,0.1f,0), -transform.forward, out hit, PLAYER_HEIGHT);
             }
         }
 
@@ -94,11 +97,13 @@ namespace Treasure_Hunter.Controllers
                 {
                     if (SceneManager.Instance.MazeManager != null)
                     {
+                        SceneManager.Instance.MazeManager.EndGamePopup.SetMessage("Do you really want go back to the base?");
                         SceneManager.Instance.MazeManager.EndGamePopup.Show();
                         AnyPopupIsVisible = true;
                     }
                     else if (SceneManager.Instance.BaseManager != null)
                     {
+                        SceneManager.Instance.BaseManager.EndGamePopup.SetMessage("Do you really want leave the game?");
                         SceneManager.Instance.BaseManager.EndGamePopup.Show();
                         AnyPopupIsVisible = true;
                     }
@@ -110,7 +115,14 @@ namespace Treasure_Hunter.Controllers
         {
             if (IsEnabled)
             {
-                ApplyMouseMovement();
+                if (SceneManager.Instance.Camera.currentDisplayMode == DisplayMode.OVRCamera)
+                {
+                    ApplyOculusRiftMotion();
+                }
+                else
+                {
+                    ApplyMouseMovement();
+                }
             }
         }
 
@@ -221,6 +233,20 @@ namespace Treasure_Hunter.Controllers
             currentRotation = new Vector3(currentRotation.x > SPINE_X ? SPINE_X : currentRotation.x < -SPINE_X ? -SPINE_X : currentRotation.x,
                                           currentRotation.y > MAX_SPINE_Y ? MAX_SPINE_Y : currentRotation.y < MIN_SPINE_Y ? MIN_SPINE_Y : currentRotation.y,
                                           0);
+            Spine.localRotation = Quaternion.Euler(currentRotation);
+        }
+
+        private void ApplyOculusRiftMotion()
+        {
+            Quaternion CameraOrientation = Quaternion.identity;
+            OVRDevice.GetOrientation(0, ref CameraOrientation);
+            float yRotation = CameraOrientation.eulerAngles.x<180?
+                              (CameraOrientation.eulerAngles.x < OCULUS_MAX_Y_ROTATION ? CameraOrientation.eulerAngles.x : OCULUS_MAX_Y_ROTATION) :
+                              (CameraOrientation.eulerAngles.x - 360 > -OCULUS_MAX_Y_ROTATION ? CameraOrientation.eulerAngles.x - 360 : -OCULUS_MAX_Y_ROTATION);
+            float xRotation = CameraOrientation.eulerAngles.y < 180 ?
+                              (CameraOrientation.eulerAngles.y < OCULUS_MAX_X_ROTATION ? CameraOrientation.eulerAngles.y : OCULUS_MAX_X_ROTATION) :
+                              (CameraOrientation.eulerAngles.y - 360 > -OCULUS_MAX_X_ROTATION ? CameraOrientation.eulerAngles.y - 360 : -OCULUS_MAX_X_ROTATION);
+            currentRotation = new Vector3(startRotation.x - xRotation, startRotation.y + yRotation, 0);
             Spine.localRotation = Quaternion.Euler(currentRotation);
         }
 
