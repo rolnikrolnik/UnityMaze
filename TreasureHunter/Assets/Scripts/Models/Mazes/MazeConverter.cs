@@ -33,7 +33,6 @@ namespace Treasure_Hunter.Mazes
             this.ConvertMaze();
         }
 
-
         #region Properties
 
         public Dictionary<Vector3, MazeComponentType> MazeComponents { get; private set; }
@@ -64,13 +63,13 @@ namespace Treasure_Hunter.Mazes
             var exitPosition = this.MazeComponents.FirstOrDefault(pair => pair.Value == MazeComponentType.EXIT).Key;
             var exitX = exitPosition.x;
             var exitZ = exitPosition.z;
-            var wallX = mazeWallScale.x/2;
-            var wallZ = mazeWallScale.z/2;
+            var wallX = mazeWallScale.x / 2;
+            var wallZ = mazeWallScale.z / 2;
             var startingX = exitX - 4 * wallX;
             var startingY = exitZ + wallZ;
             for (float i = startingX; i <= startingX + 9 * wallX; i += wallX)
             {
-                for (float j = startingY ; j <= startingY + 9*wallZ; j += wallZ)
+                for (float j = startingY; j <= startingY + 9 * wallZ; j += wallZ)
                 {
                     var neighbourVector = new Vector3(i, 1 + mazeWallScale.y / 2, j);
                     if (this.MazeComponents.ContainsKey(neighbourVector))
@@ -115,12 +114,12 @@ namespace Treasure_Hunter.Mazes
             {
                 for (var y = 0; y < this.maze.Width; y++)
                 {
-                    var componentVector = new Vector3(x, 1, y) + mazeWallScale/2;
+                    var componentVector = new Vector3(x, 1, y) + mazeWallScale / 2;
 
                     if (!this.maze.IsPointAWall(x, y)
                         && this.IsTrapPossible(componentVector))
                     {
-                            this.AddTrapComponent(componentVector);
+                        this.AddTrapComponent(componentVector);
                     }
                 }
             }
@@ -132,7 +131,7 @@ namespace Treasure_Hunter.Mazes
             {
                 for (var y = 0; y < this.maze.Width; y++)
                 {
-                    var componentVector = new Vector3(x, 1, y) + mazeWallScale/2;
+                    var componentVector = new Vector3(x, 1, y) + mazeWallScale / 2;
 
                     if (this.maze.IsPointAWall(x, y))
                     {
@@ -154,7 +153,7 @@ namespace Treasure_Hunter.Mazes
             var exitCoords = this.maze.GetExitCoords();
             var exitVector = new Vector3(exitCoords.X, 1, exitCoords.Y);
             this.MazeComponents.Add(
-                exitVector + mazeWallScale / 2, 
+                exitVector + mazeWallScale / 2,
                 MazeComponentType.EXIT);
         }
 
@@ -184,7 +183,7 @@ namespace Treasure_Hunter.Mazes
             var upperCell = new Vector3(componentVector.x, componentVector.y, componentVector.z + 1);
             var lowerCell = new Vector3(componentVector.x, componentVector.y, componentVector.z - 1);
 
-            var neighboursList = new List<Vector3> {leftCell, rightCell, upperCell, lowerCell};
+            var neighboursList = new List<Vector3> { leftCell, rightCell, upperCell, lowerCell };
 
             foreach (var neighbour in neighboursList)
             {
@@ -300,6 +299,5 @@ namespace Treasure_Hunter.Mazes
         }
 
         #endregion
-
     }
 }
